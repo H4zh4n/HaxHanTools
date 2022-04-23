@@ -1,0 +1,15 @@
+<resources>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="close_button">Close</string>
+    <string name="delete_button">Delete</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
+    <string name="alert_string">Alert!</string>
+    <string name="ok_button">Ok</string>
+    <string name="visit_button">Visit</string>
+    <string name="update_available">New Update Available</string>
+    <string name="please_wait">Please wait</string>
+
+</resources>

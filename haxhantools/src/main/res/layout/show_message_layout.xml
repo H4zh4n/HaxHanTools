@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dialogPrimaryColor"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/loTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:background="@color/colorBlackTransparent"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imgIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@null"
+            android:src="@drawable/ic_question"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/lblTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@null"
+            android:text="Title here"
+            android:textColor="@color/colorWhiteLight"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/btnDismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@drawable/onclick_highlight"
+            android:src="@drawable/ic_close" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical">
+
+        <TextView
+            android:id="@+id/lblMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:minLines="2"
+            android:padding="10dp"
+            android:text="Message here"
+            android:textColor="@color/colorText"
+            android:textSize="15dp" />
+    </ScrollView>
+    <!--
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:nestedScrollingEnabled="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical">
+
+        </ScrollView>
+    -->
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/colorBlackTransparent"
+        android:gravity="top"
+        android:inputType="text|textMultiLine"
+        android:lines="8"
+        android:padding="10dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        android:textColor="@color/colorText"
+        android:textCursorDrawable="@null"
+        android:visibility="gone">
+
+        <requestFocus />
+
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnNegative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorRedDark"
+            android:padding="10dp"
+            android:text="@string/no_button"
+            android:textColor="@color/colorWhiteLight" />
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorGreenChosen"
+            android:padding="10dp"
+            android:text="@string/yes_button"
+            android:textColor="@color/colorWhiteLight" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,56 @@
+<resources>
+
+    <style name="alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="android:textColorSecondary">@color/colorText</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="colorAccent">@color/colorYellowLight</item>
+        <item name="android:dividerHeight">10dp</item>
+        <item name="android:dividerHorizontal">@color/colorBlackDark</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:windowMinWidthMajor">95%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@color/dialogPrimaryColor</item>
+        <item name="android:windowBackground">@color/dialogPrimaryColor</item>
+        <item name="textColorAlertDialogListItem">@color/colorText</item>
+
+    </style>
+
+    <style name="alert_fullscreen" parent="alert">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:background">@color/dialogPrimaryColor</item>
+        <item name="android:windowBackground">@color/dialogPrimaryColor</item>
+    </style>
+
+    <style name="alert_fullscreen_default_background" parent="alert">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
+
+    <style name="alert_half" parent="alert">
+        <item name="android:windowMinWidthMajor">50%</item>
+        <item name="android:windowMinWidthMinor">50%</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:background">@color/dialogPrimaryColor</item>
+        <item name="android:windowBackground">@color/dialogPrimaryColor</item>
+
+    </style>
+
+    <style name="alert_transparent" parent="alert">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+</resources>
