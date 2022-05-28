@@ -1,6 +1,5 @@
 package com.dev.hazhanjalal.haxhantools.utils.utils;
 
-import static com.dev.hazhanjalal.haxhantools.utils.print.TempLogger.e;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -361,7 +360,7 @@ public class Utils {
     
             activeContext.startActivity(Intent.createChooser(i, ""));
         } catch (android.content.ActivityNotFoundException ex) {
-            e(ex);
+            // e(ex);
         }
     }
     
