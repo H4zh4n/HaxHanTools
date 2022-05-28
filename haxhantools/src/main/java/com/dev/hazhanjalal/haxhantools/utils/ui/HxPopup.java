@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -21,22 +20,14 @@ import androidx.core.content.ContextCompat;
 import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
 import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
-import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.ortiz.touchview.TouchImageView;
 
 import java.util.Random;
 import java.util.regex.Pattern;
 
-public class ShowPopup {
+public class HxPopup {
     
     public static Context activeContext;
-    
-    public static Dialog prDialog;
-    int number;
-    
-    private static int getRandomNumber() {
-        return new Random().nextInt(900000) + 100000;
-    }
     
     // START - showInputDialog
     public static void showInputDialog(Context context, String title, String message, String hint, Drawable icon,
@@ -238,7 +229,9 @@ public class ShowPopup {
         btnPositive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                action.positiveButtonPressed();
+                if (action != null) {
+                    action.positiveButtonPressed();
+                }
                 shConfirm.dismiss();
             }
         });
@@ -249,7 +242,9 @@ public class ShowPopup {
         btnNegative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                action.negativeButtonPressed();
+                if (action != null) {
+                    action.negativeButtonPressed();
+                }
                 shConfirm.dismiss();
             }
         });
@@ -444,103 +439,6 @@ public class ShowPopup {
         return dialog;
     }
     
-    //START - Progress Dialog
-    public static void showProgressDialog(String title) {
-        showProgressDialog(Utils.activeContext, title, Utils.activeContext.getDrawable(R.drawable.ic_info));
-    }
-    
-    public static void showProgressDialog(Context context, String title) {
-        showProgressDialog(context, title, context.getDrawable(R.drawable.ic_info));
-    }
-    
-    public static void showProgressDialog(Context context, String title, Drawable icon) {
-        if (prDialog != null && prDialog.isShowing()) {
-            return;
-        }
-        
-        prDialog = customProgressDialog(context, title, Utils.getString(context, R.string.please_wait), icon);
-        
-        Utils.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                prDialog.show();
-            }
-        });
-    }
-    
-    public static void setProgressText(final String message) {
-        if (prDialog != null && prDialog.isShowing()) {
-            Utils.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ((TextView) prDialog.findViewById(R.id.lblMessage)).setText(message);
-                }
-            });
-        }
-    }
-    
-    public static void closeProgressDialog() {
-        if (prDialog != null && prDialog.isShowing()) {
-            Utils.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    prDialog.dismiss();
-                }
-            });
-        }
-    }
-    
-    
-    private static Dialog customProgressDialog(Context context, String title, String message, Drawable icon) {
-        prDialog = new Dialog(context, R.style.alert);
-        prDialog.setTitle(title);
-        prDialog.setContentView(R.layout.show_progress_layout);
-        TextView lblTitle = prDialog.findViewById(R.id.lblTitle);
-        TextView lblMessage = prDialog.findViewById(R.id.lblMessage);
-        prDialog.setCancelable(false);
-        ImageView imgIcon = prDialog.findViewById(R.id.imgIcon);
-        
-        ProgressBar progressBar = (ProgressBar) prDialog.findViewById(R.id.spin_kit);
-        
-        Sprite loading = Utils.randomSprite();
-        
-        switch (new Random().nextInt(5)) {
-            case 0:
-                loading.setColor(Utils.getColor(R.color.colorYellowLight));
-                break;
-            case 1:
-                loading.setColor(Utils.getColor(R.color.colorGreenLight));
-                break;
-            case 2:
-                loading.setColor(Utils.getColor(R.color.colorBlueLight));
-                break;
-            case 3:
-                loading.setColor(Utils.getColor(R.color.colorTurquoiseLight));
-                break;
-            case 4:
-                loading.setColor(Utils.getColor(R.color.colorRedLight));
-                break;
-        }
-        
-        progressBar.setIndeterminateDrawable(loading);
-        
-        lblMessage.setText(message);
-        
-        if (title.isEmpty()) {
-            lblTitle.setVisibility(View.GONE);
-        } else {
-            lblTitle.setText(title);
-        }
-        
-        if (icon == null) {
-            imgIcon.setVisibility(View.GONE);
-        } else {
-            imgIcon.setImageDrawable(icon);
-        }
-        
-        return prDialog;
-    }
-    //END - ProgressLayout
     
     
     public static void showImageFullScreen(Object icon) {
@@ -577,10 +475,14 @@ public class ShowPopup {
             } else if (icon instanceof Bitmap) {
                 imgIcon.setImageBitmap((Bitmap) icon);
             }
-            
+    
         }
-        
+    
         dialog.show();
+    }
+    
+    private static int getRandomNumber() {
+        return new Random().nextInt(900000) + 100000;
     }
     
 }

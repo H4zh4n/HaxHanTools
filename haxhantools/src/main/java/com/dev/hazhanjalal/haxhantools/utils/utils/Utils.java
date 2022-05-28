@@ -37,6 +37,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
@@ -48,7 +49,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
-import com.dev.hazhanjalal.haxhantools.utils.ui.ShowToast;
+import com.dev.hazhanjalal.haxhantools.utils.ui.HxToast;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ChasingDots;
 import com.github.ybq.android.spinkit.style.Circle;
@@ -83,8 +84,8 @@ libs needed to be imported :
 *   //Loading lib
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 * My Custom Imports :
-    ShowToast
-    ShowPopup
+    HxToast
+    HxPopup
  */
 
 public class Utils {
@@ -267,7 +268,7 @@ public class Utils {
         try {
             getActivity().startActivity(Intent.createChooser(emailIntent, "Send Email..."));
         } catch (android.content.ActivityNotFoundException ex) {
-            ShowToast.showToastError("There are no email clients installed.");
+            HxToast.showToastError("There are no email clients installed.");
         }
     }*/
     
@@ -355,9 +356,9 @@ public class Utils {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             // i.putExtra(Intent.EXTRA_TEXT, "#تەفسیری_نوور" + "\n" + Utils.MAIN_LINK);
             i.putExtra(Intent.EXTRA_STREAM, getImageUri(activeContext, bmp));
-            
-            ShowToast.showToastSuccess("Picture added to gallery.");
-            
+    
+            HxToast.showToastSuccess("Picture added to gallery.");
+    
             activeContext.startActivity(Intent.createChooser(i, ""));
         } catch (android.content.ActivityNotFoundException ex) {
             e(ex);
@@ -465,7 +466,7 @@ public class Utils {
     
     public static void showRequestPermission(final boolean isRestartNeeded) {
         /* Utils.showStuff = false;*/
-        /*ShowPopup.showConfirmDialog("ڕێگەدان بە بەرنامە", "تكایە لە ڕووكاری دواتر ئەگەر سماح/" +
+        /*HxPopup.showConfirmDialog("ڕێگەدان بە بەرنامە", "تكایە لە ڕووكاری دواتر ئەگەر سماح/" +
                                             "Allow دەركەوت دەستی لێ بدە تا بەرنامەكە " +
                                             "بتوانێت كاربكات بەبێ كێشە.",
                                     new CustomAction() {
@@ -723,7 +724,7 @@ public class Utils {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //ShowToast.showToastError(textOnNoNetwork);
+                    //HxToast.showToastError(textOnNoNetwork);
                 }
             });
         }
@@ -851,10 +852,10 @@ public class Utils {
         clipboard.setPrimaryClip(clip);
         
         if (showToast) {
-            ShowToast.showToast(context,
-                                "Copied" /*+ text*/,
-                                ContextCompat.getDrawable(activeContext, R.drawable.ic_copy),
-                                ContextCompat.getColor(activeContext, R.color.colorBlueChosen));
+            HxToast.showToast(context,
+                              "Copied" /*+ text*/,
+                              ContextCompat.getDrawable(activeContext, R.drawable.ic_copy),
+                              ContextCompat.getColor(activeContext, R.color.colorBlueChosen));
         }
     }
     
@@ -930,7 +931,7 @@ public class Utils {
         }
     }
     
-    public static String loadJSONFromAsset(String fileName) {
+    public static String loadDataFromAsset(String fileName) {
         try {
             InputStream is = getActivity().getAssets().open(fileName);
             int size = is.available();
@@ -1073,6 +1074,58 @@ public class Utils {
         Color.colorToHSV(color, hsv);
         hsv[2] *= (1 + percent / 100);
         return Color.HSVToColor(hsv);
+    }
+    
+    /**
+     * Show Keyboard [use toggleKeyboard if this didn't work]
+     *
+     * @param view desired view to focus on.
+     */
+    public static void showKeyboard(View view) {
+        showKeyboard(view, Utils.getActivity());
+    }
+    
+    /**
+     * Show Keyboard [use toggleKeyboard if this didn't work]
+     *
+     * @param view     desired view to focus on.
+     * @param activity current activity
+     */
+    public static void showKeyboard(View view, Activity activity) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            
+            //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            
+            boolean isShowing = imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            if (!isShowing) {
+                activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            }
+        }
+    }
+    
+    /**
+     * Toggle Keyboard showing.
+     *
+     * @param view desired view to focus on.
+     */
+    public static void toggleKeyboard(View view) {
+        toggleKeyboard(view, Utils.getActivity());
+    }
+    
+    /**
+     * Toggle Keyboard showing.
+     *
+     * @param view     desired view to focus on.
+     * @param activity current activity
+     */
+    public static void toggleKeyboard(View view, Activity activity) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
     }
     
     public static void hideKeyboard() {

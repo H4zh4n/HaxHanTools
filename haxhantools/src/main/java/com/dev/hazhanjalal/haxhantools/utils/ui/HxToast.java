@@ -18,7 +18,7 @@ import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
 
 
-public class ShowToast {
+public class HxToast {
     //START - Custom Toast
     public static void showToast(Context ctx, final String text, final Drawable icon, final int backColor) {
         Utils.getActivity().runOnUiThread(new Runnable() {
