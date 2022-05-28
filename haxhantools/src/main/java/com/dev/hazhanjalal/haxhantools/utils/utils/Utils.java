@@ -1,9 +1,9 @@
 package com.dev.hazhanjalal.haxhantools.utils.utils;
 
-import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.e;
-import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.v;
+import static com.dev.hazhanjalal.haxhantools.utils.print.TempLogger.e;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -395,7 +395,7 @@ public class Utils {
             String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "TafseeriNoor_" + System.currentTimeMillis(), null);
             return Uri.parse(path);
         } catch (Exception e) {
-            e(e);
+            // e(e);
             return null;
         }
         
@@ -582,15 +582,15 @@ public class Utils {
     
     public static double getMemorySizeInGB() {
         try {
-            return Double.parseDouble(Utils.replaceArabicNumbers(getMemorySizeHumanized("gb")));
+            return Double.parseDouble(Utils.replaceEasternNumbers(getMemorySizeHumanized("gb")));
         } catch (Exception e) {
-            e(e);
+            //e(e);
             return 0;
         }
     }
     
     public static String getMemorySizeHumanized() {
-        return Utils.replaceArabicNumbers(getMemorySizeHumanized(""));
+        return Utils.replaceEasternNumbers(getMemorySizeHumanized(""));
     }
     
     public static String getMemorySizeHumanized(String spesific) {
@@ -640,7 +640,7 @@ public class Utils {
                 }
             }
         } catch (Exception e) {
-            e(e);
+            // e(e);
             finalValue = "";
         }
         
@@ -665,7 +665,7 @@ public class Utils {
                 build = pInfo.versionCode;
             }
         } catch (Exception e) {
-            e(e);
+            //  e(e);
         }
         return build;
     }
@@ -680,7 +680,7 @@ public class Utils {
             name = pInfo.versionName;
             
         } catch (Exception e) {
-            e(e);
+            // e(e);
         }
         return name;
     }
@@ -709,6 +709,7 @@ public class Utils {
         return isNetworkAvailable("هێڵی ئینتەرنێت بەردەست نییە!");
     }
     
+    @SuppressLint("MissingPermission")
     public static boolean isNetworkAvailable(final String textOnNoNetwork) {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) activeContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -859,7 +860,7 @@ public class Utils {
         }
     }
     
-    public static String replaceArabicNumbers(Object original) {
+    public static String replaceEasternNumbers(Object original) {
         //for arabic
         original = original.toString().replaceAll("١", "1")
                 .replaceAll("٢", "2")
@@ -952,7 +953,7 @@ public class Utils {
             @Override
             public void run() {
                 try {
-                    v("-- loading data from " + url);
+                    // v("-- loading data from " + url);
                     URL u = new URL(url);
                     Scanner input = new Scanner(u.openStream());
                     StringBuilder data = new StringBuilder();
@@ -965,11 +966,11 @@ public class Utils {
                         action.inputText = data.toString();
                         action.object = data.toString();
                     }
-                    
-                    v("-- data loaded from " + url);
+    
+                    //  v("-- data loaded from " + url);
                     
                 } catch (Exception e) {
-                    e(e);
+                    //  e(e);
                     if (action != null) {
                         action.inputText = e.getLocalizedMessage();
                         action.object = e;

@@ -1,15 +1,13 @@
 package com.dev.hazhanjalal.haxhantools.utils.print;
 
-import android.util.Log;
-
-import com.dev.hazhanjalal.haxhantools.BuildConfig;
-
-public class Logger {
+public class TempLogger {
     //only set as true for debugging.
-    public static boolean LOGGING_ENABLED = BuildConfig.DEBUG ? true : false;
+    //disabled for library, in normal project use :
+    //LOGGING_ENABLED = BuildConfig.DEBUG ? true :
+    public static boolean LOGGING_ENABLED = false; //
     private static int STACK_TRACE_LEVELS_UP = 6;
     
-    public static void v() {
+    /*public static void v() {
         STACK_TRACE_LEVELS_UP = 8;
         v("HAX", "", true);
     }
@@ -34,14 +32,13 @@ public class Logger {
         }
         
         if (LOGGING_ENABLED) {
-            
             if (message.isEmpty()) {
                 message = getMethodName();
             }
             
             Log.v(tag, getClassNameMethodNameAndLineNumber() + message);
         }
-    }
+    }*/
     
     /**
      * Get the current line number. Note, this will only work as called from
@@ -51,9 +48,9 @@ public class Logger {
      * @return int - Current line number.
      * @author kvarela
      */
-    private static int getLineNumber() {
+    /*private static int getLineNumber() {
         return Thread.currentThread().getStackTrace()[STACK_TRACE_LEVELS_UP].getLineNumber();
-    }
+    }*/
     
     /**
      * Get the current class name. Note, this will only work as called from this
@@ -63,7 +60,7 @@ public class Logger {
      * @return String - Current line number.
      * @author kvarela
      */
-    private static String getClassName() {
+    /*private static String getClassName() {
         try {
             String fileName = Thread.currentThread().getStackTrace()[STACK_TRACE_LEVELS_UP].getFileName();
             
@@ -73,7 +70,7 @@ public class Logger {
             Log.e("HAX", "", e);
             return "";
         }
-    }
+    }*/
     
     /**
      * Get the current method name. Note, this will only work as called from
@@ -83,9 +80,9 @@ public class Logger {
      * @return String - Current line number.
      * @author kvarela
      */
-    private static String getMethodName() {
+   /* private static String getMethodName() {
         return Thread.currentThread().getStackTrace()[STACK_TRACE_LEVELS_UP].getMethodName();
-    }
+    }*/
     
     /**
      * Returns the class name, method name, and line number from the currently
@@ -95,7 +92,7 @@ public class Logger {
      * number.
      * @author kvarela
      */
-    private static String getClassNameMethodNameAndLineNumber() {
+    /*private static String getClassNameMethodNameAndLineNumber() {
         return "(" + getClassName() + ".java" + ":" + getLineNumber() + ")\t: ";
-    }
+    }*/
 }

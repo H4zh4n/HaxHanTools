@@ -440,7 +440,6 @@ public class HxPopup {
     }
     
     
-    
     public static void showImageFullScreen(Object icon) {
         showImageFullScreen(icon, "");
     }
@@ -483,6 +482,154 @@ public class HxPopup {
     
     private static int getRandomNumber() {
         return new Random().nextInt(900000) + 100000;
+    }
+    
+    public static void showCustomPopup(String text) {
+        showCustomPopup(text, null);
+    }
+    
+    
+    public static void showCustomPopup(String text, Bitmap img) {
+        showCustomPopup(System.currentTimeMillis(), text, img, false, "");
+    }
+    
+    public static void showCustomPopup(long time, String text, Bitmap img) {
+        showCustomPopup(time, text, img, false, "");
+    }
+    
+    public static void showCustomPopup(long time, String text, Bitmap img, boolean canTapImage, String popupVisitURL) {
+        showCustomPopup(Utils.activeContext, time, text, img, canTapImage, popupVisitURL);
+    }
+    
+    public static void showCustomPopup(final Context context, long time, String text, Bitmap img, boolean canTapImage, String xPopupVisitURL) {
+        final Dialog dialog = new Dialog(context, R.style.alert_transparent);
+        dialog.setContentView(R.layout.show_popup_message);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        
+        final ImageView ivIMGURL = dialog.findViewById(R.id.imgURL);
+        ImageView btnClose = dialog.findViewById(R.id.btnClose);
+        //  ImageView btnShare = dialog.findViewById(R.id.btnShare);
+        
+        final String popupVisitURL = Utils.replaceEasternNumbers(xPopupVisitURL);
+        
+        //not needed
+        //final String fileName = new File(imageURL).getName().toString();
+        
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        
+        TextView tvText = dialog.findViewById(R.id.tvText);
+        
+        if (text.contains("<") &&
+                text.contains(">")) {
+            tvText.setText(Html.fromHtml(text));
+        } else {
+            tvText.setText(text);
+        }
+        
+        if (!popupVisitURL.isEmpty()) {
+            tvText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_link_24, 0, 0, 0);
+            tvText.setBackground(Utils.getDrawable(R.drawable.onclick_highlight_solid_background));
+            Utils.setBackgroundTintForce(Utils.getColor(R.color.colorBlueChosen), tvText);
+            
+            tvText.setTextColor(Utils.getColor(android.R.color.white));
+            tvText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.openURL(popupVisitURL);
+                }
+            });
+        }
+        
+        if (text.isEmpty()) {
+            tvText.setVisibility(View.GONE);
+        } else {
+            tvText.setVisibility(View.VISIBLE);
+        }
+        
+        if (img != null) {
+            /*btnShare.setVisibility(View.VISIBLE);
+            
+            btnShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.shareBitmapToApps(Utils.drawableToBitmap(ivIMGURL.getDrawable()));
+                }
+            });*/
+            
+            ivIMGURL.setVisibility(View.VISIBLE);
+            
+            if (canTapImage && !popupVisitURL.isEmpty()) {
+                // btnShare.setVisibility(View.GONE);
+                
+                ivIMGURL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.openURL(popupVisitURL);
+                    }
+                });
+            }
+            
+            try {
+                Utils.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        
+                        //in-case custom libraries didn't work. take it to your own hands.
+                        //220404 - you can make it so much more efficient,
+                        // much better than Glide, tho don't want to work on it now.
+                        // you can load image at startup if exists, then force download.
+                        // also check if an image is older than some time period delete them.
+                        // possibly check for old files in MainActivity.
+                       /* Downloader.startDownload(imageURL, "popups",
+                                                 fileName,
+                                                 false,
+                                                 false,
+                                                 false,
+                                                 new OnCustomDownload() {
+                                                     @Override
+                                                     public void onDownloadComplete() {
+                                                         ivIMGURL.setImageURI(Uri.fromFile(UtilsFile.getFileFullPath("popups", fileName)));
+                                                         dialog.show();
+                                                     }
+                                                 });*/
+                        
+                        ivIMGURL.setImageBitmap(img);
+                        
+                        dialog.show();
+                        
+                    }
+                });
+            } catch (Exception e) {
+            
+            }
+            
+            
+            
+           /* Picasso.get()
+                    .load(imageURL)
+                    *//*.transform(new RoundedCornersTransformation(10, 0))*//*
+                    .into(imgURL, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                        
+                        }
+                        
+                        @Override
+                        public void onError(Exception e) {
+                        
+                        }
+                    });*/
+        } else {
+            //btnShare.setVisibility(View.GONE);
+            ivIMGURL.setVisibility(View.GONE);
+            dialog.show();
+        }
+        
     }
     
 }
