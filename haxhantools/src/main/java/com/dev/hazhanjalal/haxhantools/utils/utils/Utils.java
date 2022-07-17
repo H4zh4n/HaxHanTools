@@ -38,7 +38,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.core.app.ActivityCompat;
@@ -486,21 +490,43 @@ public class Utils {
                                             }
                                         }
                                     }, "باشە", "لابردن");*/
-        
+    
     }
     
     
+    /**
+     * Set background tint for view by Color ID
+     */
     public static void setBackgroundTint(int colorID, View... v) {
-        setBackgroundTint(activeContext, colorID, v);
+        setBackgroundTint(activeContext, colorID, true, v);
     }
     
+    /**
+     * Set background tint for view by Color int
+     */
+    public static void setBackgroundTintByColor(int color, View... v) {
+        setBackgroundTint(activeContext, color, false, v);
+    }
+    
+    /**
+     * Set background tint for view by Color ID
+     */
     public static void setBackgroundTint(Context context, int colorID, View... v) {
+        setBackgroundTint(context, colorID, true, v);
+    }
+    
+    /**
+     * Set background tint for view
+     */
+    public static void setBackgroundTint(Context context, int colorID, boolean isID, View... v) {
         for (int i = 0; i < v.length; i++) {
             v[i].setBackgroundTintList(context.getResources().getColorStateList(colorID));
         }
-        
     }
     
+    /**
+     * FORCE background tint by color
+     */
     public static void setBackgroundTintForce(int color, View... v) {
         // change SRC if issues occur
         for (int i = 0; i < v.length; i++) {
@@ -508,12 +534,75 @@ public class Utils {
         }
     }
     
-    
+    /**
+     * Change the tint/color of a drawable
+     */
     public static Drawable setDrawableTint(Drawable d, int color) {
         d.clearColorFilter();
         Drawable wrappedDrawable = DrawableCompat.wrap(d);
         DrawableCompat.setTint(wrappedDrawable, color);
         return wrappedDrawable;
+    }
+    
+    /**
+     * Remove the Drawable from the sides of a view.
+     *
+     * @param view the view/component which to rmove the image from. allows (TextView, Button, CheckBox, RadioButton).
+     */
+    public static void removeDrawableFromSides(View view) {
+        setDrawableSides(0, "", view);
+    }
+    
+    /**
+     * Set Drawable to the right side of a view.
+     *
+     * @param drawableId send the ID of the drawable in drawable folder.
+     * @param view       the view/component which to put the image into. allows (TextView, Button, CheckBox, RadioButton).
+     */
+    public static void setDrawableSides(int drawableId, View view) {
+        setDrawableSides(drawableId, "right", view);
+    }
+    
+    /**
+     * Set Drawable to side of a view.
+     *
+     * @param drawableId send the ID of the drawable in drawable folder.
+     * @param position   where to put the drawable. send one of (l,r,t,b) or (left, right, top, bottom).
+     * @param view       the view/component which to put the image into. allows (TextView, Button, CheckBox, RadioButton).
+     */
+    public static void setDrawableSides(int drawableId, String position, View view) {
+        try {
+            int left = 0, right = 0, top = 0, bottom = 0;
+            switch (position.toLowerCase().substring(0, 1)) {
+                case "l":
+                    left = drawableId;
+                    break;
+                case "r":
+                    right = drawableId;
+                    break;
+                case "t":
+                    top = drawableId;
+                    break;
+                case "b":
+                    bottom = drawableId;
+                    break;
+                default:
+                    right = drawableId;
+                    break;
+            }
+            
+            if (view instanceof TextView) {
+                ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
+            } else if (view instanceof Button) {
+                ((Button) view).setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
+            } else if (view instanceof CheckBox) {
+                ((CheckBox) view).setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
+            } else if (view instanceof RadioButton) {
+                ((RadioButton) view).setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
+            }
+        } catch (Exception e) {
+        
+        }
     }
     
     public static void setStrokeColor(View v, int color) {
@@ -958,7 +1047,7 @@ public class Utils {
                     StringBuilder data = new StringBuilder();
                     
                     while (input.hasNextLine()) {
-                        data.append(input.nextLine());
+                        data.append(input.nextLine() + "\n");
                     }
                     
                     if (action != null) {
