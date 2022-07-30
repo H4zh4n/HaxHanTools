@@ -34,7 +34,7 @@ public class HxProgress {
         
         prDialog = customProgressDialog(context, title, Utils.getString(context, R.string.please_wait), icon);
         
-        Utils.getActivity().runOnUiThread(new Runnable() {
+        Utils.getActivity(context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 prDialog.show();
@@ -54,8 +54,12 @@ public class HxProgress {
     }
     
     public static void closeProgressDialog() {
+        closeProgressDialog(Utils.activeContext);
+    }
+    
+    public static void closeProgressDialog(Context context) {
         if (prDialog != null && prDialog.isShowing()) {
-            Utils.getActivity().runOnUiThread(new Runnable() {
+            Utils.getActivity(context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     prDialog.dismiss();
@@ -79,19 +83,19 @@ public class HxProgress {
         
         switch (new Random().nextInt(5)) {
             case 0:
-                loading.setColor(Utils.getColor(R.color.colorYellowLight));
+                loading.setColor(Utils.getColor(context, R.color.colorYellowLight));
                 break;
             case 1:
-                loading.setColor(Utils.getColor(R.color.colorGreenLight));
+                loading.setColor(Utils.getColor(context, R.color.colorGreenLight));
                 break;
             case 2:
-                loading.setColor(Utils.getColor(R.color.colorBlueLight));
+                loading.setColor(Utils.getColor(context, R.color.colorBlueLight));
                 break;
             case 3:
-                loading.setColor(Utils.getColor(R.color.colorTurquoiseLight));
+                loading.setColor(Utils.getColor(context, R.color.colorTurquoiseLight));
                 break;
             case 4:
-                loading.setColor(Utils.getColor(R.color.colorRedLight));
+                loading.setColor(Utils.getColor(context, R.color.colorRedLight));
                 break;
         }
         

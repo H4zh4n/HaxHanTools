@@ -185,8 +185,11 @@ public class Utils {
     }
     
     public static int getColor(int id) {
-        return ContextCompat.getColor(Utils.activeContext, id);
-        
+        return getColor(Utils.activeContext, id);
+    }
+    
+    public static int getColor(Context context, int id) {
+        return ContextCompat.getColor(context, id);
     }
     
     public static String colorIntToHex(int color) {
@@ -204,10 +207,18 @@ public class Utils {
     
     public static int getDrawableByName(String name) {
         try {
+            return getResourceIdByName("drawable", name);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+    
+    public static int getResourceIdByName(String resource, String name) {
+        try {
             return Utils.activeContext
                     .getResources()
                     .getIdentifier(Utils.activeContext.getPackageName() +
-                                           ":drawable/" + name, null, null);
+                                           ":" + resource + "/" + name, null, null);
         } catch (Exception e) {
             return 0;
         }
@@ -794,7 +805,7 @@ public class Utils {
     }
     
     public static boolean isNetworkAvailable() {
-        return isNetworkAvailable("هێڵی ئینتەرنێت بەردەست نییە!");
+        return isNetworkAvailable(null);
     }
     
     @SuppressLint("MissingPermission")
@@ -813,7 +824,7 @@ public class Utils {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //HxToast.showToastError(textOnNoNetwork);
+                    HxToast.showToastError(textOnNoNetwork);
                 }
             });
         }

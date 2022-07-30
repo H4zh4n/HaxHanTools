@@ -5,6 +5,10 @@ plugins {
 android {
     compileSdk 31
 
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
     defaultConfig {
         applicationId "com.dev.hazhanjalal.haxhantools"
         minSdk 21
@@ -37,7 +41,4 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-
-
-
 }
