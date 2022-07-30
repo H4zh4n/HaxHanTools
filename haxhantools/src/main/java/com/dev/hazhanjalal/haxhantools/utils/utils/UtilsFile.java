@@ -1,6 +1,7 @@
 package com.dev.hazhanjalal.haxhantools.utils.utils;
 
 
+import android.content.Context;
 import android.os.Environment;
 
 import com.dev.hazhanjalal.haxhantools.utils.ui.HxProgress;
@@ -67,7 +68,7 @@ public class UtilsFile {
             e.printStackTrace();
             return false;
         }
-        
+    
         return false;
     }
     
@@ -78,7 +79,11 @@ public class UtilsFile {
     }
     
     public static File getFolderFullPath(String subfolder) {
-        File folder = getFileFullPath(subfolder, "");
+        return getFolderFullPath(Utils.activeContext, subfolder);
+    }
+    
+    public static File getFolderFullPath(Context context, String subfolder) {
+        File folder = getFileFullPath(context, subfolder, "");
         if (!folder.exists()) {
             folder.mkdirs();
         }
@@ -87,7 +92,11 @@ public class UtilsFile {
     }
     
     public static File getFileFullPath(String subfolder, String fileName) {
-        return new File(Utils.activeContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath() + "/" + localFolderPath + "/" + Utils.replaceEasternNumbers(subfolder) + "/" + Utils.replaceEasternNumbers(fileName));
+        return getFileFullPath(Utils.activeContext, subfolder, fileName);
+    }
+    
+    public static File getFileFullPath(Context context, String subfolder, String fileName) {
+        return new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath() + "/" + localFolderPath + "/" + Utils.replaceEasternNumbers(subfolder) + "/" + Utils.replaceEasternNumbers(fileName));
         /*if (Build.VERSION.SDK_INT >= 28) {
             //Stores in Android/data/{app_package}
             //  return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/" + localFolderPath + "/" + subfolder + "/" + fileName);
