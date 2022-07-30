@@ -52,6 +52,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
+import com.dev.hazhanjalal.haxhantools.utils.print.Logger;
 import com.dev.hazhanjalal.haxhantools.utils.ui.HxToast;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ChasingDots;
@@ -98,15 +99,17 @@ public class Utils {
     
     public Utils(Context con) {
         activeContext = con;
-        
+    
+        Logger.setEnabled(con);
+    
         colors = new int[]{
                 Utils.getColor(R.color.colorBlueChosen),
                 Utils.getColor(R.color.colorBlueDark),
                 Utils.getColor(R.color.colorBlueLight),
-                
+            
                 Utils.getColor(R.color.colorOrangeDark),
                 Utils.getColor(R.color.colorOrangeLight),
-                
+            
                 Utils.getColor(R.color.colorGreenChosen),
                 Utils.getColor(R.color.colorGreenDark),
                 Utils.getColor(R.color.colorGreenLight),
