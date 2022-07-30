@@ -1,6 +1,8 @@
 package com.dev.hazhanjalal.haxhantools.utils.utils;
 
 
+import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.e;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -335,18 +337,30 @@ public class Utils {
     }
     
     public static String getStringPref(String key, String def) {
-        
         if (prefs != null) {
             return prefs.getString(key, def);
         }
-        
+    
         return null;
     }
     
-    public static void removeKey(String key) {
+    public static void removeKeyPrefs(String key) {
         if (prefs.contains(key)) {
             prefs.edit().remove(key).commit();
         }
+    }
+    
+    public static boolean prefsContains(String key) {
+        if (prefs != null) {
+            if (prefs.contains(key)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            e("SharedPreferences not initialized.");
+        }
+        return false;
     }
     
     

@@ -49,6 +49,10 @@ public class Logger {
         Log.e("-HAX-", "", e);
     }
     
+    public static void e(String e) {
+        Log.e("-HAX-", "" + e);
+    }
+    
     /**
      * Make sure Filter is -HAX-
      */
