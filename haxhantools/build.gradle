@@ -55,9 +55,6 @@ dependencies {
     //Zoomable ImageView
     implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
 
-    //Hash generator
-    implementation 'com.password4j:password4j:1.6.0'
-
     //Download manager
     implementation 'com.mindorks.android:prdownloader:0.6.0'
 

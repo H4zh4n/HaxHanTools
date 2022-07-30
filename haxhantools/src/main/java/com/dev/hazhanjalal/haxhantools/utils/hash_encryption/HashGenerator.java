@@ -1,16 +1,9 @@
 package com.dev.hazhanjalal.haxhantools.utils.hash_encryption;
 
-import com.password4j.Password;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HashGenerator {
-    
-    public static String getBcrypt(String message) {
-        return Password.hash(message).withBcrypt().getResult();
-    }
-    
     
     public static String getSHA1(String message) {
         return getHash(message, "SHA-1");
