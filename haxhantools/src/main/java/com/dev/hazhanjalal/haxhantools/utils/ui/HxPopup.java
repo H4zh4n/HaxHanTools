@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,39 +33,89 @@ public class HxPopup {
     // START - showInputDialog
     public static void showInputDialog(Context context, String title, String message, String hint, Drawable icon,
                                        final CustomAction action, boolean numberOnly) {
-        showInputDialog(context, title, message, "", hint, icon, action, numberOnly);
+        showInputDialog(context, title, message, "", hint, icon, action, numberOnly,
+                        context.getString(R.string.confirm_button), context.getString(R.string.close_button));
     }
     
     public static void showInputDialog(Context context, String title, String message, String hint, Drawable icon,
                                        final CustomAction action) {
-        showInputDialog(context, title, message, "", hint, icon, action, false);
+        showInputDialog(context, title, message, "", hint, icon, action, false,
+                        context.getString(R.string.confirm_button), context.getString(R.string.close_button));
     }
     
     public static void showInputDialog(Context context, String title, String message, String hint,
                                        final CustomAction action, boolean isNumberOnly) {
-        showInputDialog(context, title, message, "", hint, context.getDrawable(R.drawable.ic_goto_page), action, isNumberOnly);
+        showInputDialog(context, title, message, "", hint, context.getDrawable(R.drawable.ic_goto_page), action, isNumberOnly,
+                        context.getString(R.string.confirm_button), context.getString(R.string.close_button));
     }
     
     public static void showInputDialog(Context context, String title, String message, final CustomAction action) {
-        showInputDialog(context, title, message, "", "", context.getDrawable(R.drawable.ic_goto_page), action, false);
+        showInputDialog(context, title, message, "", "", context.getDrawable(R.drawable.ic_goto_page), action, false,
+                        context.getString(R.string.confirm_button), context.getString(R.string.close_button));
     }
     
     public static void showInputDialog(Context context, String title, String message, Drawable icon,
                                        final CustomAction action) {
-        showInputDialog(context, title, message, "", "", icon, action, false);
+        showInputDialog(context, title, message, "", "", icon, action, false,
+                        context.getString(R.string.confirm_button), context.getString(R.string.close_button));
     }
+    
+    public static void showInputDialog(String title, String message,
+                                       final CustomAction action, boolean isNumberOnly, String txtPositiveButton, String txtNegativeButton) {
+        
+        showInputDialog(Utils.activeContext, title, message, "", "", Utils.getDrawable(R.drawable.ic_edit), action, isNumberOnly,
+                        txtPositiveButton, txtNegativeButton);
+    }
+    
+    public static void showInputDialog(String message,
+                                       final CustomAction action, boolean isNumberOnly, String txtPositiveButton, String txtNegativeButton) {
+        
+        showInputDialog(Utils.activeContext, "", message, "", "", Utils.getDrawable(R.drawable.ic_edit), action, isNumberOnly,
+                        txtPositiveButton, txtNegativeButton);
+    }
+    
+    public static void showInputDialog(String title, String message, String hint,
+                                       final CustomAction action, boolean isNumberOnly, String txtPositiveButton, String txtNegativeButton) {
+        
+        showInputDialog(Utils.activeContext, title, message, "", hint, Utils.getDrawable(R.drawable.ic_edit), action, isNumberOnly,
+                        txtPositiveButton, txtNegativeButton);
+    }
+    
+    public static void showInputDialog(String title, String message,
+                                       final CustomAction action, String txtPositiveButton, String txtNegativeButton) {
+        
+        showInputDialog(Utils.activeContext, title, message, "", "", Utils.getDrawable(R.drawable.ic_edit), action, false,
+                        txtPositiveButton, txtNegativeButton);
+    }
+    
+    public static void showInputDialog(String title, String message, String hint,
+                                       final CustomAction action, String txtPositiveButton, String txtNegativeButton) {
+        
+        showInputDialog(Utils.activeContext, title, message, "", hint, Utils.getDrawable(R.drawable.ic_edit), action, false,
+                        txtPositiveButton, txtNegativeButton);
+    }
+    
     //END - customInputDialog
     
     // START - showConfirmDialog
-    
     public static void showInputDialog(Context context, String title, String message, String input, String hint,
                                        Drawable icon,
-                                       final CustomAction action, boolean numberOnly) {
+                                       final CustomAction action, boolean numberOnly, String txtPositiveButton, String txtNegativeButton) {
+        
         final Dialog shInput = customInputDialog(context, title, message, input, hint, icon);
         final EditText txtInput = shInput.findViewById(R.id.txtInput);
         
         if (numberOnly) {
             txtInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+            
+            txtInput.setTextSize(24);
+            txtInput.setGravity(Gravity.CENTER);
+            
+            txtInput.setPadding(Utils.dpToPx(20),
+                                Utils.dpToPx(20),
+                                Utils.dpToPx(20),
+                                Utils.dpToPx(20));
+            
         }
         
         if (title.equalsIgnoreCase("Password")) {
@@ -91,7 +142,7 @@ public class HxPopup {
         });
         
         Button btnPositive = shInput.findViewById(R.id.btnConfirm);
-        btnPositive.setText(context.getString(R.string.confirm_button));
+        btnPositive.setText(txtPositiveButton);
         btnPositive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +161,7 @@ public class HxPopup {
         });
         
         Button btnNegative = (Button) shInput.findViewById(R.id.btnNegative);
-        btnNegative.setText(context.getString(R.string.close_button));
+        btnNegative.setText(txtNegativeButton);
         btnNegative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

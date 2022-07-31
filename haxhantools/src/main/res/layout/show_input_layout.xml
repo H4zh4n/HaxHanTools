@@ -86,6 +86,7 @@
         android:scrollbars="vertical"
         android:textColorHint="@color/colorTextHint"
         android:textCursorDrawable="@null"
+        android:textSize="18dp"
         android:visibility="visible">
 
         <requestFocus />
