@@ -207,8 +207,13 @@ public class Utils {
     }
     
     public static Drawable getDrawable(int id) {
-        return ContextCompat.getDrawable(Utils.activeContext, id);
+        return getDrawable(Utils.activeContext, id);
     }
+    
+    public static Drawable getDrawable(Context context, int id) {
+        return ContextCompat.getDrawable(context, id);
+    }
+    
     
     public static int getDrawableByName(String name) {
         try {

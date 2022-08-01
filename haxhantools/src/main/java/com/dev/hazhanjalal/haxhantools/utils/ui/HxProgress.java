@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dev.hazhanjalal.haxhantools.R;
+import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
 import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 
@@ -17,22 +18,50 @@ import java.util.Random;
 public class HxProgress {
     
     static Dialog prDialog;
+    static Context context;
     
     //START - Progress Dialog
     public static void showProgressDialog(String title) {
-        showProgressDialog(Utils.activeContext, title, Utils.activeContext.getDrawable(R.drawable.ic_info));
+        showProgressDialog(Utils.activeContext, title, Utils.getString(R.string.please_wait), Utils.getDrawable(R.drawable.ic_info), null);
+    }
+    
+    public static void showProgressDialog(String title, String message) {
+        showProgressDialog(Utils.activeContext, title, message, Utils.getDrawable(R.drawable.ic_info), null);
+    }
+    
+    public static void showProgressDialog(Context context, String title, String message) {
+        showProgressDialog(context, title, message, Utils.getDrawable(context, R.drawable.ic_info), null);
+    }
+    
+    
+    public static void showProgressDialog(String title, String message, CustomAction onDismiss) {
+        showProgressDialog(Utils.activeContext, title, message, Utils.getDrawable(R.drawable.ic_info), onDismiss);
+    }
+    
+    public static void showProgressDialog(Context context, String title, String message, CustomAction onDismiss) {
+        showProgressDialog(context, title, message, Utils.getDrawable(context, R.drawable.ic_info), onDismiss);
+    }
+    
+    public static void showProgressDialog(String title, String message, Drawable icon, CustomAction onDismiss) {
+        showProgressDialog(Utils.activeContext, title, message, icon, onDismiss);
+    }
+    
+    public static void showProgressDialog(Context context, String title, Drawable icon, String message, CustomAction onDismiss) {
+        showProgressDialog(context, title, message, icon, onDismiss);
     }
     
     public static void showProgressDialog(Context context, String title) {
-        showProgressDialog(context, title, context.getDrawable(R.drawable.ic_info));
+        showProgressDialog(context, title, Utils.getString(context, R.string.please_wait), Utils.getDrawable(context, R.drawable.ic_info), null);
     }
     
-    public static void showProgressDialog(Context context, String title, Drawable icon) {
-        if (prDialog != null && prDialog.isShowing()) {
+    public static void showProgressDialog(Context ctx, String title, String message, Drawable icon, CustomAction onDismiss) {
+        context = ctx;
+        
+        if ((prDialog != null && prDialog.isShowing()) || ctx == null) {
             return;
         }
         
-        prDialog = customProgressDialog(context, title, Utils.getString(context, R.string.please_wait), icon);
+        prDialog = customProgressDialog(context, title, message, icon, onDismiss);
         
         Utils.getActivity(context).runOnUiThread(new Runnable() {
             @Override
@@ -43,8 +72,8 @@ public class HxProgress {
     }
     
     public static void setProgressText(final String message) {
-        if (prDialog != null && prDialog.isShowing()) {
-            Utils.getActivity().runOnUiThread(new Runnable() {
+        if (prDialog != null && prDialog.isShowing() && context != null) {
+            Utils.getActivity(context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     ((TextView) prDialog.findViewById(R.id.lblMessage)).setText(message);
@@ -54,11 +83,11 @@ public class HxProgress {
     }
     
     public static void closeProgressDialog() {
-        closeProgressDialog(Utils.activeContext);
+        closeProgressDialog(context);
     }
     
     public static void closeProgressDialog(Context context) {
-        if (prDialog != null && prDialog.isShowing()) {
+        if (prDialog != null && prDialog.isShowing() && context != null) {
             Utils.getActivity(context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -68,7 +97,7 @@ public class HxProgress {
         }
     }
     
-    private static Dialog customProgressDialog(Context context, String title, String message, Drawable icon) {
+    private static Dialog customProgressDialog(Context context, String title, String message, Drawable icon, CustomAction onDismiss) {
         prDialog = new Dialog(context, R.style.alert);
         prDialog.setTitle(title);
         prDialog.setContentView(R.layout.show_progress_layout);
@@ -76,6 +105,21 @@ public class HxProgress {
         TextView lblMessage = prDialog.findViewById(R.id.lblMessage);
         prDialog.setCancelable(false);
         ImageView imgIcon = prDialog.findViewById(R.id.imgIcon);
+        View btnClose = prDialog.findViewById(R.id.btnClose);
+        
+        if (onDismiss != null) {
+            btnClose.setVisibility(View.VISIBLE);
+            
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onDismiss.positiveButtonPressed();
+                    closeProgressDialog();
+                }
+            });
+        } else {
+            btnClose.setVisibility(View.GONE);
+        }
         
         ProgressBar progressBar = (ProgressBar) prDialog.findViewById(R.id.spin_kit);
         
