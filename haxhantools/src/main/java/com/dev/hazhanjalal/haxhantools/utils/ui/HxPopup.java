@@ -389,7 +389,7 @@ public class HxPopup {
     public static Dialog customMessageDialog(Context context, String title, String message, Drawable icon) {
         final Dialog dialog = new Dialog(context, R.style.alert);
         dialog.setTitle(title);
-        dialog.setContentView(R.layout.show_message_layout);
+        dialog.setContentView(R.layout.hx_show_message_layout);
         final TextView txtTitle = dialog.findViewById(R.id.lblTitle);
         TextView lblMessage = dialog.findViewById(R.id.lblMessage);
         //txtMessage.setMovementMethod(new ScrollingMovementMethod());
@@ -447,7 +447,7 @@ public class HxPopup {
                                            Drawable icon) {
         final Dialog dialog = new Dialog(context, R.style.alert);
         dialog.setTitle(title);
-        dialog.setContentView(R.layout.show_input_layout);
+        dialog.setContentView(R.layout.hx_show_input_layout);
         TextView txtTitle = dialog.findViewById(R.id.lblTitle);
         TextView lblMessage = dialog.findViewById(R.id.lblMessage);
         EditText txtInput = dialog.findViewById(R.id.txtInput);
@@ -497,7 +497,7 @@ public class HxPopup {
     
     public static void showImageFullScreen(Object icon, String text) {
         final Dialog dialog = new Dialog(Utils.activeContext, R.style.alert_transparent);
-        dialog.setContentView(R.layout.show_popup_message);
+        dialog.setContentView(R.layout.hx_show_popup_message);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         TouchImageView imgIcon = dialog.findViewById(R.id.imgURL);
         
@@ -554,7 +554,7 @@ public class HxPopup {
     
     public static void showCustomPopup(final Context context, long time, String text, Bitmap img, boolean canTapImage, String xPopupVisitURL) {
         final Dialog dialog = new Dialog(context, R.style.alert_transparent);
-        dialog.setContentView(R.layout.show_popup_message);
+        dialog.setContentView(R.layout.hx_show_popup_message);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         
         final ImageView ivIMGURL = dialog.findViewById(R.id.imgURL);

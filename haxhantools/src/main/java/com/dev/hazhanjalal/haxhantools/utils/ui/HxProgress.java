@@ -100,7 +100,7 @@ public class HxProgress {
     private static Dialog customProgressDialog(Context context, String title, String message, Drawable icon, CustomAction onDismiss) {
         prDialog = new Dialog(context, R.style.alert);
         prDialog.setTitle(title);
-        prDialog.setContentView(R.layout.show_progress_layout);
+        prDialog.setContentView(R.layout.hx_show_progress_layout);
         TextView lblTitle = prDialog.findViewById(R.id.lblTitle);
         TextView lblMessage = prDialog.findViewById(R.id.lblMessage);
         prDialog.setCancelable(false);

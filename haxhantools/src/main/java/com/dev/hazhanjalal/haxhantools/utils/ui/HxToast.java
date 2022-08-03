@@ -25,7 +25,7 @@ public class HxToast {
             @Override
             public void run() {
                 LayoutInflater inflater = Utils.getActivity().getLayoutInflater();
-                View layout = inflater.inflate(R.layout.show_custom_toast,
+                View layout = inflater.inflate(R.layout.hx_show_custom_toast,
                                                (ViewGroup) Utils.getActivity().findViewById(R.id.toast_layout_root));
                 
                 LinearLayout loToast = layout.findViewById(R.id.toast_layout_root);
