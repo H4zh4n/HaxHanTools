@@ -25,26 +25,26 @@
 
         <TextView
             android:id="@+id/lblTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:background="@null"
+            android:gravity="center_vertical"
             android:text="Title here"
             android:textColor="@color/colorWhiteLight"
             android:textSize="20dp"
             android:textStyle="bold" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
         <ImageView
             android:id="@+id/btnDismiss"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
             android:background="@drawable/onclick_highlight"
+            android:gravity="center_vertical"
             android:src="@drawable/ic_close" />
     </LinearLayout>
 
