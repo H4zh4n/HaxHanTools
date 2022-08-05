@@ -28,6 +28,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
@@ -201,6 +202,7 @@ public class Utils {
         String hexColor = "#" + Integer.toHexString(color).substring(2);
         return hexColor;
     }
+    
     
     public static Typeface getTypeFace(int id) {
         return ResourcesCompat.getFont(Utils.activeContext, id);
@@ -1320,7 +1322,7 @@ public class Utils {
         if (haveDollarSign) {
             sign = "$";
         }
-        
+    
         return sign + String.format("%,." + decimals + "f", value);
     }
     
@@ -1331,6 +1333,38 @@ public class Utils {
         return Float.parseFloat(num);
     }
     
+    
+    public static void shortVibrate() {
+        shortVibrate(Utils.activeContext);
+    }
+    
+    public static void shortVibrate(Context context) {
+        vibrate(context, 50);
+    }
+    
+    public static void longVibrate() {
+        longVibrate(Utils.activeContext);
+    }
+    
+    public static void longVibrate(Context context) {
+        vibrate(context, 50 * 10);
+    }
+    
+    public static void vibrate(long duration) {
+        vibrate(Utils.activeContext, duration);
+    }
+    
+    public static void vibrate(Context context, long duration) {
+        try {
+            ((Vibrator) context.getSystemService(context.VIBRATOR_SERVICE)).vibrate(duration);
+        } catch (Exception e) {
+            e(e);
+        }
+    }
+    
+    public static String removeDuplicateCharacters(String text) {
+        return text.replaceAll("(.)(?=.*\\1)", "");
+    }
     
     /**
      * Detect hit between two ImageViews.
