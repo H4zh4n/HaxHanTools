@@ -4,6 +4,9 @@ package com.dev.hazhanjalal.haxhantools.utils.utils;
 import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.e;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -1364,6 +1367,70 @@ public class Utils {
     
     public static String removeDuplicateCharacters(String text) {
         return text.replaceAll("(.)(?=.*\\1)", "");
+    }
+    
+    
+    /**
+     * Animate views based on set properties. [Utils.whenViewIsVisible(View, CustomAction) might be needed in some cases].
+     *
+     * @param v           View to be animated.
+     * @param property    animation to do. can be either of [translationX , translationY, rotation, rotationX, rotationY, scaleX , scaleY, pivotX, pivotY, x, y, alpha]
+     *                    [for more info read https://developer.android.com/guide/topics/graphics/prop-animation#views]
+     * @param targetValue value that the animation starts with [eg./ 0 alpha].
+     * @param duration    amount of time to perform this action in milliseconds..
+     */
+    public static void animate(View v, String property, float targetValue, long duration) {
+        animate(v, property, targetValue, duration, null, -1, 0);
+    }
+    
+    /**
+     * Animate views based on set properties. [Utils.whenViewIsVisible(View, CustomAction) might be needed in some cases].
+     *
+     * @param v                View to be animated.
+     * @param property         animation to do. can be either of [translationX , translationY, rotation, rotationX, rotationY, scaleX , scaleY, pivotX, pivotY, x, y, alpha]
+     *                         [for more info read https://developer.android.com/guide/topics/graphics/prop-animation#views]
+     * @param startTargetValue value that the animation starts with [eg./ 0 alpha].
+     * @param endTargetValue   same as [endValue].
+     * @param duration         amount of time to perform this action in milliseconds..
+     */
+    public static void animate(View v, String property, float startTargetValue, float endTargetValue, long duration) {
+        animate(v, property, startTargetValue, duration, property, endTargetValue, duration);
+    }
+    
+    /**
+     * Animate views based on set properties. [Utils.whenViewIsVisible(View, CustomAction) might be needed in some cases].
+     *
+     * @param v                View to be animated.
+     * @param startProperty    animation to do. can be either of [translationX , translationY, rotation, rotationX, rotationY, scaleX , scaleY, pivotX, pivotY, x, y, alpha]
+     *                         [for more info read https://developer.android.com/guide/topics/graphics/prop-animation#views]
+     * @param startTargetValue value that the animation starts with [eg./ 0 alpha].
+     * @param startDuration    amount of time to perform this action in milliseconds.
+     * @param endProperty      same as [startProperty], but done when [startProperty] ends.
+     * @param endTargetValue   same as [endValue].
+     * @param endDuration      same as [startDuration].
+     */
+    public static void animate(View v, String startProperty, float startTargetValue, long startDuration, String endProperty, float endTargetValue, long endDuration) {
+        try {
+            Utils.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(v, startProperty, startTargetValue).setDuration(startDuration);
+                    
+                    if (endProperty != null) {
+                        animator.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animator) {
+                                ObjectAnimator.ofFloat(v, endProperty, endTargetValue).setDuration(endDuration).start();
+                            }
+                        });
+                    }
+                    
+                    animator.start();
+                }
+            });
+        } catch (Exception e) {
+            Logger.e(e);
+        }
     }
     
     /**
