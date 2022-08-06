@@ -9,6 +9,7 @@
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/drawable/round_corner_outline_highlight.xml" value="0.2195" />
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/hx_layout_item_list.xml" value="0.4" />
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/hx_no_data_found.xml" value="0.23802083333333332" />
+        <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/hx_show_custom_toast.xml" value="0.2390625" />
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/hx_show_input_layout.xml" value="0.264" />
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/hx_show_item_list.xml" value="0.4" />
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/hx_show_message_layout.xml" value="0.264" />
@@ -17,6 +18,7 @@
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/show_input_layout.xml" value="0.2390625" />
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/show_popup_message.xml" value="0.2390625" />
         <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/layout/show_progress_layout.xml" value="0.2390625" />
+        <entry key="..\:/z/FILES/MyFiles/Project/Android/HaxHanTools/haxhantools/src/main/res/xml/provider_paths.xml" value="0.2390625" />
       </map>
     </option>
   </component>

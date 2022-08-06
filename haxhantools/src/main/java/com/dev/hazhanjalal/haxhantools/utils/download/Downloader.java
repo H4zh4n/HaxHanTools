@@ -106,6 +106,8 @@ public class Downloader {
         if (haveNotification) {
             notif = new CustomNotification(Utils.activeContext)
                     .setTitle(title)
+                    .setContentText(default_progress_text)
+                    .setSmallIconResource(Utils.getResourceIdByName("mipmap", "ic_launcher"))
                     .setNotification_ID(new Random().nextInt(1234567))
                     .setMaxProgress(100)
                     .sendNotification();

@@ -125,7 +125,7 @@ public class CustomNotification {
         notiBuilder = new NotificationCompat.Builder(context, "download_manager_31415");
         
         if (contentText == null || contentText.isEmpty()) {
-            contentText = "داگرتن لە ئارادایە";
+            contentText = Downloader.default_progress_text;
         }
         
         if (smallIconResource == 0) {
@@ -151,12 +151,17 @@ public class CustomNotification {
                 //LOW for no vibration
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setOngoing(isOngoing)
-                .setSmallIcon(smallIconResource)
                 .setAutoCancel(false)
                 .setLargeIcon(largeIcon)
                 .setProgress(maxProgress, 0, false)
                 .build();
+    
+        try {
+            notiBuilder.setSmallIcon(smallIconResource);
+        } catch (Exception e) {
         
+        }
+    
         notificationManager.notify(DOWNLOAD_NOTIFICATION_ID, notiBuilder.build());
         return this;
     }

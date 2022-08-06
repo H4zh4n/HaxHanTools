@@ -3,7 +3,6 @@ package com.dev.hazhanjalal.haxhantools.utils.utils;
 
 import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.e;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -479,10 +478,10 @@ public class Utils {
         
     }
     
-    public static boolean isPermissionGranted() {
+   /* public static boolean isPermissionGranted() {
         return ContextCompat.checkSelfPermission(activeContext, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(activeContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-    }
+    }*/
     
     public static boolean isPermissionGranted(String... perm) {
         boolean isGranted = true;
@@ -501,13 +500,13 @@ public class Utils {
                                           perms, 20);
     }
     
-    public static void showRequestPermission() {
+   /* public static void showRequestPermission() {
         showRequestPermission(false);
     }
     
     public static void showRequestPermission(final boolean isRestartNeeded) {
-        /* Utils.showStuff = false;*/
-        /*HxPopup.showConfirmDialog("ڕێگەدان بە بەرنامە", "تكایە لە ڕووكاری دواتر ئەگەر سماح/" +
+        *//* Utils.showStuff = false;*//*
+     *//*HxPopup.showConfirmDialog("ڕێگەدان بە بەرنامە", "تكایە لە ڕووكاری دواتر ئەگەر سماح/" +
                                             "Allow دەركەوت دەستی لێ بدە تا بەرنامەكە " +
                                             "بتوانێت كاربكات بەبێ كێشە.",
                                     new CustomAction() {
@@ -517,7 +516,7 @@ public class Utils {
                                                                               new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
                                                                                       , Manifest.permission.READ_EXTERNAL_STORAGE}, 20);
                 
-                                            *//* Utils.showStuff = true;*//*
+                                            *//**//* Utils.showStuff = true;*//**//*
                                         }
             
                                         @Override
@@ -527,9 +526,9 @@ public class Utils {
                                                 Utils.restartThis();
                                             }
                                         }
-                                    }, "باشە", "لابردن");*/
-    
-    }
+                                    }, "باشە", "لابردن");*//*
+        
+    }*/
     
     
     /**
@@ -1357,6 +1356,8 @@ public class Utils {
         vibrate(Utils.activeContext, duration);
     }
     
+    //suppress MissingPermission cause it's added. it's just being annoying.
+    @SuppressLint("MissingPermission")
     public static void vibrate(Context context, long duration) {
         try {
             ((Vibrator) context.getSystemService(context.VIBRATOR_SERVICE)).vibrate(duration);
