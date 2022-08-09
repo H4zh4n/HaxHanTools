@@ -74,15 +74,20 @@ import com.github.ybq.android.spinkit.style.WanderingCubes;
 import com.github.ybq.android.spinkit.style.Wave;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 
 /*
@@ -688,6 +693,46 @@ public class Utils {
     
     public static Activity getActivity(Context context) {
         return ((Activity) context);
+    }
+    
+    public static int getByteSizeOfBitmap(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return bitmap.getAllocationByteCount();
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+            return bitmap.getByteCount();
+        } else {
+            return bitmap.getRowBytes() * bitmap.getHeight();
+        }
+    }
+    
+    public static Uri getURIFromBitmap(Bitmap inImage) {
+        return getURIFromBitmap(activeContext, inImage);
+    }
+    
+    public static Uri getURIFromBitmap(Context context, Bitmap inImage) {
+        try {
+            // File tempDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath() + "");
+            File tempDir = new File(context.getCacheDir().getPath() + "");
+            tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+            
+            //v("path=" + tempDir.getAbsolutePath());
+            
+            tempDir.mkdir();
+            File tempFile = File.createTempFile("img_" + System.currentTimeMillis(), ".jpg", tempDir);
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            byte[] bitmapData = bytes.toByteArray();
+            
+            //write the bytes in file
+            FileOutputStream fos = new FileOutputStream(tempFile);
+            fos.write(bitmapData);
+            fos.flush();
+            fos.close();
+            return Uri.fromFile(tempFile);
+        } catch (Exception e) {
+            //e(e);
+        }
+        return null;
     }
     
     //RAM Related methods
@@ -1370,6 +1415,29 @@ public class Utils {
         return text.replaceAll("(.)(?=.*\\1)", "");
     }
     
+    /**
+     * Remove duplicates from an ArrayList
+     *
+     * @param list list to remove duplicates.
+     */
+    public static <T> ArrayList<T> removeDuplicatesFromArrayList(ArrayList<T> list) {
+        
+        // Create a new LinkedHashSet
+        Set<T> set = new LinkedHashSet<>();
+        
+        // Add the elements to set
+        set.addAll(list);
+        
+        // Clear the list
+        list.clear();
+        
+        // add the elements of set
+        // with no duplicates to the list
+        list.addAll(set);
+        
+        // return the list
+        return list;
+    }
     
     /**
      * Animate views based on set properties. [Utils.whenViewIsVisible(View, CustomAction) might be needed in some cases].
