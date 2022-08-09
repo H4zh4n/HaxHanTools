@@ -38,7 +38,6 @@ public class HxPopup {
     
     public static Context activeContext;
     
-    
     public static void showCustomPopup(String imageURL) {
         ClassPopup pop = new ClassPopup();
         pop.popupTime = System.currentTimeMillis();
