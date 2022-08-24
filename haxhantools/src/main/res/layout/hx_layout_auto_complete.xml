@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="0dp"
+    android:orientation="horizontal"
+    app:cardBackgroundColor="@color/colorGreenChosen"
+    app:cardCornerRadius="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <AutoCompleteTextView
+            android:id="@+id/txtData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorBlackTransparent"
+            android:completionThreshold="1"
+            android:gravity="center"
+            android:hint="                                              "
+            android:inputType="textShortMessage"
+            android:lines="1"
+            android:padding="5dp"
+            android:popupBackground="@color/colorBlueChosen"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/imgClose"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_close" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
