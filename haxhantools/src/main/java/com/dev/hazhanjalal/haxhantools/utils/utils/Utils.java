@@ -1015,6 +1015,16 @@ public class Utils {
         });
     }
     
+    public static void whenViewIsVisibleRunnable(final View v, final CustomAction action) {
+        v.post(new Runnable() {
+            @Override
+            public void run() {
+                action.positiveButtonPressed();
+            }
+        });
+    }
+    
+    
     @SuppressWarnings("deprecation")
     public static void copyToClip(Context context, String text, boolean showToast) {
         android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);

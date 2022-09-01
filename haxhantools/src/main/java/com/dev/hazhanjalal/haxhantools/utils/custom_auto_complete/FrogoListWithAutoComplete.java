@@ -3,6 +3,7 @@ package com.dev.hazhanjalal.haxhantools.utils.custom_auto_complete;
 
 import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.e;
 
+import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,17 @@ import java.util.List;
 public class FrogoListWithAutoComplete {
     
     //static AutoCompleteTextView lastItem;
+    
+    public static Context context;
+    
+    public FrogoListWithAutoComplete() {
+        context = Utils.activeContext;
+    }
+    
+    public FrogoListWithAutoComplete(Context ctx) {
+        context = ctx;
+        
+    }
     
     public static String formatToSingleLine(List<String> ar) {
         String result = "";
@@ -58,7 +70,7 @@ public class FrogoListWithAutoComplete {
         //arList.add("");
     }
     
-    public static void requetLastItemFocus(ClassFrogoData dt) {
+    public static void requestLastItemFocus(ClassFrogoData dt) {
         requestItemFocus(dt, dt.dataIncluded.size() - 1);
     }
     
@@ -67,26 +79,39 @@ public class FrogoListWithAutoComplete {
         try {
             int atIndex = index;
             dt.frg.scrollToPosition(atIndex);
+    
+            Utils.whenViewIsVisibleRunnable(dt.frg,
+                                            new CustomAction() {
+                                                @Override
+                                                public void positiveButtonPressed() {
+                                                    View viewItem = dt.frg.getLayoutManager().findViewByPosition(atIndex);
+                                                    AutoCompleteTextView cd = viewItem.findViewById(R.id.txtData);
+                                                    Utils.showKeyboard(cd);
+                                                }
+                                            });
             
-            Utils.whenViewIsVisible(dt.frg,
+          /*  Utils.whenViewIsVisible(dt.frg,
                                     new CustomAction() {
                                         @Override
                                         public void positiveButtonPressed() {
                                             View viewItem = dt.frg.getLayoutManager().findViewByPosition(atIndex);
                                             AutoCompleteTextView cd = viewItem.findViewById(R.id.txtData);
+                                            //cd.requestFocus();
                     
                                             Utils.showKeyboard(cd);
                                         }
-                                    });
+                                    });*/
         } catch (Exception e) {
         
         }
     }
     
     public static void setListForAutoComplete(AutoCompleteTextView et, List arValues) {
-        AutoSuggestAdapter adapter = new AutoSuggestAdapter(Utils.activeContext,
+        AutoSuggestAdapter adapter = new AutoSuggestAdapter(context,
                                                             R.layout.custom_simple_list,
                                                             arValues);
+    
+        // et.setDropDownBackgroundDrawable(context.getResources().getDrawable(R.drawable.round_corner));
         et.setAdapter(adapter);
     }
     
@@ -153,13 +178,12 @@ public class FrogoListWithAutoComplete {
                 }
                 }
                 });*/
-                
-                /** focus on edittext
-                 * */
+    
+                /** focus on edittext */
                 txtData.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        requetLastItemFocus(dt);
+                        requestLastItemFocus(dt);
                     }
                 });
                 
@@ -288,8 +312,8 @@ public class FrogoListWithAutoComplete {
             //add single empty at the end.
             dt.dataIncluded.add("");
         }
-        
-        dt.frg.setItemViewCacheSize(100);
+    
+        dt.frg.setItemViewCacheSize(Integer.MAX_VALUE);
         
         if (dt.isLinear) {
             dt.frg.injector()
@@ -314,7 +338,7 @@ public class FrogoListWithAutoComplete {
         }*/
         try {
             if (isLastItemFocusRequested) {
-                requetLastItemFocus(dt);
+                requestLastItemFocus(dt);
             } else {
                 dt.frg.scrollToPosition(dt.dataIncluded.size() - 1);
             }

@@ -18,13 +18,13 @@ public class ClassFrogoData {
     List<String> dataIncluded;
     List<String> autoCompleteList;
     
-    public ClassFrogoData(FrogoRecyclerView frg, List<String> dataIncluded, ArrayList<String> autoCompleteList) {
+    public ClassFrogoData(FrogoRecyclerView frg, ArrayList<String> dataIncluded, ArrayList<String> autoCompleteList) {
         this.frg = frg;
         this.dataIncluded = dataIncluded;
         this.autoCompleteList = autoCompleteList;
     }
     
-    public ClassFrogoData(FrogoRecyclerView frg, List<String> dataIncluded, ArrayList<String> autoCompleteList, int backgroundColor) {
+    public ClassFrogoData(FrogoRecyclerView frg, ArrayList<String> dataIncluded, ArrayList<String> autoCompleteList, int backgroundColor) {
         this.frg = frg;
         this.autoCompleteList = autoCompleteList;
         this.dataIncluded = dataIncluded;
@@ -32,14 +32,14 @@ public class ClassFrogoData {
     }
     
     
-    public ClassFrogoData(FrogoRecyclerView frg, List<String> dataIncluded, ArrayList<String> autoCompleteList, boolean isLinear) {
+    public ClassFrogoData(FrogoRecyclerView frg, ArrayList<String> dataIncluded, ArrayList<String> autoCompleteList, boolean isLinear) {
         this.frg = frg;
         this.autoCompleteList = autoCompleteList;
         this.dataIncluded = dataIncluded;
         this.isLinear = isLinear;
     }
     
-    public ClassFrogoData(FrogoRecyclerView frg, List<String> dataIncluded, ArrayList<String> autoCompleteList, int backgroundColor, boolean isLinear) {
+    public ClassFrogoData(FrogoRecyclerView frg, ArrayList<String> dataIncluded, ArrayList<String> autoCompleteList, int backgroundColor, boolean isLinear) {
         this.frg = frg;
         this.autoCompleteList = autoCompleteList;
         this.dataIncluded = dataIncluded;
