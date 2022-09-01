@@ -174,13 +174,15 @@ public class UtilsImage {
         return color ^ 0x00ffffff;
     }
     
+    /**
+     * Change color alpha
+     *
+     * @param color the color to change
+     * @param alpha desired alpha between 0 and 255
+     */
     @ColorInt
-    public static int adjustAlpha(@ColorInt int color, float factor) {
-        int alpha = Math.round(Color.alpha(color) * factor);
-        int red = Color.red(color);
-        int green = Color.green(color);
-        int blue = Color.blue(color);
-        return Color.argb(alpha, red, green, blue);
+    public static int adjustAlpha(@ColorInt int color, int alpha) {
+        return ColorUtils.setAlphaComponent(color, alpha);
     }
     
 }
