@@ -21,7 +21,7 @@ Latest version : [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitp
 
 # Known Errors
 
-### Duplicate Class Found error
+### -- Duplicate Class Found
 - If you faced duplicate Class found for `lifecycle-viewmodel` or  `androidx.lifecycle` or `lifecycle-viewmodel-ktx` then implement as following
 
 ```
@@ -31,7 +31,7 @@ implementation('com.github.H4zh4n:HaxHanTools:$LatestVersion') {
 }
 ```
 
-### More than one file was found
+### -- More than one file was found
 
 - below code might be needed in `build.grade` Module to avoid `More than one file was found with OS independent path 'META-INF/DEPENDENCIES'`
 
