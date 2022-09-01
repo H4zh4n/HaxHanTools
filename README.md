@@ -10,7 +10,7 @@ repositories {
 }
 ```
 
-### Implementation in `build.gradle` :
+### Implementation in `build.gradle` Module :
 ```
 implementation 'com.github.H4zh4n:HaxHanTools:$LatestVersion'
 ```
