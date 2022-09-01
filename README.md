@@ -19,7 +19,7 @@ be sure to change `$LatestVersion` to the latest version in [Releases](https://g
 Latest version : [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
 
 
-# Known Erros
+# Known Errors
 
 ### Duplicate Class Found error
 - If you faced duplicate Class found for `lifecycle-viewmodel` or  `androidx.lifecycle` or `lifecycle-viewmodel-ktx` then implement as following
