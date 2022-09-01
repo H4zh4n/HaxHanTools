@@ -1,7 +1,7 @@
 [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
 
 # Implementation
-Jitpack required in `settings.gradle`
+### Jitpack required in `settings.gradle`
 ```
 repositories {
   //...
@@ -10,7 +10,7 @@ repositories {
 }
 ```
 
-implementation in `build.gradle` :
+### Implementation in `build.gradle` :
 ```
 implementation 'com.github.H4zh4n:HaxHanTools:$LatestVersion'
 ```
