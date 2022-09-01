@@ -68,4 +68,8 @@ dependencies {
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel'
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
     }
+
+    //Dominant color finder
+    implementation 'androidx.palette:palette:1.0.0'
+
 }
