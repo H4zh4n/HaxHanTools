@@ -16,10 +16,8 @@ implementation 'com.github.H4zh4n:HaxHanTools:$LatestVersion'
 ```
 be sure to change `$LatestVersion` to the latest version in [Releases](https://github.com/H4zh4n/HaxHanTools/releases) (without the v)
 
-example : 
-```
-implementation 'com.github.H4zh4n:HaxHanTools:1.0.8'
-```
+Latest version : [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
+
 
 # Known Erros
 
