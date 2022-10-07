@@ -19,6 +19,18 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
+        <ImageView
+            android:id="@+id/btnLeft"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/round_corner_highlight_blue"
+            android:backgroundTint="@color/colorBlackDark"
+            android:padding="5dp"
+            android:src="@drawable/ic_check"
+            android:visibility="gone"
+            app:tint="@android:color/white" />
+
         <TextView
             android:id="@+id/tvItem"
             android:layout_width="match_parent"
@@ -33,17 +45,6 @@
             android:textColor="@color/white"
             android:textSize="16dp"
             android:textStyle="" />
-
-        <ImageView
-            android:id="@+id/btnLeft"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/round_corner_highlight_blue"
-            android:backgroundTint="@color/colorBlackDark"
-            android:padding="5dp"
-            android:visibility="gone"
-            app:tint="@android:color/white" />
 
         <ImageView
             android:id="@+id/btnRight"

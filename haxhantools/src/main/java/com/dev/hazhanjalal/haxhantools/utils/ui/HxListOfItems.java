@@ -1,8 +1,11 @@
 package com.dev.hazhanjalal.haxhantools.utils.ui;
 
+import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.e;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -38,6 +41,9 @@ public class HxListOfItems {
     int colorFoundTextInSearch;
     View btnClearSearchText;
     
+    Bitmap bmpItemIcon;
+    Bitmap bmpSelectedItemIcon;
+    
     /*CustomAction actionRightButton;
     CustomAction actionLeftButton;
     
@@ -59,6 +65,8 @@ public class HxListOfItems {
     int selectedIndex = -1;
     String selectedItemText = null;
     boolean checkSelectedItemThatContains = false;
+    
+    int itemImageBackgroundColor, selectedItemImageBackgroundColor;
     
     public HxListOfItems(Context ctx) {
         context = ctx;
@@ -94,6 +102,9 @@ public class HxListOfItems {
         colorFoundTextInSearch = Utils.getColor(context, R.color.colorRedChosen);
         itemBackgroundColor = Utils.getColor(context, R.color.colorBlackTransparent);
         selectedItemBackgroundColor = Utils.getColor(context, R.color.colorBlueChosen);
+        
+        itemImageBackgroundColor = Utils.getColor(context, R.color.colorBlackDark);
+        selectedItemImageBackgroundColor = Utils.getColor(context, R.color.colorBlackDark);
         
         selectedItemTextColor = Utils.getColor(context, R.color.white);
         itemTextColor = Utils.getColor(context, R.color.white);
@@ -145,25 +156,51 @@ public class HxListOfItems {
                         tvItem.setText(Html.fromHtml(colordText));
                     }
                 }
-                
+    
                 tvItem.setTypeface(tvItem.getTypeface(), Typeface.NORMAL);
-                
+    
                 //for index, searchText has to be null or empty to change background of item.
                 //because user can say highlight index 10, and then search for something,
                 //in this example in both cases regardless of the item data index 10 will be highlighted.
                 //hence the second condition after [index == selectedIndex] is added to prevent that.
                 // for selectedItemText it's ok and no condition is needed since even when searching for an item
                 //it's still ok to highlight it if they match.
-                
+                ImageView btnLeft = view.findViewById(R.id.btnLeft);
+                btnLeft.setImageBitmap(null);
+    
+                //if it's requested to have an image to left of the data [whether selected or not]
+                if (bmpItemIcon != null || bmpSelectedItemIcon != null) {
+                    //change the image visibility to
+                    btnLeft.setVisibility(View.VISIBLE);
+        
+                    if (bmpItemIcon != null) {
+                        btnLeft.setImageBitmap(bmpItemIcon);
+                        Utils.setBackgroundTintForce(itemImageBackgroundColor, btnLeft);
+                    } else {
+                        btnLeft.setVisibility(View.INVISIBLE);
+                    }
+                }
+    
                 if ((index == selectedIndex && (searchText == null || searchText.isEmpty()))
                         || (selectedItemText != null && o.toString().equals(selectedItemText))
                         || (selectedItemText != null && o.toString().contains(selectedItemText) && checkSelectedItemThatContains)) {
-                    
+        
                     checkSelectedItemThatContains = false;
-                    
+        
                     topLayout.setCardBackgroundColor(selectedItemBackgroundColor);
                     tvItem.setTextColor(selectedItemTextColor);
                     tvItem.setTypeface(tvItem.getTypeface(), Typeface.BOLD);
+        
+                    if (bmpSelectedItemIcon != null) {
+                        btnLeft.setVisibility(View.VISIBLE);
+                        Utils.setBackgroundTintForce(selectedItemImageBackgroundColor, btnLeft);
+                        btnLeft.setImageBitmap(bmpSelectedItemIcon);
+                    } else if (bmpItemIcon != null) {
+                        btnLeft.setVisibility(View.VISIBLE);
+                        btnLeft.setImageBitmap(bmpItemIcon);
+                    } else {
+                        btnLeft.setVisibility(View.INVISIBLE);
+                    }
                 }
               
                 
@@ -246,6 +283,43 @@ public class HxListOfItems {
     public HxListOfItems setTitleBarBackgroundColor(int backgroundColor) {
         LinearLayout loTitleBar = dialog.findViewById(R.id.loTitleBar);
         Utils.setBackgroundTintForce(backgroundColor, loTitleBar);
+        return this;
+    }
+    
+    
+    public HxListOfItems setItemImage(Bitmap bitmapItemIcon, int backgroundColor) {
+        this.bmpItemIcon = bitmapItemIcon;
+        this.itemImageBackgroundColor = backgroundColor;
+        return this;
+    }
+    
+    public HxListOfItems setItemImage(int idItemIcon, int backgroundColor) {
+        
+        try {
+            this.bmpItemIcon = Utils.drawableToBitmap(Utils.getDrawable(idItemIcon));
+        } catch (Exception e) {
+            e(e);
+        }
+        
+        this.itemImageBackgroundColor = backgroundColor;
+        return this;
+    }
+    
+    public HxListOfItems setSelectedItemImage(Bitmap bitmapSelectedItemIcon, int backgroundColor) {
+        this.bmpSelectedItemIcon = bitmapSelectedItemIcon;
+        this.selectedItemImageBackgroundColor = backgroundColor;
+        return this;
+    }
+    
+    public HxListOfItems setSelectedItemImage(int idSelectedItemIcon, int backgroundColor) {
+        
+        try {
+            this.bmpSelectedItemIcon = Utils.drawableToBitmap(Utils.getDrawable(idSelectedItemIcon));
+        } catch (Exception e) {
+            e(e);
+        }
+        
+        this.selectedItemImageBackgroundColor = backgroundColor;
         return this;
     }
     
