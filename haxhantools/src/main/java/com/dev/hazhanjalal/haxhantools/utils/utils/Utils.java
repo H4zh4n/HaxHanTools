@@ -1005,14 +1005,9 @@ public class Utils {
         }
     }
     
+    
     public static void whenViewIsVisible(final View v, final CustomAction action) {
-        v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                action.positiveButtonPressed();
-                removeGlobalLayoutListener(v, this);
-            }
-        });
+        whenViewIsVisibleObservableTree(v, action);
     }
     
     public static void whenViewIsVisibleRunnable(final View v, final CustomAction action) {
@@ -1024,6 +1019,15 @@ public class Utils {
         });
     }
     
+    public static void whenViewIsVisibleObservableTree(final View v, final CustomAction action) {
+        v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                action.positiveButtonPressed();
+                removeGlobalLayoutListener(v, this);
+            }
+        });
+    }
     
     @SuppressWarnings("deprecation")
     public static void copyToClip(Context context, String text, boolean showToast) {

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
 import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 
@@ -181,7 +182,7 @@ public class UtilsImage {
      * @param alpha desired alpha between 0 and 255
      */
     @ColorInt
-    public static int adjustAlpha(@ColorInt int color, int alpha) {
+    public static int adjustAlpha(@ColorInt int color, @IntRange(from = 0, to = 255) int alpha) {
         return ColorUtils.setAlphaComponent(color, alpha);
     }
     
