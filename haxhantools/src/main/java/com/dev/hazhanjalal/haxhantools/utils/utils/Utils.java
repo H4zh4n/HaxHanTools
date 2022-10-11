@@ -234,6 +234,19 @@ public class Utils {
     
     /**
      * Get certain Layout from layout folder. useful for when you want to have a layout as a template.
+     * <br><br>
+     * Use-case :
+     * <br>
+     * You made a layout called `layout_each_item` that has top view as CardView, programmatically you want to add items to another layout and for each item to have the layout design in that file. instead of re-creating it from code, you call :
+     * <br><br>
+     * `CardView item = (CardView) Utils.inflateView(R.layout.layout_each_item);`
+     * <br><br>
+     * essentially what it does is it creates a copy of that layout with all it's attributes.
+     * <br>
+     * to call children in that layout (for example it has a TextView inside it), use below format :
+     * <br><br>
+     * `TextView tv = item.findViewById(R.id.myTv);`
+     * <br><br>
      *
      * @param id the id of the layout (eg./ R.layout.custom_layout).
      */
@@ -243,11 +256,24 @@ public class Utils {
     
     /**
      * Get certain Layout from layout folder. useful for when you want to have a layout as a template.
-     *
+     * <br><br>
+     * Use-case :
+     * <br>
+     * You made a layout called `layout_each_item` that has top view as CardView, programmatically you want to add items to another layout and for each item to have the layout design in that file. instead of re-creating it from code, you call :
+     * <br><br>
+     * `CardView item = (CardView) Utils.inflateView(R.layout.layout_each_item);`
+     * <br><br>
+     * essentially what it does is it creates a copy of that layout with all it's attributes.
+     * <br>
+     * to call children in that layout (for example it has a TextView inside it), use below format :
+     * <br><br>
+     * `TextView tv = item.findViewById(R.id.myTv);`
+     * <br><br>
      * @param id      the id of the layout (eg./ R.layout.custom_layout).
      * @param context Context in-which it's being called from.
      */
     public static View inflateView(Context context, int id) {
+        
         return Utils.getActivity(context).getLayoutInflater().inflate(id, null);
     }
     
