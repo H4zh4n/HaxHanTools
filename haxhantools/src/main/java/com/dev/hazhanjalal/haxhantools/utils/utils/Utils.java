@@ -232,6 +232,25 @@ public class Utils {
         }
     }
     
+    /**
+     * Get certain Layout from layout folder. useful for when you want to have a layout as a template.
+     *
+     * @param id the id of the layout (eg./ R.layout.custom_layout).
+     */
+    public static View inflateView(int id) {
+        return inflateView(Utils.activeContext, id);
+    }
+    
+    /**
+     * Get certain Layout from layout folder. useful for when you want to have a layout as a template.
+     *
+     * @param id      the id of the layout (eg./ R.layout.custom_layout).
+     * @param context Context in-which it's being called from.
+     */
+    public static View inflateView(Context context, int id) {
+        return Utils.getActivity(context).getLayoutInflater().inflate(id, null);
+    }
+    
     public static int getResourceIdByName(String resource, String name) {
         try {
             return Utils.activeContext
