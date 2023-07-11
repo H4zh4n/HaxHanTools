@@ -51,7 +51,8 @@ protected void onCreate(Bundle savedInstanceState) {
 For the dialogs/toast and such to work and display data properly, make sure that for each activity you have below line in it's `onResume`
 
 ```java
-@Overrideprotected void onResume() {
+@Override
+protected void onResume() {
     super.onResume();
 
     Utils.activeContext = this;
