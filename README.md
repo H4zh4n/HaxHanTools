@@ -61,7 +61,7 @@ protected void onResume() {
 }
 
 ```
-This is so that the app knows on which thre screen the dialogs should be shown.
+This is so that the app knows on which screen the dialogs should be shown.
 
 
 
