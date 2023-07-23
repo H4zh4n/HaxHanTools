@@ -8,7 +8,9 @@
 - [x] Easy debugger [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/print)
 - [x] Easy Ui Components creator (Confirm/Input/Progress/List dialogs, Toasts) [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/ui)
 - [x] General App utils, File Utils, Image Utils [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils)
-- [x] Easy Global SharedPreferences Setup/Usage [Found here](https://github.com/H4zh4n/HaxHanTools/blob/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java)
+- [x] Easy Global SharedPreferences Setup/Usage [Found here](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L434).
+call `new Utils(this)` once in the first activity. later use this methods [here](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L353)
+
 
 ___
 
