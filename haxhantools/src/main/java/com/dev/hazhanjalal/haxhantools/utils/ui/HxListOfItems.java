@@ -41,6 +41,8 @@ public class HxListOfItems {
     int colorFoundTextInSearch;
     View btnClearSearchText;
     
+    CustomAction actionDoAfterShown = null;
+    
     Bitmap bmpItemIcon;
     Bitmap bmpSelectedItemIcon;
     
@@ -134,13 +136,18 @@ public class HxListOfItems {
                 topLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        // Dismiss first, then do the action.
+                        // This is in-case the user wants to display loading or something,
+                        // if not closes first, the dialog won't show until late action is performed.
+                        // which in turn hangs the screen.
+    
+                        dialog.dismiss();
+    
                         if (action != null) {
                             action.object = index; // index
                             action.inputText = o.toString(); // text
                             action.positiveButtonPressed();
                         }
-                        
-                        dialog.dismiss();
                     }
                 });
                 
@@ -172,7 +179,7 @@ public class HxListOfItems {
                 if (bmpItemIcon != null || bmpSelectedItemIcon != null) {
                     //change the image visibility to
                     btnLeft.setVisibility(View.VISIBLE);
-        
+    
                     if (bmpItemIcon != null) {
                         btnLeft.setImageBitmap(bmpItemIcon);
                         Utils.setBackgroundTintForce(itemImageBackgroundColor, btnLeft);
@@ -237,13 +244,19 @@ public class HxListOfItems {
             public void onItemClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
             
             }
-            
+    
             @Override
             public void onItemLongClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-            
+        
             }
         };
-        
+    
+        return this;
+    }
+    
+    
+    public HxListOfItems doAfterDialogShown(CustomAction action) {
+        actionDoAfterShown = action;
         return this;
     }
     
@@ -706,15 +719,20 @@ public class HxListOfItems {
                     
                 }
             }
-            
+    
             if (selectedIndex >= 0) {
                 frgList.scrollToPosition(selectedIndex);
             }
-            
+    
             // selectedItemText = arItems.get(selectedIndex);
         }
-        
+    
         dialog.show();
+    
+        if (actionDoAfterShown != null) {
+            actionDoAfterShown.positiveButtonPressed();
+        }
+    
     }
     
 }
