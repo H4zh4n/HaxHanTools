@@ -35,12 +35,8 @@ repositories {
 
 ### Implementation in `build.gradle` Module :
 ```
-implementation 'com.github.H4zh4n:HaxHanTools:$LatestVersion'
+implementation 'com.github.H4zh4n:HaxHanTools:1.0.9'
 ```
-be sure to change `$LatestVersion` to the latest version in [Releases](https://github.com/H4zh4n/HaxHanTools/releases) (don't include a `v` before the number)
-
-Latest version : [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
-
 ___
 
 # Usage 
