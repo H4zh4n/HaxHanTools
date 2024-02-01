@@ -35,7 +35,7 @@ repositories {
 
 ### Implementation in `build.gradle` Module :
 ```gradle
-implementation 'com.github.H4zh4n:HaxHanTools:1.0.9'
+implementation 'com.github.H4zh4n:HaxHanTools:1.0.10.3'
 ```
 ___
 
@@ -94,17 +94,9 @@ implementation('com.github.H4zh4n:HaxHanTools:$LatestVersion') {
 ```gradle
 android {
  // ...
-   packagingOptions {
-          exclude 'META-INF/DEPENDENCIES'
-          exclude 'META-INF/LICENSE'
-          exclude 'META-INF/LICENSE.txt'
-          exclude 'META-INF/license.txt'
-          exclude 'META-INF/NOTICE'
-          exclude 'META-INF/NOTICE.txt'
-          exclude 'META-INF/notice.txt'
-          exclude 'META-INF/ASL2.0'
-          exclude("META-INF/*.kotlin_module")
-      }
+    packagingOptions {
+        exclude 'META-INF/*'
+    }
    //...
 }
 ```
