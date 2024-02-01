@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
+import com.dev.hazhanjalal.haxhantools.utils.implementations.OnHxItemClickListener;
 import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
 import com.frogobox.recycler.core.FrogoRecyclerNotifyListener;
 import com.frogobox.recycler.core.IFrogoViewAdapter;
@@ -98,7 +99,8 @@ public class HxListOfItems {
             }
         });
         
-        onItemClickListener(null);
+        //onItemClickListener(null);
+        onSingleItemClickListener(null);
         enableSearch(true);
         
         colorFoundTextInSearch = Utils.getColor(context, R.color.colorRedChosen);
@@ -125,7 +127,20 @@ public class HxListOfItems {
         });
     }
     
+    /**
+     * Don't use this, use onSingleItemClickListener(OnHxItemClickListener action) instead.
+     */
+    @Deprecated
     public HxListOfItems onItemClickListener(CustomAction action) {
+        
+        return onItemClickListener(action, true);
+    }
+    
+    
+    @Deprecated
+    /** Don't use this, use onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) instead.
+     */
+    public HxListOfItems onItemClickListener(CustomAction action, boolean closeDialogOnItemClick) {
         adptItems = new IFrogoViewAdapter() {
             @Override
             public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
@@ -140,9 +155,11 @@ public class HxListOfItems {
                         // This is in-case the user wants to display loading or something,
                         // if not closes first, the dialog won't show until late action is performed.
                         // which in turn hangs the screen.
-    
-                        dialog.dismiss();
-    
+                        
+                        if (closeDialogOnItemClick) {
+                            dialog.dismiss();
+                        }
+                        
                         if (action != null) {
                             action.object = index; // index
                             action.inputText = o.toString(); // text
@@ -163,9 +180,9 @@ public class HxListOfItems {
                         tvItem.setText(Html.fromHtml(colordText));
                     }
                 }
-    
+                
                 tvItem.setTypeface(tvItem.getTypeface(), Typeface.NORMAL);
-    
+                
                 //for index, searchText has to be null or empty to change background of item.
                 //because user can say highlight index 10, and then search for something,
                 //in this example in both cases regardless of the item data index 10 will be highlighted.
@@ -174,12 +191,12 @@ public class HxListOfItems {
                 //it's still ok to highlight it if they match.
                 ImageView btnLeft = view.findViewById(R.id.btnLeft);
                 btnLeft.setImageBitmap(null);
-    
+                
                 //if it's requested to have an image to left of the data [whether selected or not]
                 if (bmpItemIcon != null || bmpSelectedItemIcon != null) {
                     //change the image visibility to
                     btnLeft.setVisibility(View.VISIBLE);
-    
+                    
                     if (bmpItemIcon != null) {
                         btnLeft.setImageBitmap(bmpItemIcon);
                         Utils.setBackgroundTintForce(itemImageBackgroundColor, btnLeft);
@@ -187,17 +204,17 @@ public class HxListOfItems {
                         btnLeft.setVisibility(View.INVISIBLE);
                     }
                 }
-    
+                
                 if ((index == selectedIndex && (searchText == null || searchText.isEmpty()))
                         || (selectedItemText != null && o.toString().equals(selectedItemText))
                         || (selectedItemText != null && o.toString().contains(selectedItemText) && checkSelectedItemThatContains)) {
-        
+                    
                     checkSelectedItemThatContains = false;
-        
+                    
                     topLayout.setCardBackgroundColor(selectedItemBackgroundColor);
                     tvItem.setTextColor(selectedItemTextColor);
                     tvItem.setTypeface(tvItem.getTypeface(), Typeface.BOLD);
-        
+                    
                     if (bmpSelectedItemIcon != null) {
                         btnLeft.setVisibility(View.VISIBLE);
                         Utils.setBackgroundTintForce(selectedItemImageBackgroundColor, btnLeft);
@@ -244,13 +261,171 @@ public class HxListOfItems {
             public void onItemClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
             
             }
-    
+            
             @Override
             public void onItemLongClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-        
+            
             }
         };
+        
+        return this;
+    }
     
+    
+    public HxListOfItems onSingleItemClickListener(OnHxItemClickListener action) {
+        return onSingleItemClickListener(action, true);
+    }
+    
+    public HxListOfItems onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) {
+        return onSingleItemClickListener(action, closeDialogOnItemClick, false);
+    }
+    
+    public HxListOfItems onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick, boolean closeDialogOnItemLongClick) {
+        adptItems = new IFrogoViewAdapter() {
+            @Override
+            public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
+                CardView topLayout = view.findViewById(R.id.topLayout);
+                
+                topLayout.setCardBackgroundColor(itemBackgroundColor);
+                
+                topLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (action != null) {
+                            action.itemPosition = index; // index
+                            
+                            action.thisHxDialogObject = HxListOfItems.this; // Current Object
+                            
+                            action.itemText = o.toString(); // text
+                            action.onItemClicked();
+                        }
+                        
+                        if (closeDialogOnItemClick) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                
+                topLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (action != null) {
+                            action.itemPosition = index; // index
+                            
+                            action.thisHxDialogObject = HxListOfItems.this; // Current Object
+                            
+                            action.itemText = o.toString(); // text
+                            action.onItemLongClicked();
+                        }
+                        
+                        if (closeDialogOnItemLongClick) {
+                            dialog.dismiss();
+                        }
+                        
+                        return true;
+                    }
+                });
+                
+                TextView tvItem = view.findViewById(R.id.tvItem);
+                tvItem.setText(o.toString());
+                tvItem.setTextColor(itemTextColor);
+                
+                if (searchText != null && !searchText.isEmpty()) {
+                    if (o.toString().contains(searchText)) {
+                        String colordText = o.toString().replaceAll(searchText, "<font color=\"" +
+                                Utils.colorIntToHex(colorFoundTextInSearch)
+                                + "\">" + searchText + "</font>");
+                        tvItem.setText(Html.fromHtml(colordText));
+                    }
+                }
+                
+                tvItem.setTypeface(tvItem.getTypeface(), Typeface.NORMAL);
+                
+                //for index, searchText has to be null or empty to change background of item.
+                //because user can say highlight index 10, and then search for something,
+                //in this example in both cases regardless of the item data index 10 will be highlighted.
+                //hence the second condition after [index == selectedIndex] is added to prevent that.
+                // for selectedItemText it's ok and no condition is needed since even when searching for an item
+                //it's still ok to highlight it if they match.
+                ImageView btnLeft = view.findViewById(R.id.btnLeft);
+                btnLeft.setImageBitmap(null);
+                
+                //if it's requested to have an image to left of the data [whether selected or not]
+                if (bmpItemIcon != null || bmpSelectedItemIcon != null) {
+                    //change the image visibility
+                    btnLeft.setVisibility(View.VISIBLE);
+                    
+                    if (bmpItemIcon != null) {
+                        btnLeft.setImageBitmap(bmpItemIcon);
+                        Utils.setBackgroundTintForce(itemImageBackgroundColor, btnLeft);
+                    } else {
+                        btnLeft.setVisibility(View.INVISIBLE);
+                    }
+                }
+                
+                if ((index == selectedIndex && (searchText == null || searchText.isEmpty()))
+                        || (selectedItemText != null && !selectedItemText.isEmpty() && o.toString().equals(selectedItemText))
+                        || (selectedItemText != null && !selectedItemText.isEmpty() && o.toString().contains(selectedItemText) && checkSelectedItemThatContains)) {
+                    
+                    checkSelectedItemThatContains = false;
+                    
+                    topLayout.setCardBackgroundColor(selectedItemBackgroundColor);
+                    tvItem.setTextColor(selectedItemTextColor);
+                    tvItem.setTypeface(tvItem.getTypeface(), Typeface.BOLD);
+                    
+                    if (bmpSelectedItemIcon != null) {
+                        btnLeft.setVisibility(View.VISIBLE);
+                        Utils.setBackgroundTintForce(selectedItemImageBackgroundColor, btnLeft);
+                        btnLeft.setImageBitmap(bmpSelectedItemIcon);
+                    } else if (bmpItemIcon != null) {
+                        btnLeft.setVisibility(View.VISIBLE);
+                        btnLeft.setImageBitmap(bmpItemIcon);
+                    } else {
+                        btnLeft.setVisibility(View.INVISIBLE);
+                    }
+                }
+              
+                
+                /*ImageView btnLeft = view.findViewById(R.id.btnLeft);
+                ImageView btnRight = view.findViewById(R.id.btnRight);
+                
+                if (showRightButton) {
+                    btnRight.setVisibility(View.VISIBLE);
+                    
+                    try {
+                        if (rightButtonImageResource != 0) {
+                            btnRight.setImageResource(rightButtonImageResource);
+                        } else {
+                            btnRight.setImageResource(R.drawable.ic_delete);
+                        }
+                    } catch (Exception e) {
+                    
+                    }
+                    
+                    if (actionRightButton != null) {
+                        btnRight.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                actionRightButton.positiveButtonPressed();
+                            }
+                        });
+                    }
+                } else {
+                    btnRight.setVisibility(View.GONE);
+                }*/
+            }
+            
+            @Override
+            public void onItemClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
+            
+            }
+            
+            @Override
+            public void onItemLongClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
+            
+            }
+        };
+        
         return this;
     }
     
@@ -719,20 +894,25 @@ public class HxListOfItems {
                     
                 }
             }
-    
+            
             if (selectedIndex >= 0) {
                 frgList.scrollToPosition(selectedIndex);
             }
-    
+            
             // selectedItemText = arItems.get(selectedIndex);
         }
-    
+        
         dialog.show();
-    
+        
         if (actionDoAfterShown != null) {
             actionDoAfterShown.positiveButtonPressed();
         }
-    
+        
     }
     
+    public void closeDialog() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
 }
