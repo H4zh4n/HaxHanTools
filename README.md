@@ -80,7 +80,7 @@ ___
 - If you faced duplicate Class found for `lifecycle-viewmodel` or  `androidx.lifecycle` or `lifecycle-viewmodel-ktx` then implement as following
 
 ```gradle
-implementation('com.github.H4zh4n:HaxHanTools:$LatestVersion') {
+implementation('com.github.H4zh4n:HaxHanTools:1.0.10.3') {
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel'
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
 }
