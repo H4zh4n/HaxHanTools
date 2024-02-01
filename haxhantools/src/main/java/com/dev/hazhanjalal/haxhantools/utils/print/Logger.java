@@ -50,7 +50,7 @@ public class Logger {
     }
     
     public static void e(String e) {
-        Log.e("-HAX-", "" + e);
+        //Log.e("-HAX-", "" + e);
     }
     
     /**
