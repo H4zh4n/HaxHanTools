@@ -5,8 +5,8 @@ To show a dialog with a list of items.
 ### Basic usage
 ```java
 new HxListOfItems(this)
-.setItems(new String[]{"a", "b"})
-.show();
+	.setItems(new String[]{"a", "b"})
+	.show();
 ```
 
 
@@ -17,9 +17,9 @@ Show Search header or not. default is true.
 
 ```java
 new HxListOfItems(this)
-.enableSearch(false) // Hides the search section
-.setItems(new String[]{"a", "b"})
-.show();
+	.enableSearch(false) // Hides the search section
+	.setItems(new String[]{"a", "b"})
+	.show();
 ```
 
 ____
@@ -29,7 +29,6 @@ An action to perform after the list is closed. This will be performed whether an
 
 ```java
 new HxListOfItems(this)
-
 	.onListCloseListener(new CustomAction() {  
 		@Override  
 		public void positiveButtonPressed() {  
@@ -52,41 +51,41 @@ What to do after an item is clicked. When you provide `new OnHxItemClickListener
 
 ```java
 new HxListOfItems(this)  
-.onSingleItemClickListener(new OnHxItemClickListener() {  
-	@Override  
-	public void onItemClicked() {  
-	  // Click action here...
-	  String tx = itemText;
-	  int pst = itemPosition;
-	  Dialog d = thisHxDialogObject;
-	}  
-})  
-.setItems(new String[]{"a", "b"})  
-.show();
+	.onSingleItemClickListener(new OnHxItemClickListener() {  
+		@Override  
+		public void onItemClicked() {  
+		  // Click action here...
+		  String tx = itemText;
+		  int pst = itemPosition;
+		  Dialog d = thisHxDialogObject;
+		}  
+	})  
+	.setItems(new String[]{"a", "b"})  
+	.show();
 ```
 
 You can also add an action for long click by overriding `onItemLongClicked`.
 
 ```java
 new HxListOfItems(this)  
-.onSingleItemClickListener(new OnHxItemClickListener() {  
-	@Override  
-	public void onItemClicked() {  
-	  // Click action here...
-	  String tx = itemText;
-	  int pst = itemPosition;
-	  Dialog d = thisHxDialogObject;
-	}
-
-	@Override  
-	public void onItemLongClicked() {  
-		super.onItemLongClicked();  
-	}
-
-
-})  
-.setItems(new String[]{"a", "b"})  
-.show();
+	.onSingleItemClickListener(new OnHxItemClickListener() {  
+		@Override  
+		public void onItemClicked() {  
+		  // Click action here...
+		  String tx = itemText;
+		  int pst = itemPosition;
+		  Dialog d = thisHxDialogObject;
+		}
+	
+		@Override  
+		public void onItemLongClicked() {  
+			super.onItemLongClicked();  
+		}
+	
+	
+	})  
+	.setItems(new String[]{"a", "b"})  
+	.show();
 ```
 
 
