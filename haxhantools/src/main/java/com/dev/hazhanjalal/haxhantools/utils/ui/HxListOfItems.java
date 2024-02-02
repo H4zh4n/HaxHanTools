@@ -64,6 +64,7 @@ public class HxListOfItems {
     boolean scrollToSelectedItemWhenDialogOpens = true;
     
     FrogoRecyclerView frgList;
+    LinearLayout fullDialogLayout;
     Parcelable stateScroll;
     int selectedIndex = -1;
     String selectedItemText = null;
@@ -79,6 +80,8 @@ public class HxListOfItems {
         
         View btnClose = dialog.findViewById(R.id.btnClose);
         frgList = dialog.findViewById(R.id.frgItemList);
+        
+        fullDialogLayout = dialog.findViewById(R.id.fullDialogLayout);
         
         EditText etBookSearch = dialog.findViewById(R.id.etBookSearch);
         btnClearSearchText = dialog.findViewById(R.id.btnClearSearchText);
@@ -426,6 +429,17 @@ public class HxListOfItems {
             }
         };
         
+        return this;
+    }
+    
+    
+    public HxListOfItems setDialogBackgroundColor(int color) {
+        if (fullDialogLayout != null) {
+            fullDialogLayout.setBackgroundColor(color);
+        }
+        
+        frgList.setBackgroundColor(color);
+        dialog.findViewById(R.id.loSearch).setBackgroundColor(color);
         return this;
     }
     
