@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
 
-Usage + implementation included in main branch :
+implementation is in main branch :
 [H4zh4n/HaxHanTools](https://github.com/H4zh4n/HaxHanTools)
 
 
