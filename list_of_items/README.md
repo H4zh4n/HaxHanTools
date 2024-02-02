@@ -1,7 +1,7 @@
 # HxListOfItems
 
-To show a dialog with a list of items.
-
+Show a dialog with a list of items with search capabilities.
+<img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/4f236019-2ae4-4a71-85ab-f47ec3123d8d" width="30%"/> <img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/e2a4002e-8ee0-4594-8a4b-f21341b9f4ab" width="30%"/> <img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/c5a7239c-019f-4438-8911-cc7040fcd48b" width="30%"/>
 ### Basic usage
 ```java
 new HxListOfItems(this)
@@ -11,6 +11,49 @@ new HxListOfItems(this)
 
 
 # Parameters
+
+### `setItems(ArrayList<String> items)`
+### `setItems(String[] items)`
+Provide the items to be shown. As of now the list of items have to be provided in String, no custom classes allowed. the List can be Normal array `new String[]{"a", "b"}` or an ArrayList.
+
+Normal array :
+```java
+
+String [] array = {"a", "b"};
+
+new HxListOfItems(this)
+	.setItems(array)
+	.show();
+```
+
+ArrayList :
+
+```java
+
+ArrayList<String> arLst = new ArrayList<>();
+
+arLst.add("a");
+arLst.add("b");
+
+new HxListOfItems(this)
+	.setItems(arLst)
+	.show();
+```
+
+
+
+
+
+
+
+### `show()`
+Display the list. this must be provided preferably at the end of all the parameters so the list can be shown.
+
+```java
+new HxListOfItems(this)
+	.setItems(new String[]{"a", "b"})
+	.show();
+```
 
 ### `enableSearch(boolean enableSearch)`
 Show Search header or not. default is true.
