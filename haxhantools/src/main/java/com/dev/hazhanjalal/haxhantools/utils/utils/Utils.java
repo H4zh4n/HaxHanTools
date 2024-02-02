@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -109,17 +110,17 @@ public class Utils {
     
     public Utils(Context con) {
         activeContext = con;
-    
+        
         Logger.setEnabled(con);
-    
+        
         colors = new int[]{
                 Utils.getColor(R.color.colorBlueChosen),
                 Utils.getColor(R.color.colorBlueDark),
                 Utils.getColor(R.color.colorBlueLight),
-            
+                
                 Utils.getColor(R.color.colorOrangeDark),
                 Utils.getColor(R.color.colorOrangeLight),
-            
+                
                 Utils.getColor(R.color.colorGreenChosen),
                 Utils.getColor(R.color.colorGreenDark),
                 Utils.getColor(R.color.colorGreenLight),
@@ -269,6 +270,7 @@ public class Utils {
      * <br><br>
      * `TextView tv = item.findViewById(R.id.myTv);`
      * <br><br>
+     *
      * @param id      the id of the layout (eg./ R.layout.custom_layout).
      * @param context Context in-which it's being called from.
      */
@@ -399,7 +401,7 @@ public class Utils {
         if (prefs != null) {
             return prefs.getString(key, def);
         }
-    
+        
         return null;
     }
     
@@ -446,9 +448,9 @@ public class Utils {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             // i.putExtra(Intent.EXTRA_TEXT, "#تەفسیری_نوور" + "\n" + Utils.MAIN_LINK);
             i.putExtra(Intent.EXTRA_STREAM, getImageUri(activeContext, bmp));
-    
+            
             HxToast.showToastSuccess("Picture added to gallery.");
-    
+            
             activeContext.startActivity(Intent.createChooser(i, ""));
         } catch (android.content.ActivityNotFoundException ex) {
             // e(ex);
@@ -605,9 +607,14 @@ public class Utils {
     /**
      * Set background tint for view
      */
-    public static void setBackgroundTint(Context context, int colorID, boolean isID, View... v) {
+    public static void setBackgroundTint(Context context, int color, boolean isID, View... v) {
         for (int i = 0; i < v.length; i++) {
-            v[i].setBackgroundTintList(context.getResources().getColorStateList(colorID));
+            v[i].setBackgroundTintList(
+                    isID ?
+                            ColorStateList.valueOf(Utils.getColor(context, color))
+                            :
+                            ColorStateList.valueOf(color)
+            );
         }
     }
     
@@ -1195,7 +1202,7 @@ public class Utils {
                         action.inputText = data.toString();
                         action.object = data.toString();
                     }
-    
+                    
                     //  v("-- data loaded from " + url);
                     
                 } catch (Exception e) {
@@ -1428,7 +1435,7 @@ public class Utils {
         if (haveDollarSign) {
             sign = "$";
         }
-    
+        
         return sign + String.format("%,." + decimals + "f", value);
     }
     

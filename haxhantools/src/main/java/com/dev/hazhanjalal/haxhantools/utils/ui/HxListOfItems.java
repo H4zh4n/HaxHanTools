@@ -43,7 +43,7 @@ public class HxListOfItems {
     View btnClearSearchText;
     
     CustomAction actionDoAfterShown = null;
-    
+    boolean ignoreCaseInSearch = true;
     Bitmap bmpItemIcon;
     Bitmap bmpSelectedItemIcon;
     
@@ -104,7 +104,7 @@ public class HxListOfItems {
         
         //onItemClickListener(null);
         onSingleItemClickListener(null);
-        enableSearch(true);
+        enableSearch();
         
         colorFoundTextInSearch = Utils.getColor(context, R.color.colorRedChosen);
         itemBackgroundColor = Utils.getColor(context, R.color.colorBlackTransparent);
@@ -444,6 +444,17 @@ public class HxListOfItems {
     }
     
     
+    public HxListOfItems setHintBackgroundColor(int color) {
+        Utils.setBackgroundTint(context, color, false, dialog.findViewById(R.id.loHint));
+        
+        return this;
+    }
+    
+    public HxListOfItems setHintTextColor(int color) {
+        ((EditText) dialog.findViewById(R.id.etBookSearch)).setTextColor(color);
+        return this;
+    }
+    
     public HxListOfItems doAfterDialogShown(CustomAction action) {
         actionDoAfterShown = action;
         return this;
@@ -598,7 +609,17 @@ public class HxListOfItems {
         return this;
     }
     
+    public HxListOfItems enableSearch() {
+        return enableSearch(true);
+    }
+    
     public HxListOfItems enableSearch(boolean enableSearch) {
+        return enableSearch(enableSearch, true);
+    }
+    
+    public HxListOfItems enableSearch(boolean enableSearch, boolean ignoreCaseInSearch) {
+        this.ignoreCaseInSearch = ignoreCaseInSearch;
+        
         ViewGroup loSearch = dialog.findViewById(R.id.loSearch);
         EditText etBookSearch = dialog.findViewById(R.id.etBookSearch);
         
@@ -624,9 +645,16 @@ public class HxListOfItems {
                         btnClearSearchText.setVisibility(View.VISIBLE);
                         
                         for (int j = arItems.size() - 1; j >= 0; j--) {
-                            if (!arItems.get(j).contains(searchText)) {
-                                arItems.remove(j);
+                            if (ignoreCaseInSearch) {
+                                if (!arItems.get(j).toLowerCase().contains(searchText.toLowerCase())) {
+                                    arItems.remove(j);
+                                }
+                            } else {
+                                if (!arItems.get(j).contains(searchText)) {
+                                    arItems.remove(j);
+                                }
                             }
+                            
                         }
                     }
                     
