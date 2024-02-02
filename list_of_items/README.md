@@ -1,7 +1,9 @@
 # HxListOfItems
 
 Show a dialog with a list of items with search capabilities.
+
 <img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/4f236019-2ae4-4a71-85ab-f47ec3123d8d" width="30%"/> <img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/e2a4002e-8ee0-4594-8a4b-f21341b9f4ab" width="30%"/> <img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/c5a7239c-019f-4438-8911-cc7040fcd48b" width="30%"/>
+
 ### Basic usage
 ```java
 new HxListOfItems(this)
