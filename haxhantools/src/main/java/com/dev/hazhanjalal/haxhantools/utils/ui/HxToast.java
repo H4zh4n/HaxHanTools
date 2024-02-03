@@ -60,6 +60,7 @@ public class HxToast {
                         Logger.e(e);
                     }
                 }
+                
                 toast = new Toast(ctx);
                 toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 200);
                 toast.setDuration(Toast.LENGTH_LONG);
