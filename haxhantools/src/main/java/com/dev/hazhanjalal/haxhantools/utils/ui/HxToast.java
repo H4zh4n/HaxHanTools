@@ -15,11 +15,25 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
 import com.dev.hazhanjalal.haxhantools.R;
+import com.dev.hazhanjalal.haxhantools.utils.print.Logger;
 import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
 
 
 public class HxToast {
+    
+    private static boolean cancelPreviousToastVisibleToast = true;
+    private static Toast toast;
+    
+    public static boolean isCancelPreviousToastVisibleToast() {
+        return cancelPreviousToastVisibleToast;
+    }
+    
+    public static void setCancelPreviousToastVisibleToast(boolean cancelPreviousToastVisibleToast) {
+        HxToast.cancelPreviousToastVisibleToast = cancelPreviousToastVisibleToast;
+    }
+    
     //START - Custom Toast
+    
     public static void showToast(Context ctx, final String text, final Drawable icon, final int backColor) {
         Utils.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -38,7 +52,15 @@ public class HxToast {
                 TextView lblText = (TextView) layout.findViewById(R.id.text);
                 lblText.setText(" " + text);
                 
-                final Toast toast = new Toast(ctx);
+                if (isCancelPreviousToastVisibleToast()
+                        && toast != null) {
+                    try {
+                        toast.cancel();
+                    } catch (Exception e) {
+                        Logger.e(e);
+                    }
+                }
+                toast = new Toast(ctx);
                 toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 200);
                 toast.setDuration(Toast.LENGTH_LONG);
                 toast.setView(layout);
