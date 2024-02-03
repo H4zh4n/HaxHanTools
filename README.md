@@ -1,6 +1,7 @@
 [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
 
-> No official full documentation available currently.
+> Partial documentation available here : [documentation](https://github.com/H4zh4n/HaxHanTools/tree/documentation)
+
 
 - [x] Easy File Download manager [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/download)
 
@@ -35,7 +36,7 @@ repositories {
 
 ### Implementation in `build.gradle` Module :
 ```gradle
-implementation 'com.github.H4zh4n:HaxHanTools:1.0.11'
+implementation 'com.github.H4zh4n:HaxHanTools:1.0.12'
 ```
 ___
 
@@ -80,7 +81,7 @@ ___
 - If you faced duplicate Class found for `lifecycle-viewmodel` or  `androidx.lifecycle` or `lifecycle-viewmodel-ktx` then implement as following
 
 ```gradle
-implementation('com.github.H4zh4n:HaxHanTools:1.0.11') {
+implementation('com.github.H4zh4n:HaxHanTools:1.0.12') {
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel'
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
 }
