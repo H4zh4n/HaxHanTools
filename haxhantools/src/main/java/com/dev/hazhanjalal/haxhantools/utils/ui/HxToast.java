@@ -21,15 +21,15 @@ import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
 
 public class HxToast {
     
-    private static boolean cancelPreviousToastVisibleToast = true;
+    private static boolean cancelPreviousVisibleToast = true;
     private static Toast toast;
     
-    public static boolean isCancelPreviousToastVisibleToast() {
-        return cancelPreviousToastVisibleToast;
+    public static boolean isCancelPreviousVisibleToast() {
+        return cancelPreviousVisibleToast;
     }
     
-    public static void setCancelPreviousToastVisibleToast(boolean cancelPreviousToastVisibleToast) {
-        HxToast.cancelPreviousToastVisibleToast = cancelPreviousToastVisibleToast;
+    public static void setCancelPreviousVisibleToast(boolean cancelPreviousVisibleToast) {
+        HxToast.cancelPreviousVisibleToast = cancelPreviousVisibleToast;
     }
     
     //START - Custom Toast
@@ -52,7 +52,7 @@ public class HxToast {
                 TextView lblText = (TextView) layout.findViewById(R.id.text);
                 lblText.setText(" " + text);
                 
-                if (isCancelPreviousToastVisibleToast()
+                if (isCancelPreviousVisibleToast()
                         && toast != null) {
                     try {
                         toast.cancel();
