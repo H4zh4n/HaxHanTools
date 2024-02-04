@@ -66,28 +66,9 @@ new HxListOfItems(this)
 	.setItems(new String[]{"a", "b"})
 	.show();
 ```
-
-____
-### `onListCloseListener(CustomAction action)`
-An action to perform after the list is closed. This will be performed whether an item is clicked or the list is closed from the close button.
-
-
-```java
-new HxListOfItems(this)
-	.onListCloseListener(new CustomAction() {  
-		@Override  
-		public void positiveButtonPressed() {  
-		  // code here
-		}  
-	})
-	.setItems(new String[]{"a", "b"})
-	.show();
-```
-
-
 ____
 ### `onSingleItemClickListener(OnHxItemClickListener action)`
-What to do after an item is clicked. When you provide `new OnHxItemClickListener` you will be provide with these values : 
+What to do after an item is clicked. When you provide `new OnHxItemClickListener` you will be provided with these values : 
 
 `itemText` : The text of the item clicked.
 `itemPosition` : clicked item's position in the list .
@@ -142,5 +123,22 @@ As mentioned before, `onSingleItemClickListener` has three overloaded methods.
 
 ____
 
+### `onListCloseListener(CustomAction action)`
+An action to perform after the list is closed. This will be performed whether an item is clicked or the list is closed from the close button.
+
+
+```java
+new HxListOfItems(this)
+	.onListCloseListener(new CustomAction() {  
+		@Override  
+		public void positiveButtonPressed() {  
+		  // code here
+		}  
+	})
+	.setItems(new String[]{"a", "b"})
+	.show();
+```
+
+____
 
 ... more method explanations to come ...
