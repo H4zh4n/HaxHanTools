@@ -1,8 +1,10 @@
 [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
 
-> Partial documentation available here : [documentation](https://github.com/H4zh4n/HaxHanTools/tree/documentation)
+# Documentation
+Partial documentation available here : [documentation](https://github.com/H4zh4n/HaxHanTools/tree/documentation)
 
 
+# Components
 - [x] Easy File Download manager [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/download)
 
 - [x] Easy Imgur uploader [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/imgur_upload_helper)
@@ -21,8 +23,6 @@
 [removeKeyPrefs(key)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L406),
 [prefsContains(key)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L412),
 
-
-___
 
 # Implementation
 ### Jitpack required in `settings.gradle`
