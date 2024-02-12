@@ -12,13 +12,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        /*new Utils(this);
-        ArrayList<Item> itms = new ArrayList();
-        itms.add(new Item(1, "Sulaymani"));
-        itms.add(new Item(2, "Erbil"));
-        itms.add(new Item(3, "Karkuk"));
+       /* new Utils(this);
+        ArrayList<Warehouses> itms = new ArrayList();
+        itms.add(new Warehouses(1, "Sulaymani"));
+        itms.add(new Warehouses(2, "Erbil"));
+        itms.add(new Warehouses(3, "Karkuk"));
         
-        new HxListOfItems<Item>(this)
+        new HxListOfItems<Warehouses>(this)
                 .setItems(itms)
                 .setItemTextProvider(new ItemTextProvider() {
                     @NonNull
@@ -27,24 +27,16 @@ public class MainActivity extends AppCompatActivity {
                         return itms.get(position).name;
                     }
                 })
-                .onSingleItemClickListener(new OnHxItemClickListener<Item>() {
+                .setOnItemClickListener(new OnHxItemClickListener<Warehouses>() {
                     @Override
-                    public void onItemClicked() {
+                    public void onItemClicked(int position) {
                         Logger.v("=" + itemText);
-                        Logger.v("=" + selectedItem);
+                        Logger.v("=" + itemObject);
                     }
+                    
                 })
                 .show();*/
         
     }
 }
 
-class Item {
-    public String name;
-    int id;
-    
-    public Item(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-}

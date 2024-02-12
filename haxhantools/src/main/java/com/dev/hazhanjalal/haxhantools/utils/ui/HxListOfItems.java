@@ -34,10 +34,10 @@ import com.frogobox.recycler.widget.FrogoRecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class HxListOfItems {
+public class HxListOfItems<T> {
     Context context;
-    ArrayList<Object> arItems = new ArrayList<>();
-    ArrayList<Object> arItemsAllItems = new ArrayList<>();
+    ArrayList<T> arItems = new ArrayList<>();
+    ArrayList<T> arItemsAllItems = new ArrayList<>();
     Dialog dialog;
     IFrogoViewAdapter adptItems;
     String searchText;
@@ -181,14 +181,14 @@ public class HxListOfItems {
         return this;
     }
     
-    public HxListOfItems setItems(ArrayList<Object> items) {
+    public HxListOfItems setItems(ArrayList<T> items) {
         arItems.addAll(items);
         arItemsAllItems.addAll(arItems);
         return this;
     }
     
     
-    public HxListOfItems setItems(Object[] items) {
+    public HxListOfItems setItems(T[] items) {
         arItems.addAll(Arrays.asList(items));
         arItemsAllItems.addAll(arItems);
         return this;
