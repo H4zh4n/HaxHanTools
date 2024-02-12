@@ -6,17 +6,26 @@ Show a dialog with a list of items with search capabilities.
 
 ### Basic usage
 ```java
+String array[] = {"Sulaymaniyah", "Hawler"};
+
 new HxListOfItems(this)
-	.setItems(new String[]{"a", "b"})
+	.setItemTextProvider(new ItemTextProvider() {
+	    @Override
+	    public CharSequence getText(int position) {
+		return array[position];
+	    }
+	})
+	.setItems(a)
 	.show();
 ```
 
 
 # Parameters
 
-### `setItems(ArrayList<String> items)`
-### `setItems(String[] items)`
-Provide the items to be shown. As of now the list of items have to be provided in String, no custom classes allowed. the List can be Normal array `new String[]{"a", "b"}` or an ArrayList.
+### `setItems(ArrayList<Object> items)`
+### `setItems(Object[] items)`
+Provide the items to be shown. The list can be of any type (String, Integer, Custom class... ).
+The List can be Normal array `new String[]{"a", "b"}` or an ArrayList.
 
 Normal array :
 ```java
@@ -41,12 +50,79 @@ new HxListOfItems(this)
 	.setItems(arLst)
 	.show();
 ```
+____
+### `setItemTextProvider (ItemTextProvider)`
+MUST provide this method so that your items have the correct text.
 
+```java
+ArrayList<String> arLst = new ArrayList<>();
 
+arLst.add("a");
+arLst.add("b");
 
+new HxListOfItems(this)
+	.setItems(arLst)
+	.setItemTextProvider(new ItemTextProvider() {
+	    @Override
+	    public CharSequence getText(int position) {
+		// For each item in arLst, it will return it's own text and display it in the item text place.
+		return arLst.get(position);
+	    }
+	})
+	.show();
+```
 
+____
+### Custom Classes
+If your array has custom class types, it's best to do as following :
 
+- Assuming we have this custom class :
+```java
+public class Item {
+  int id;
 
+  // Either have a field as public, or a getter method that is public. handle that yourself. 
+  public String name; 
+
+  public Item (int id, String name){
+    this.id = id;
+    this.name = name;
+  }
+}
+```
+
+- We can then do the following :
+```java
+
+// create the list
+ArrayList<Item> itms = new ArrayList();
+itms.add(new Item(1, "Sulaymani"));
+itms.add(new Item(2, "Erbil"));
+itms.add(new Item(3, "Karkuk"));
+    
+new HxListOfItems(this)
+      .setItems(itms)
+
+      // setup each item's text in the popup.
+      .setItemTextProvider(new ItemTextProvider() {
+          @Override
+          public CharSequence getText(int position) {
+              // calling the public field of [name] from the arraylist [itms].
+              return itms.get(position).name;
+          }
+      })
+      //                                                 v denote the class type, used for [itemObject]
+      .setOnItemClickListener(new OnHxItemClickListener<Item>() {
+          @Override
+          public void onItemClicked() {
+            String text = itemText;
+            Item clickedItem = itemObject;
+          }
+      })
+      .show();
+```
+
+____
 
 ### `show()`
 Display the list. this must be provided preferably at the end of all the parameters so the list can be shown.
@@ -67,25 +143,44 @@ new HxListOfItems(this)
 	.show();
 ```
 ____
-### `onSingleItemClickListener(OnHxItemClickListener action)`
+### `setOnItemClickListener(OnHxItemClickListener action)`
 What to do after an item is clicked. When you provide `new OnHxItemClickListener` you will be provided with these values : 
 
-`itemText` : The text of the item clicked.
-`itemPosition` : clicked item's position in the list .
-`thisHxDialogObject` : Current instance of the dialog. you may close it manually or do whatever. useful when providing false for `closeDialogOnItemClick` when calling `onSingleItemClickListener(action, closeDialogOnItemClick)`.
+1. `itemObject` : The Object of the item clicked. When instantiating the `setOnItemClickListener`, be sure to provide a type just so this variable has same type.
+```java
+...
+//                                                 v denote the class type, used for [itemObject]
+.setOnItemClickListener(new OnHxItemClickListener<Item>() {
+	@Override
+	public void onItemClicked() {
+		// the itemObject will have the type of Item, which might be what your provided in the array.
+		Item clickedItem = itemObject;
+	}
+})
+...
+```
 
 
+
+2. `itemText` : The text of the item clicked.
+
+3. `itemPosition` : clicked item's position in the list .
+
+4. `thisHxDialogObject` : Current instance of the dialog. you may close it manually or do whatever. useful when providing false for when you call `setCloseDialogOnItemClick`.
+
+Example :
 ```java
 new HxListOfItems(this)  
-	.onSingleItemClickListener(new OnHxItemClickListener() {  
-		@Override  
-		public void onItemClicked() {  
-		  // Click action here...
-		  String tx = itemText;
-		  int pst = itemPosition;
-		  Dialog d = thisHxDialogObject;
-		}  
-	})  
+	.setOnItemClickListener(new OnHxItemClickListener<Item>() {  
+			@Override  
+			public void onItemClicked() {  
+				// Click action here...
+				Item clickedItem = itemObject;
+				String tx = itemText;
+				int pst = itemPosition;
+				Dialog d = thisHxDialogObject;
+			}  
+		})  
 	.setItems(new String[]{"a", "b"})  
 	.show();
 ```
@@ -105,7 +200,8 @@ new HxListOfItems(this)
 	
 		@Override  
 		public void onItemLongClicked() {  
-			super.onItemLongClicked();  
+			// on item long clicked. will be provided with same variables as onItemClicked. (itemObject, itemText,itemPosition ... etc.)
+
 		}
 	
 	
@@ -114,12 +210,6 @@ new HxListOfItems(this)
 	.show();
 ```
 
-
-As mentioned before, `onSingleItemClickListener` has three overloaded methods.
-
-1. `onSingleItemClickListener(OnHxItemClickListener action)` : Provide Click action only.
-2. `onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick)` : Provide Click action. and whether to close the dialog when item is clicked or not. when providing `false` for `closeDialogOnItemClick` make sure to handle close yourself, using `thisHxDialogObject`. default for `closeDialogOnItemClick` is `true`.
-3. `onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick, boolean closeDialogOnItemLongClick)` : Provide Click action. and whether to close the dialog when item is clicked or not. AND whether to close the dialog when item is long pressed. default for `closeDialogOnItemLongClick` is `false`.
 
 ____
 
