@@ -80,6 +80,16 @@ public class HxListOfItems<T> {
     
     int itemImageBackgroundColor, selectedItemImageBackgroundColor;
     
+    CardView.LayoutParams prmCardShown = new CardView.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+    );
+    
+    CardView.LayoutParams prmCardHidden = new CardView.LayoutParams(
+            0,
+            0
+    );
+    
     public HxListOfItems(Context ctx) {
         context = ctx;
         
@@ -114,6 +124,11 @@ public class HxListOfItems<T> {
         onItemClickListener = null;
         
         enableSearch();
+        
+        prmCardShown.setMargins(Utils.dpToPx(5),
+                                Utils.dpToPx(5),
+                                Utils.dpToPx(5),
+                                Utils.dpToPx(5));
         
         colorFoundTextInSearch = Utils.getColor(context, R.color.colorRedChosen);
         itemBackgroundColor = Utils.getColor(context, R.color.colorBlackTransparent);
@@ -366,64 +381,67 @@ public class HxListOfItems<T> {
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     searchText = etBookSearch.getText().toString();
                     
-                    arItems.clear();
-                    arItems.addAll(arItemsAllItems);
+                   /* arItems.clear();
                     
                     if (searchText.isEmpty()) {
+                        arItems.addAll(arItemsAllItems);
                         btnClearSearchText.setVisibility(View.INVISIBLE);
                     } else {
                         btnClearSearchText.setVisibility(View.VISIBLE);
                         
-                        for (int j = arItems.size() - 1; j >= 0; j--) {
-                            if (ignoreCaseInSearch) {
-                                
-                                try {
-                                    String text = "";
-                                    
-                                    if (itemTextProvider != null) {
-                                        text = itemTextProvider.getText(j).toString(); // text
-                                    } else {
-                                        text = ""; // text
-                                    }
-                                    
-                                    if (!text.toString().toLowerCase().contains(searchText.toLowerCase())) {
-                                        arItems.remove(j);
-                                    }
-                                } catch (Exception e) {
-                                    e(e);
-                                }
-                                
+                       *//* for (int itemIndex = 0; itemIndex < arItemsAllItems.size(); itemIndex++) {
+                            String text = "";
+                            
+                            if (itemTextProvider != null) {
+                                text = itemTextProvider.getText(itemIndex).toString(); // text
                             } else {
-                                
-                                try {
-                                    
-                                    String text = "";
-                                    
-                                    if (itemTextProvider != null) {
-                                        text = itemTextProvider.getText(j).toString(); // text
-                                    } else {
-                                        text = ""; // text
-                                    }
-                                    
-                                    if (!text.toString().contains(searchText)) {
-                                        arItems.remove(j);
-                                    }
-                                } catch (Exception e) {
-                                
+                                text = ""; // text
+                            }
+                            
+                            if (ignoreCaseInSearch) {
+                                if (text.toLowerCase().contains(searchText.toLowerCase())) {
+                                    arItems.add(arItemsAllItems.get(itemIndex));
+                                }
+                            } else {
+                                if (text.contains(searchText)) {
+                                    arItems.add(arItemsAllItems.get(itemIndex));
+                                }
+                            }
+                        }*//*
+                     
+                     *//*for (int itemsIndex = arItems.size() - 1; itemsIndex >= 0; itemsIndex--) {
+                            String text = "";
+                            
+                            if (itemTextProvider != null) {
+                                text = itemTextProvider.getText(itemsIndex).toString(); // text
+                            } else {
+                                text = ""; // text
+                            }
+                            
+                            if (ignoreCaseInSearch) {
+                                if (!text.toLowerCase().contains(searchText.toLowerCase())) {
+                                    arItems.remove(itemsIndex);
+                                }
+                            } else {
+                                if (!text.contains(searchText)) {
+                                    arItems.remove(itemsIndex);
                                 }
                             }
                             
-                        }
-                    }
+                        }*//*
+                    }*/
                     
                     if (frgList != null) {
-                        frgList.injector()
+                        
+                        frgList.getAdapter().notifyDataSetChanged();
+                        
+                      /*  frgList.injector()
                                 .addData(arItems)
                                 .addCallback(adptItems)
                                 .createLayoutLinearVertical(false)
                                 .addCustomView(R.layout.hx_layout_item_list)
                                 .addEmptyView(R.layout.hx_no_data_found)
-                                .build();
+                                .build();*/
                         
                         /*if (stateScroll != null) {
                             frgList.getLayoutManager().onRestoreInstanceState(stateScroll);
@@ -459,7 +477,9 @@ public class HxListOfItems<T> {
         return this;
     }
     
+    
     public void show() {
+        
         adptItems = new IFrogoViewAdapter() {
             @Override
             public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
@@ -524,23 +544,49 @@ public class HxListOfItems<T> {
                 });
                 
                 TextView tvItem = view.findViewById(R.id.tvItem);
+                String textToBeDisplayed = "* be sure to call [setItemTextProvider] to provide text for items.";
                 
                 // grab the variable from O
                 if (itemTextProvider != null) {
-                    tvItem.setText(itemTextProvider.getText(index));
-                } else {
-                    tvItem.setText("* be sure to call [setItemTextProvider] to provide text for items.");
+                    textToBeDisplayed = itemTextProvider.getText(index).toString();
                 }
+                
+                tvItem.setText(textToBeDisplayed);
                 
                 tvItem.setTextColor(itemTextColor);
                 
                 if (searchText != null && !searchText.isEmpty()) {
-                    if (o.toString().contains(searchText)) {
-                        String colordText = o.toString().replaceAll(searchText, "<font color=\"" +
-                                Utils.colorIntToHex(colorFoundTextInSearch)
-                                + "\">" + searchText + "</font>");
-                        tvItem.setText(Html.fromHtml(colordText));
+                    
+                    boolean isHere = true;
+                    
+                    if (ignoreCaseInSearch) {
+                        isHere = textToBeDisplayed.toLowerCase().contains(searchText.toLowerCase());
+                    } else {
+                        isHere = textToBeDisplayed.contains(searchText);
                     }
+                    
+                    if (isHere) {
+                        
+                        topLayout.setVisibility(View.VISIBLE);
+                        topLayout.setLayoutParams(prmCardShown);
+                        
+                        String colordText = "";
+                        
+                        if (ignoreCaseInSearch) {
+                            colordText = textToBeDisplayed.toLowerCase()
+                                    .replaceAll(searchText.toLowerCase(), "<font color=\"" +
+                                            Utils.colorIntToHex(colorFoundTextInSearch)
+                                            + "\">" + searchText + "</font>");
+                        }
+                        
+                        tvItem.setText(Html.fromHtml(colordText));
+                    } else {
+                        topLayout.setVisibility(View.GONE);
+                        topLayout.setLayoutParams(prmCardHidden);
+                    }
+                } else {
+                    topLayout.setVisibility(View.VISIBLE);
+                    topLayout.setLayoutParams(prmCardShown);
                 }
                 
                 tvItem.setTypeface(tvItem.getTypeface(), Typeface.NORMAL);
@@ -568,8 +614,10 @@ public class HxListOfItems<T> {
                 }
                 
                 if ((index == selectedIndex && (searchText == null || searchText.isEmpty()))
-                        || (selectedItemText != null && !selectedItemText.isEmpty() && o.toString().equals(selectedItemText))
-                        || (selectedItemText != null && !selectedItemText.isEmpty() && o.toString().contains(selectedItemText) && checkSelectedItemThatContains)) {
+                        || (selectedItemText != null && !selectedItemText.isEmpty()
+                        && textToBeDisplayed.equals(selectedItemText))
+                        || (selectedItemText != null && !selectedItemText.isEmpty()
+                        && textToBeDisplayed.contains(selectedItemText) && checkSelectedItemThatContains)) {
                     
                     checkSelectedItemThatContains = false;
                     

@@ -2,7 +2,16 @@ package com.dev.hazhanjalal.haxhantools;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.dev.hazhanjalal.haxhantools.utils.implementations.OnHxItemClickListener;
+import com.dev.hazhanjalal.haxhantools.utils.print.Logger;
+import com.dev.hazhanjalal.haxhantools.utils.ui.HxListOfItems;
+import com.dev.hazhanjalal.haxhantools.utils.ui.list_related.ItemTextProvider;
+import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -12,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-       /* new Utils(this);
+        new Utils(this);
         ArrayList<Warehouses> itms = new ArrayList();
         itms.add(new Warehouses(1, "Sulaymani"));
         itms.add(new Warehouses(2, "Erbil"));
@@ -35,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     
                 })
-                .show();*/
+                .show();
         
     }
 }
