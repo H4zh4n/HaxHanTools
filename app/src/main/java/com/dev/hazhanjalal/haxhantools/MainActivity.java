@@ -12,26 +12,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        /*new Utils(this);
+        ArrayList<Item> itms = new ArrayList();
+        itms.add(new Item(1, "Sulaymani"));
+        itms.add(new Item(2, "Erbil"));
+        itms.add(new Item(3, "Karkuk"));
         
-        
-        /*
-        new Utils(this);
-        ArrayList itms = new ArrayList();
-        itms.add("Suli");
-        itms.add("Erbil");
-        itms.add("Karkuk");
-        
-        new HxListOfItems(this)
-                .setTitle("Select city")
-                .setSearchHint("Search city")
-                .setDialogBackgroundColor(Utils.getColor(R.color.colorWhiteDark))
-                .setItemBackgroundColor(Utils.getColor(R.color.colorWhiteLight))
+        new HxListOfItems<Item>(this)
                 .setItems(itms)
-                .setSelectedItemImage(R.drawable.ic_check, Utils.getColor(android.R.color.transparent))
-                .setHintBackgroundColor(Utils.getColor(R.color.white))
-                .setItemTextColor(Utils.getColor(R.color.black))
-                .setSelectedItemIndex(0)
-                .onSingleItemClickListener(new OnHxItemClickListener() {
+                .setItemTextProvider(new ItemTextProvider() {
+                    @NonNull
+                    @Override
+                    public CharSequence getText(int position) {
+                        return itms.get(position).name;
+                    }
+                })
+                .onSingleItemClickListener(new OnHxItemClickListener<Item>() {
                     @Override
                     public void onItemClicked() {
                         Logger.v("=" + itemText);
@@ -40,5 +36,15 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();*/
         
+    }
+}
+
+class Item {
+    public String name;
+    int id;
+    
+    public Item(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }

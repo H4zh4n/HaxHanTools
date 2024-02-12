@@ -27,12 +27,12 @@ import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.OnHxItemClickListener;
 import com.dev.hazhanjalal.haxhantools.utils.ui.list_related.HxListOfItemsShow;
+import com.dev.hazhanjalal.haxhantools.utils.ui.list_related.ItemTextProvider;
 import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
 import com.frogobox.recycler.core.FrogoRecyclerNotifyListener;
 import com.frogobox.recycler.core.IFrogoViewAdapter;
 import com.frogobox.recycler.widget.FrogoRecyclerView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class HxListOfItems<T> {
@@ -135,171 +135,6 @@ public class HxListOfItems<T> {
         });
     }
     
-    /**
-     * Don't use this, use onSingleItemClickListener(OnHxItemClickListener action) instead.
-     */
-    @Deprecated
-    public HxListOfItems onItemClickListener(CustomAction action) {
-        
-        return onItemClickListener(action, true);
-    }
-    
-    
-    @Deprecated
-    /** Don't use this, use onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) instead.
-     */
-    public HxListOfItems onItemClickListener(CustomAction action, boolean closeDialogOnItemClick) {
-        adptItems = new IFrogoViewAdapter<T>() {
-            @Override
-            public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-                CardView topLayout = view.findViewById(R.id.topLayout);
-                
-                topLayout.setCardBackgroundColor(itemBackgroundColor);
-                
-                topLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Dismiss first, then do the action.
-                        // This is in-case the user wants to display loading or something,
-                        // if not closes first, the dialog won't show until late action is performed.
-                        // which in turn hangs the screen.
-                        
-                        if (closeDialogOnItemClick) {
-                            dialog.dismiss();
-                        }
-                        
-                        if (action != null) {
-                            action.object = index; // index
-                            action.inputText = o.toString(); // text
-                            action.positiveButtonPressed();
-                        }
-                    }
-                });
-                
-                TextView tvItem = view.findViewById(R.id.tvItem);
-                
-                // grab the variable from O
-                try {
-                    
-                    Object value = null;
-                    
-                    if (checkDefaultTypes(o)) {
-                        value = o.toString();
-                    } else {
-                        Field nameField = o.getClass().getField(variableFieldName);
-                        value = nameField.get(o);
-                    }
-                    
-                    tvItem.setText(value.toString());
-                    
-                } catch (Exception e) {
-                    tvItem.setText("* No field in " + o.getClass().getName() + " with name " + variableFieldName);
-                    v("No field found with name name");
-                    e(e);
-                }
-                
-                tvItem.setTextColor(itemTextColor);
-                
-                if (searchText != null && !searchText.isEmpty()) {
-                    if (o.toString().contains(searchText)) {
-                        String colordText = o.toString().replaceAll(searchText, "<font color=\"" +
-                                Utils.colorIntToHex(colorFoundTextInSearch)
-                                + "\">" + searchText + "</font>");
-                        tvItem.setText(Html.fromHtml(colordText));
-                    }
-                }
-                
-                tvItem.setTypeface(tvItem.getTypeface(), Typeface.NORMAL);
-                
-                //for index, searchText has to be null or empty to change background of item.
-                //because user can say highlight index 10, and then search for something,
-                //in this example in both cases regardless of the item data index 10 will be highlighted.
-                //hence the second condition after [index == selectedIndex] is added to prevent that.
-                // for selectedItemText it's ok and no condition is needed since even when searching for an item
-                //it's still ok to highlight it if they match.
-                ImageView btnLeft = view.findViewById(R.id.btnLeft);
-                btnLeft.setImageBitmap(null);
-                
-                //if it's requested to have an image to left of the data [whether selected or not]
-                if (bmpItemIcon != null || bmpSelectedItemIcon != null) {
-                    //change the image visibility to
-                    btnLeft.setVisibility(View.VISIBLE);
-                    
-                    if (bmpItemIcon != null) {
-                        btnLeft.setImageBitmap(bmpItemIcon);
-                        Utils.setBackgroundTintForce(itemImageBackgroundColor, btnLeft);
-                    } else {
-                        btnLeft.setVisibility(View.INVISIBLE);
-                    }
-                }
-                
-                if ((index == selectedIndex && (searchText == null || searchText.isEmpty()))
-                        || (selectedItemText != null && o.toString().equals(selectedItemText))
-                        || (selectedItemText != null && o.toString().contains(selectedItemText) && checkSelectedItemThatContains)) {
-                    
-                    checkSelectedItemThatContains = false;
-                    
-                    topLayout.setCardBackgroundColor(selectedItemBackgroundColor);
-                    tvItem.setTextColor(selectedItemTextColor);
-                    tvItem.setTypeface(tvItem.getTypeface(), Typeface.BOLD);
-                    
-                    if (bmpSelectedItemIcon != null) {
-                        btnLeft.setVisibility(View.VISIBLE);
-                        Utils.setBackgroundTintForce(selectedItemImageBackgroundColor, btnLeft);
-                        btnLeft.setImageBitmap(bmpSelectedItemIcon);
-                    } else if (bmpItemIcon != null) {
-                        btnLeft.setVisibility(View.VISIBLE);
-                        btnLeft.setImageBitmap(bmpItemIcon);
-                    } else {
-                        btnLeft.setVisibility(View.INVISIBLE);
-                    }
-                }
-              
-                
-                /*ImageView btnLeft = view.findViewById(R.id.btnLeft);
-                ImageView btnRight = view.findViewById(R.id.btnRight);
-                
-                if (showRightButton) {
-                    btnRight.setVisibility(View.VISIBLE);
-                    
-                    try {
-                        if (rightButtonImageResource != 0) {
-                            btnRight.setImageResource(rightButtonImageResource);
-                        } else {
-                            btnRight.setImageResource(R.drawable.ic_delete);
-                        }
-                    } catch (Exception e) {
-                    
-                    }
-                    
-                    if (actionRightButton != null) {
-                        btnRight.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                actionRightButton.positiveButtonPressed();
-                            }
-                        });
-                    }
-                } else {
-                    btnRight.setVisibility(View.GONE);
-                }*/
-            }
-            
-            @Override
-            public void onItemClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-            
-            }
-            
-            @Override
-            public void onItemLongClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-            
-            }
-        };
-        
-        return this;
-    }
-    
-    
     public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action) {
         return onSingleItemClickListener(action, true);
     }
@@ -312,6 +147,25 @@ public class HxListOfItems<T> {
     
     public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) {
         return onSingleItemClickListener(action, closeDialogOnItemClick, false);
+    }
+    
+    ItemTextProvider itemTextProvider;
+    
+    
+    public HxListOfItems setDialogBackgroundColor(int color) {
+        if (fullDialogLayout != null) {
+            fullDialogLayout.setBackgroundColor(color);
+        }
+        
+        frgList.setBackgroundColor(color);
+        dialog.findViewById(R.id.loSearch).setBackgroundColor(color);
+        return this;
+    }
+    
+    
+    public HxListOfItems setHintBackgroundColor(int color) {
+        Utils.setBackgroundTint(context, color, false, dialog.findViewById(R.id.loHint));
+        return this;
     }
     
     public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick, boolean closeDialogOnItemLongClick) {
@@ -331,17 +185,11 @@ public class HxListOfItems<T> {
                             action.thisHxDialogObject = HxListOfItems.this; // Current Object
                             
                             try {
-                                Object value = null;
-                                
-                                if (checkDefaultTypes(o)) {
-                                    value = o.toString();
+                                if (itemTextProvider != null) {
+                                    action.itemText = itemTextProvider.getText(index).toString(); // text
                                 } else {
-                                    Field nameField = o.getClass().getField(variableFieldName);
-                                    value = nameField.get(o);
+                                    action.itemText = ""; // text
                                 }
-                                
-                                action.itemText = value.toString(); // text
-                                
                             } catch (Exception e) {
                                 e(e);
                             }
@@ -365,20 +213,10 @@ public class HxListOfItems<T> {
                             
                             action.thisHxDialogObject = HxListOfItems.this; // Current Object
                             
-                            try {
-                                Object nameValue = null;
-                                
-                                if (checkDefaultTypes(o)) {
-                                    nameValue = o.toString();
-                                } else {
-                                    Field nameField = o.getClass().getField(variableFieldName);
-                                    nameValue = nameField.get(o);
-                                }
-                                
-                                action.itemText = nameValue.toString(); // text
-                                
-                            } catch (Exception e) {
-                                e(e);
+                            if (itemTextProvider != null) {
+                                action.itemText = itemTextProvider.getText(index).toString(); // text
+                            } else {
+                                action.itemText = ""; // text
                             }
                             
                             action.selectedItem = o;
@@ -398,17 +236,11 @@ public class HxListOfItems<T> {
                 
                 // grab the variable from O
                 try {
-                    
-                    Object nameValue = null;
-                    
-                    if (checkDefaultTypes(o)) {
-                        nameValue = o.toString();
+                    if (itemTextProvider != null) {
+                        tvItem.setText(itemTextProvider.getText(index));
                     } else {
-                        Field nameField = o.getClass().getField(variableFieldName);
-                        nameValue = nameField.get(o);
+                        tvItem.setText("* be sure to call [setItemTextProvider] to provide text for items.");
                     }
-                    
-                    tvItem.setText(nameValue.toString());
                     
                 } catch (Exception e) {
                     tvItem.setText("* No field in [" + o.getClass().getName() + "] with name [" + variableFieldName + "], be sure it is public and exists.");
@@ -517,20 +349,8 @@ public class HxListOfItems<T> {
         return new HxListOfItemsShow(this);
     }
     
-    
-    public HxListOfItems setDialogBackgroundColor(int color) {
-        if (fullDialogLayout != null) {
-            fullDialogLayout.setBackgroundColor(color);
-        }
-        
-        frgList.setBackgroundColor(color);
-        dialog.findViewById(R.id.loSearch).setBackgroundColor(color);
-        return this;
-    }
-    
-    
-    public HxListOfItems setHintBackgroundColor(int color) {
-        Utils.setBackgroundTint(context, color, false, dialog.findViewById(R.id.loHint));
+    public HxListOfItems setItemTextProvider(ItemTextProvider itemTextProvider) {
+        this.itemTextProvider = itemTextProvider;
         
         return this;
     }
@@ -741,17 +561,15 @@ public class HxListOfItems<T> {
                             if (ignoreCaseInSearch) {
                                 
                                 try {
+                                    String text = "";
                                     
-                                    Object nameValue = null;
-                                    
-                                    if (checkDefaultTypes(arItems.get(j))) {
-                                        nameValue = arItems.get(j).toString();
+                                    if (itemTextProvider != null) {
+                                        text = itemTextProvider.getText(j).toString(); // text
                                     } else {
-                                        Field nameField = arItems.get(j).getClass().getField(variableFieldName);
-                                        nameValue = nameField.get(arItems.get(j));
+                                        text = ""; // text
                                     }
                                     
-                                    if (!nameValue.toString().toLowerCase().contains(searchText.toLowerCase())) {
+                                    if (!text.toString().toLowerCase().contains(searchText.toLowerCase())) {
                                         arItems.remove(j);
                                     }
                                 } catch (Exception e) {
@@ -762,16 +580,15 @@ public class HxListOfItems<T> {
                                 
                                 try {
                                     
-                                    Object nameValue = null;
+                                    String text = "";
                                     
-                                    if (checkDefaultTypes(arItems.get(j))) {
-                                        nameValue = arItems.get(j).toString();
+                                    if (itemTextProvider != null) {
+                                        text = itemTextProvider.getText(j).toString(); // text
                                     } else {
-                                        Field nameField = arItems.get(j).getClass().getField(variableFieldName);
-                                        nameValue = nameField.get(arItems.get(j));
+                                        text = ""; // text
                                     }
                                     
-                                    if (!nameValue.toString().contains(searchText)) {
+                                    if (!text.toString().contains(searchText)) {
                                         arItems.remove(j);
                                     }
                                 } catch (Exception e) {
@@ -1053,17 +870,16 @@ public class HxListOfItems<T> {
                     // OR has contain set as true and current item contains requested text
                     
                     try {
-                        Object value = null;
+                        String text = "";
                         
-                        if (checkDefaultTypes(arItems.get(i))) {
-                            value = arItems.get(i).toString();
+                        if (itemTextProvider != null) {
+                            text = itemTextProvider.getText(i).toString(); // text
                         } else {
-                            Field nameField = arItems.get(i).getClass().getField(variableFieldName);
-                            value = nameField.get(arItems.get(i));
+                            text = ""; // text
                         }
                         
-                        if (arItems.get(i).equals(selectedItemText)
-                                || (checkSelectedItemThatContains && value.toString().contains(selectedItemText))) {
+                        if (text.equals(selectedItemText)
+                                || (checkSelectedItemThatContains && text.contains(selectedItemText))) {
                             // selectedIndex = i;
                             frgList.scrollToPosition(i);
                             break;
