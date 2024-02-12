@@ -8,12 +8,12 @@ public abstract class OnHxItemClickListener<T> {
     public HxListOfItems thisHxDialogObject = null;
     public int itemPosition = -1;
     
-    public T selectedItem;
+    public T itemObject;
     
-    public abstract void onItemClicked();
+    public abstract void onItemClicked(int position);
     
     
-    public void onItemLongClicked() {
+    public void onItemLongClicked(int position) {
     
     }
     

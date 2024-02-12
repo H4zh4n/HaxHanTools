@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.OnHxItemClickListener;
-import com.dev.hazhanjalal.haxhantools.utils.ui.list_related.HxListOfItemsShow;
 import com.dev.hazhanjalal.haxhantools.utils.ui.list_related.ItemTextProvider;
 import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
 import com.frogobox.recycler.core.FrogoRecyclerNotifyListener;
@@ -33,16 +32,22 @@ import com.frogobox.recycler.core.IFrogoViewAdapter;
 import com.frogobox.recycler.widget.FrogoRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class HxListOfItems<T> {
+public class HxListOfItems {
     Context context;
-    ArrayList<T> arItems = new ArrayList<>();
-    ArrayList<T> arItemsAllItems = new ArrayList<>();
+    ArrayList<Object> arItems = new ArrayList<>();
+    ArrayList<Object> arItemsAllItems = new ArrayList<>();
     Dialog dialog;
     IFrogoViewAdapter adptItems;
     String searchText;
     int colorFoundTextInSearch;
     View btnClearSearchText;
+    ItemTextProvider itemTextProvider;
+    OnHxItemClickListener onItemClickListener;
+    
+    boolean closeDialogOnItemClick = true;
+    boolean closeDialogOnItemLongClick = false;
     
     
     CustomAction actionDoAfterShown = null;
@@ -106,7 +111,8 @@ public class HxListOfItems<T> {
         });
         
         //onItemClickListener(null);
-        onSingleItemClickListener(null);
+        onItemClickListener = null;
+        
         enableSearch();
         
         colorFoundTextInSearch = Utils.getColor(context, R.color.colorRedChosen);
@@ -125,6 +131,9 @@ public class HxListOfItems<T> {
         selectedItemText = null;
         selectedIndex = -1;
         
+        closeDialogOnItemClick = true;
+        closeDialogOnItemLongClick = false;
+        
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,17 +141,6 @@ public class HxListOfItems<T> {
             }
         });
     }
-    
-    public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action) {
-        return onSingleItemClickListener(action, true);
-    }
-    
-    
-    public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) {
-        return onSingleItemClickListener(action, closeDialogOnItemClick, false);
-    }
-    
-    ItemTextProvider itemTextProvider;
     
     
     public HxListOfItems setDialogBackgroundColor(int color) {
@@ -161,183 +159,15 @@ public class HxListOfItems<T> {
         return this;
     }
     
-    public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick, boolean closeDialogOnItemLongClick) {
-        adptItems = new IFrogoViewAdapter() {
-            @Override
-            public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-                CardView topLayout = view.findViewById(R.id.topLayout);
-                
-                topLayout.setCardBackgroundColor(itemBackgroundColor);
-                
-                topLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (action != null) {
-                            action.itemPosition = index; // index
-                            
-                            action.thisHxDialogObject = HxListOfItems.this; // Current Object
-                            
-                            try {
-                                if (itemTextProvider != null) {
-                                    action.itemText = itemTextProvider.getText(index).toString(); // text
-                                } else {
-                                    action.itemText = ""; // text
-                                }
-                            } catch (Exception e) {
-                                e(e);
-                            }
-                            
-                            action.selectedItem = o;
-                            
-                            action.onItemClicked();
-                        }
-                        
-                        if (closeDialogOnItemClick) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-                
-                topLayout.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (action != null) {
-                            action.itemPosition = index; // index
-                            
-                            action.thisHxDialogObject = HxListOfItems.this; // Current Object
-                            
-                            if (itemTextProvider != null) {
-                                action.itemText = itemTextProvider.getText(index).toString(); // text
-                            } else {
-                                action.itemText = ""; // text
-                            }
-                            
-                            action.selectedItem = o;
-                            
-                            action.onItemLongClicked();
-                        }
-                        
-                        if (closeDialogOnItemLongClick) {
-                            dialog.dismiss();
-                        }
-                        
-                        return true;
-                    }
-                });
-                
-                TextView tvItem = view.findViewById(R.id.tvItem);
-                
-                // grab the variable from O
-                if (itemTextProvider != null) {
-                    tvItem.setText(itemTextProvider.getText(index));
-                } else {
-                    tvItem.setText("* be sure to call [setItemTextProvider] to provide text for items.");
-                }
-                
-                tvItem.setTextColor(itemTextColor);
-                
-                if (searchText != null && !searchText.isEmpty()) {
-                    if (o.toString().contains(searchText)) {
-                        String colordText = o.toString().replaceAll(searchText, "<font color=\"" +
-                                Utils.colorIntToHex(colorFoundTextInSearch)
-                                + "\">" + searchText + "</font>");
-                        tvItem.setText(Html.fromHtml(colordText));
-                    }
-                }
-                
-                tvItem.setTypeface(tvItem.getTypeface(), Typeface.NORMAL);
-                
-                //for index, searchText has to be null or empty to change background of item.
-                //because user can say highlight index 10, and then search for something,
-                //in this example in both cases regardless of the item data index 10 will be highlighted.
-                //hence the second condition after [index == selectedIndex] is added to prevent that.
-                // for selectedItemText it's ok and no condition is needed since even when searching for an item
-                //it's still ok to highlight it if they match.
-                ImageView btnLeft = view.findViewById(R.id.btnLeft);
-                btnLeft.setImageBitmap(null);
-                
-                //if it's requested to have an image to left of the data [whether selected or not]
-                if (bmpItemIcon != null || bmpSelectedItemIcon != null) {
-                    //change the image visibility
-                    btnLeft.setVisibility(View.VISIBLE);
-                    
-                    if (bmpItemIcon != null) {
-                        btnLeft.setImageBitmap(bmpItemIcon);
-                        Utils.setBackgroundTintForce(itemImageBackgroundColor, btnLeft);
-                    } else {
-                        btnLeft.setVisibility(View.INVISIBLE);
-                    }
-                }
-                
-                if ((index == selectedIndex && (searchText == null || searchText.isEmpty()))
-                        || (selectedItemText != null && !selectedItemText.isEmpty() && o.toString().equals(selectedItemText))
-                        || (selectedItemText != null && !selectedItemText.isEmpty() && o.toString().contains(selectedItemText) && checkSelectedItemThatContains)) {
-                    
-                    checkSelectedItemThatContains = false;
-                    
-                    topLayout.setCardBackgroundColor(selectedItemBackgroundColor);
-                    tvItem.setTextColor(selectedItemTextColor);
-                    tvItem.setTypeface(tvItem.getTypeface(), Typeface.BOLD);
-                    
-                    if (bmpSelectedItemIcon != null) {
-                        btnLeft.setVisibility(View.VISIBLE);
-                        Utils.setBackgroundTintForce(selectedItemImageBackgroundColor, btnLeft);
-                        btnLeft.setImageBitmap(bmpSelectedItemIcon);
-                    } else if (bmpItemIcon != null) {
-                        btnLeft.setVisibility(View.VISIBLE);
-                        btnLeft.setImageBitmap(bmpItemIcon);
-                    } else {
-                        btnLeft.setVisibility(View.GONE);
-                    }
-                }
-              
-                
-                /*ImageView btnLeft = view.findViewById(R.id.btnLeft);
-                ImageView btnRight = view.findViewById(R.id.btnRight);
-                
-                if (showRightButton) {
-                    btnRight.setVisibility(View.VISIBLE);
-                    
-                    try {
-                        if (rightButtonImageResource != 0) {
-                            btnRight.setImageResource(rightButtonImageResource);
-                        } else {
-                            btnRight.setImageResource(R.drawable.ic_delete);
-                        }
-                    } catch (Exception e) {
-                    
-                    }
-                    
-                    if (actionRightButton != null) {
-                        btnRight.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                actionRightButton.positiveButtonPressed();
-                            }
-                        });
-                    }
-                } else {
-                    btnRight.setVisibility(View.GONE);
-                }*/
-            }
-            
-            @Override
-            public void onItemClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-            
-            }
-            
-            @Override
-            public void onItemLongClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-            
-            }
-        };
-        
-        return new HxListOfItemsShow(this);
-    }
     
     public HxListOfItems setItemTextProvider(ItemTextProvider itemTextProvider) {
         this.itemTextProvider = itemTextProvider;
         
+        return this;
+    }
+    
+    public HxListOfItems setOnItemClickListener(OnHxItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
         return this;
     }
     
@@ -351,18 +181,15 @@ public class HxListOfItems<T> {
         return this;
     }
     
-    public HxListOfItems setItems(ArrayList<T> items) {
+    public HxListOfItems setItems(ArrayList<Object> items) {
         arItems.addAll(items);
         arItemsAllItems.addAll(arItems);
         return this;
     }
     
     
-    public HxListOfItems setItems(T[] items) {
-        for (int i = 0; i < items.length; i++) {
-            arItems.add(items[i]);
-        }
-        
+    public HxListOfItems setItems(Object[] items) {
+        arItems.addAll(Arrays.asList(items));
         arItemsAllItems.addAll(arItems);
         return this;
     }
@@ -392,6 +219,15 @@ public class HxListOfItems<T> {
         return this;
     }
     
+    public HxListOfItems setCloseDialogOnItemClick(boolean closeDialogOnItemClick) {
+        this.closeDialogOnItemClick = closeDialogOnItemClick;
+        return this;
+    }
+    
+    public HxListOfItems setCloseDialogOnItemLongClick(boolean closeDialogOnItemLongClick) {
+        this.closeDialogOnItemLongClick = closeDialogOnItemLongClick;
+        return this;
+    }
     
     public HxListOfItems setItemImage(Bitmap bitmapItemIcon, int backgroundColor) {
         this.bmpItemIcon = bitmapItemIcon;
@@ -416,6 +252,7 @@ public class HxListOfItems<T> {
         this.selectedItemImageBackgroundColor = backgroundColor;
         return this;
     }
+    
     
     public HxListOfItems setSelectedItemImage(int idSelectedItemIcon, int backgroundColor) {
         
@@ -623,217 +460,175 @@ public class HxListOfItems<T> {
     }
     
     public void show() {
-        //        FrogoRecyclerView frgQariList = dialog.findViewById(R.id.frgQariList);
-        //        ArrayList<ClassQariAudio> arQari = MyDatabase.getAllQari();
-        //        EditText etBookSearch = dialog.findViewById(R.id.etBookSearch);
-        //
-        //        TextView tvAllAudioSize = dialog.findViewById(R.id.tvAllAudioSize);
-        //        TextView tvTopInfoSelectAudio = dialog.findViewById(R.id.tvTopInfoSelectAudio);
-        //        tvTopInfoSelectAudio.append("ی قورئان خوێن");
-        //
-        //        IFrogoViewAdapter adptQari = new IFrogoViewAdapter<ClassQariAudio>() {
-        //            @Override
-        //            public void setupInitComponent(@NonNull View view, ClassQariAudio o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-        //                TextView tvQari = view.findViewById(R.id.tvQari);
-        //                ImageView btnDelete = view.findViewById(R.id.btnDelete);
-        //                ImageView btnDownload = view.findViewById(R.id.btnDownload);
-        //                CardView topLayout = view.findViewById(R.id.topLayout);
-        //                String nArabic = o.nameArabic;
-        //
-        //                if (nArabic.contains("بێ بچڕان")) {
-        //                    nArabic = nArabic.replaceAll("بێ بچڕان", "<font color=\"#f1c40f\">بێ بچڕان</font>");
-        //                    /*if (!o.nameArabic.equals(MyDatabase.getSelectedQari())) {
-        //                        nArabic = nArabic.replaceAll("بێ بچڕان", "<font color=\"#e74c3c\">بێ بچڕان</font>");
-        //                    } else {
-        //                    }*/
-        //                } else {
-        //                    nArabic += "<font color=\"#1abc9c\"> (ئایەت ئایەت) </font>";
-        //                }
-        //
-        //                if (MyDatabase.getSelectedQari().equals(o.nameArabic)) {
-        //                    topLayout.setCardBackgroundColor(Utils.getColor(R.color.colorBlueChosen));
-        //                    tvQari.setTextColor(Utils.getColor(android.R.color.white));
-        //                } else {
-        //                    topLayout.setCardBackgroundColor(Utils.getColor(R.color.modeBackgroundColorLighter));
-        //                    tvQari.setTextColor(Utils.getColor(R.color.modeTextColor));
-        //                }
-        //
-        //                if (!etBookSearch.getText().toString().isEmpty()) {
-        //                    nArabic = nArabic.replaceAll(etBookSearch.getText().toString(), "<font color=\"#2ecc71\">" + etBookSearch.getText().toString() + "</font>");
-        //                }
-        //
-        //                tvQari.setText(Html.fromHtml(nArabic));
-        //
-        //                btnDownload.setVisibility(View.GONE);
-        //
-        //                ViewGroup mainLayout = view.findViewById(R.id.mainLayout);
-        //                View.OnClickListener onClickDownload = new View.OnClickListener() {
-        //                    @Override
-        //                    public void onClick(View v) {
-        //                        try {
-        //                            if (!o.nameArabic.equals(MyDatabase.getSelectedQari())) {
-        //
-        //                                //audio_player.pause();
-        //                                Utils.getActivity().runOnUiThread(new Runnable() {
-        //                                    @Override
-        //                                    public void run() {
-        //                                        // if (audio_player.isPlaying()) {
-        //                                        audio_player.pause();
-        //                                        audio_player.kill();
-        //                                        //  }
-        //                                    }
-        //                                });
-        //
-        //                                Utils.put("selected_qari", o.nameArabic);
-        //                                tvSelectedQari.setText(MyDatabase.getSelectedQari());
-        //
-        //                                new Thread(new Runnable() {
-        //                                    @Override
-        //                                    public void run() {
-        //                                        refreshAudio();
-        //                                        checkAudioAvailable();
-        //                                    }
-        //                                }).start();
-        //                            }
-        //
-        //                            dialog.dismiss();
-        //
-        //                        } catch (Exception e) {
-        //                            e(e);
-        //                        }
-        //                    }
-        //                };
-        //
-        //                mainLayout.setOnClickListener(onClickDownload);
-        //
-        //                /*
-        //                btnDelete.setBackground(null);
-        //                btnDelete.setBackgroundColor();
-        //                */
-        //
-        //                Utils.setBackgroundTintForce(Utils.getColor(R.color.colorGreenChosen), btnDelete);
-        //                btnDelete.setImageResource(R.drawable.ic_check);
-        //                // btnDelete.setImageDrawable(Utils.setDrawableTint(Utils.getDrawable(R.drawable.ic_check), Utils.getColor(R.color.modeTextColor)));
-        //
-        //                if (!AudioPlayer.isAudioAvailableForSurahOfQari(o.nameArabic, selectedSura)) {
-        //                    btnDelete.setVisibility(View.VISIBLE);
-        //                    btnDelete.setImageResource(R.drawable.ic_no_audio);
-        //                    Utils.setBackgroundTintForce(Utils.getColor(R.color.colorRedChosen), btnDelete);
-        //                } else {
-        //                    //checking if file for this surah exists or not.
-        //                    if (MyDatabase.isGapless(o.nameArabic)) {
-        //                        if (UtilsFile.fileExist("mp3/" + o.nameEnglish, Utils.replaceEasternNumbers(String.format("%03d.mp3", selectedSura)))) {
-        //                            btnDelete.setVisibility(View.VISIBLE);
-        //                        } else {
-        //                            btnDelete.setVisibility(View.INVISIBLE);
-        //                        }
-        //                    } else {
-        //                        //sample three ayahs, first middle last, if they all exists, consider surah downloaded.
-        //                        if (UtilsFile.fileExist("mp3/" + o.nameEnglish, Utils.replaceEasternNumbers(String.format("%03d%03d.mp3", selectedSura, 1)))
-        //                                && UtilsFile.fileExist("mp3/" + o.nameEnglish, Utils.replaceEasternNumbers(String.format("%03d%03d.mp3", selectedSura, totalAyah / 2)))
-        //                                && UtilsFile.fileExist("mp3/" + o.nameEnglish, Utils.replaceEasternNumbers(String.format("%03d%03d.mp3", selectedSura, totalAyah)))) {
-        //                            btnDelete.setVisibility(View.VISIBLE);
-        //                        } else {
-        //                            btnDelete.setVisibility(View.INVISIBLE);
-        //                        }
-        //                    }
-        //                }
-        //
-        //
-        //                /*if (UtilsFile.folderExists("mp3/" + o.nameEnglish)) {
-        //                    btnDelete.setVisibility(View.VISIBLE);
-        //                } else {
-        //                    btnDelete.setVisibility(View.INVISIBLE);
-        //                }*/
-        //
-        //                btnDelete.setOnClickListener(new View.OnClickListener() {
-        //                    @Override
-        //                    public void onClick(View v) {
-        //                        if (!AudioPlayer.isAudioAvailableForSurahOfQari(o.nameArabic, selectedSura)) {
-        //                            ShowToast.showToast(String.format(" ئەم سورەتە بە دەنگی %s بەردەست نییە ", o.nameArabic.replaceAll("\\(" + "بێ بچڕان" + "\\)" + "|" + "\\(" + " بێ بچڕان " + "\\)", "").trim()),
-        //                                                Utils.getDrawable(R.drawable.ic_no_audio),
-        //                                                Utils.getColor(R.color.colorRedChosen));
-        //                        } else {
-        //                            ShowToast.showToastSuccess("ئەم سورەتە بە دەنگی " + o.nameArabic.replaceAll("\\(" + "بێ بچڕان" + "\\)" + "|" + "\\(" + " بێ بچڕان " + "\\)", "").trim() + " داگیراوە ");
-        //                        }
-        //
-        //                    }
-        //                });
-        //            }
-        //
-        //            @Override
-        //            public void onItemClicked(@NonNull View view, ClassQariAudio o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-        //
-        //            }
-        //
-        //            @Override
-        //            public void onItemLongClicked(@NonNull View view, ClassQariAudio o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
-        //
-        //            }
-        //        };
-        //
-        //        int selectedQari = 0;
-        //        for (int i = 0; i < arQari.size(); i++) {
-        //            if (MyDatabase.getSelectedQari().equals(arQari.get(i).nameArabic)) {
-        //                selectedQari = i;
-        //                break;
-        //            }
-        //        }
-        //
-        //        tvAllAudioSize.setText("كۆی دەنگەكان : " + arQari.size());
-        //
-        //        frgQariList.injector()
-        //                .addData(arQari)
-        //                .createLayoutLinearVertical(false)
-        //                .addCustomView(R.layout.layout_qari_download)
-        //                .addCallback(adptQari)
-        //                .addEmptyView(R.layout.layout_empty)
-        //                .build();
-        //
-        //        frgQariList.scrollToPosition(selectedQari);
-        //
-        //        etBookSearch.addTextChangedListener(new TextWatcher() {
-        //            @Override
-        //            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        //
-        //            }
-        //
-        //            @Override
-        //            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        //                ArrayList<ClassQariAudio> arQari = MyDatabase.getAllQari();
-        //
-        //                int currentSelectedQari = 0;
-        //                //v("text=" + charSequence.toString());
-        //                if (!etBookSearch.getText().toString().isEmpty()) {
-        //                    for (int x = arQari.size() - 1; x >= 0; x--) {
-        //                        if (!arQari.get(x).nameArabic.contains(charSequence.toString())) {
-        //                            arQari.remove(x);
-        //                            continue;
-        //                        }
-        //
-        //                        if (MyDatabase.getSelectedQari().equals(arQari.get(x).nameArabic)) {
-        //                            currentSelectedQari = x;
-        //                        }
-        //                    }
-        //                }
-        //
-        //                frgQariList.injector()
-        //                        .addData(arQari)
-        //                        .createLayoutLinearVertical(false)
-        //                        .addCustomView(R.layout.layout_qari_download)
-        //                        .addCallback(adptQari)
-        //                        .addEmptyView(R.layout.layout_empty)
-        //                        .build();
-        //
-        //                frgQariList.scrollToPosition(currentSelectedQari);
-        //
-        //            }
-        //
-        //            @Override
-        //            public void afterTextChanged(Editable editable) {
-        //
-        //            }
-        //        });
+        adptItems = new IFrogoViewAdapter() {
+            @Override
+            public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
+                CardView topLayout = view.findViewById(R.id.topLayout);
+                
+                topLayout.setCardBackgroundColor(itemBackgroundColor);
+                
+                topLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.itemPosition = index; // index
+                            
+                            onItemClickListener.thisHxDialogObject = HxListOfItems.this; // Current Object
+                            
+                            try {
+                                if (itemTextProvider != null) {
+                                    onItemClickListener.itemText = itemTextProvider.getText(index).toString(); // text
+                                } else {
+                                    onItemClickListener.itemText = ""; // text
+                                }
+                            } catch (Exception e) {
+                                e(e);
+                            }
+                            
+                            onItemClickListener.itemObject = o;
+                            
+                            onItemClickListener.onItemClicked(index);
+                        }
+                        
+                        if (closeDialogOnItemClick) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                
+                topLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (onItemClickListener != null) {
+                            onItemClickListener.itemPosition = index; // index
+                            
+                            onItemClickListener.thisHxDialogObject = HxListOfItems.this; // Current Object
+                            
+                            if (itemTextProvider != null) {
+                                onItemClickListener.itemText = itemTextProvider.getText(index).toString(); // text
+                            } else {
+                                onItemClickListener.itemText = ""; // text
+                            }
+                            
+                            onItemClickListener.itemObject = o;
+                            
+                            onItemClickListener.onItemLongClicked(index);
+                        }
+                        
+                        if (closeDialogOnItemLongClick) {
+                            dialog.dismiss();
+                        }
+                        
+                        return true;
+                    }
+                });
+                
+                TextView tvItem = view.findViewById(R.id.tvItem);
+                
+                // grab the variable from O
+                if (itemTextProvider != null) {
+                    tvItem.setText(itemTextProvider.getText(index));
+                } else {
+                    tvItem.setText("* be sure to call [setItemTextProvider] to provide text for items.");
+                }
+                
+                tvItem.setTextColor(itemTextColor);
+                
+                if (searchText != null && !searchText.isEmpty()) {
+                    if (o.toString().contains(searchText)) {
+                        String colordText = o.toString().replaceAll(searchText, "<font color=\"" +
+                                Utils.colorIntToHex(colorFoundTextInSearch)
+                                + "\">" + searchText + "</font>");
+                        tvItem.setText(Html.fromHtml(colordText));
+                    }
+                }
+                
+                tvItem.setTypeface(tvItem.getTypeface(), Typeface.NORMAL);
+                
+                //for index, searchText has to be null or empty to change background of item.
+                //because user can say highlight index 10, and then search for something,
+                //in this example in both cases regardless of the item data index 10 will be highlighted.
+                //hence the second condition after [index == selectedIndex] is added to prevent that.
+                // for selectedItemText it's ok and no condition is needed since even when searching for an item
+                //it's still ok to highlight it if they match.
+                ImageView btnLeft = view.findViewById(R.id.btnLeft);
+                btnLeft.setImageBitmap(null);
+                
+                //if it's requested to have an image to left of the data [whether selected or not]
+                if (bmpItemIcon != null || bmpSelectedItemIcon != null) {
+                    //change the image visibility
+                    btnLeft.setVisibility(View.VISIBLE);
+                    
+                    if (bmpItemIcon != null) {
+                        btnLeft.setImageBitmap(bmpItemIcon);
+                        Utils.setBackgroundTintForce(itemImageBackgroundColor, btnLeft);
+                    } else {
+                        btnLeft.setVisibility(View.INVISIBLE);
+                    }
+                }
+                
+                if ((index == selectedIndex && (searchText == null || searchText.isEmpty()))
+                        || (selectedItemText != null && !selectedItemText.isEmpty() && o.toString().equals(selectedItemText))
+                        || (selectedItemText != null && !selectedItemText.isEmpty() && o.toString().contains(selectedItemText) && checkSelectedItemThatContains)) {
+                    
+                    checkSelectedItemThatContains = false;
+                    
+                    topLayout.setCardBackgroundColor(selectedItemBackgroundColor);
+                    tvItem.setTextColor(selectedItemTextColor);
+                    tvItem.setTypeface(tvItem.getTypeface(), Typeface.BOLD);
+                    
+                    if (bmpSelectedItemIcon != null) {
+                        btnLeft.setVisibility(View.VISIBLE);
+                        Utils.setBackgroundTintForce(selectedItemImageBackgroundColor, btnLeft);
+                        btnLeft.setImageBitmap(bmpSelectedItemIcon);
+                    } else if (bmpItemIcon != null) {
+                        btnLeft.setVisibility(View.VISIBLE);
+                        btnLeft.setImageBitmap(bmpItemIcon);
+                    } else {
+                        btnLeft.setVisibility(View.GONE);
+                    }
+                }
+              
+                
+                /*ImageView btnLeft = view.findViewById(R.id.btnLeft);
+                ImageView btnRight = view.findViewById(R.id.btnRight);
+                
+                if (showRightButton) {
+                    btnRight.setVisibility(View.VISIBLE);
+                    
+                    try {
+                        if (rightButtonImageResource != 0) {
+                            btnRight.setImageResource(rightButtonImageResource);
+                        } else {
+                            btnRight.setImageResource(R.drawable.ic_delete);
+                        }
+                    } catch (Exception e) {
+                    
+                    }
+                    
+                    if (actionRightButton != null) {
+                        btnRight.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                actionRightButton.positiveButtonPressed();
+                            }
+                        });
+                    }
+                } else {
+                    btnRight.setVisibility(View.GONE);
+                }*/
+            }
+            
+            @Override
+            public void onItemClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
+            
+            }
+            
+            @Override
+            public void onItemLongClicked(@NonNull View view, Object o, int i, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
+            
+            }
+        };
         
         frgList.injector()
                 .addData(arItems)
