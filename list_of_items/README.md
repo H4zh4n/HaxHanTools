@@ -100,7 +100,7 @@ itms.add(new Item(1, "Sulaymani"));
 itms.add(new Item(2, "Erbil"));
 itms.add(new Item(3, "Karkuk"));
 
-//                 v denote the array type
+//                 v denote array type for setItems
 new HxListOfItems<Item>(this)
       .setItems(itms)
 
