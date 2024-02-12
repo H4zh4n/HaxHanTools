@@ -5,4 +5,4 @@ implementation is in main branch :
 
 
 # Documentation : 
-* [HxListOfItems](list_of_items)
+* [HxListOfItems](list_of_items) Display a list of items.
