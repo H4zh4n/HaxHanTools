@@ -36,7 +36,7 @@ repositories {
 
 ### Implementation in `build.gradle` Module :
 ```gradle
-implementation 'com.github.H4zh4n:HaxHanTools:1.0.13.0'
+implementation 'com.github.H4zh4n:HaxHanTools:1.0.13.1'
 ```
 ___
 
@@ -81,7 +81,7 @@ ___
 - If you faced duplicate Class found for `lifecycle-viewmodel` or  `androidx.lifecycle` or `lifecycle-viewmodel-ktx` then implement as following
 
 ```gradle
-implementation('com.github.H4zh4n:HaxHanTools:1.0.13.0') {
+implementation('com.github.H4zh4n:HaxHanTools:1.0.13.1') {
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel'
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
 }
