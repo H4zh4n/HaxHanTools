@@ -99,8 +99,9 @@ ArrayList<Item> itms = new ArrayList();
 itms.add(new Item(1, "Sulaymani"));
 itms.add(new Item(2, "Erbil"));
 itms.add(new Item(3, "Karkuk"));
-    
-new HxListOfItems(this)
+
+//                 v denote the array type
+new HxListOfItems<Item>(this)
       .setItems(itms)
 
       // setup each item's text in the popup.
