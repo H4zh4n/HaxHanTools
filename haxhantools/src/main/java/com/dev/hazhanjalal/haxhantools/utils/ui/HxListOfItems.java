@@ -1,7 +1,6 @@
 package com.dev.hazhanjalal.haxhantools.utils.ui;
 
 import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.e;
-import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.v;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -45,7 +44,6 @@ public class HxListOfItems<T> {
     int colorFoundTextInSearch;
     View btnClearSearchText;
     
-    String variableFieldName;
     
     CustomAction actionDoAfterShown = null;
     boolean ignoreCaseInSearch = true;
@@ -139,11 +137,6 @@ public class HxListOfItems<T> {
         return onSingleItemClickListener(action, true);
     }
     
-    public HxListOfItemsShow onSingleItemClickListener(String variableFieldName, OnHxItemClickListener action) {
-        this.variableFieldName = variableFieldName;
-        
-        return onSingleItemClickListener(action, true);
-    }
     
     public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) {
         return onSingleItemClickListener(action, closeDialogOnItemClick, false);
@@ -235,17 +228,10 @@ public class HxListOfItems<T> {
                 TextView tvItem = view.findViewById(R.id.tvItem);
                 
                 // grab the variable from O
-                try {
-                    if (itemTextProvider != null) {
-                        tvItem.setText(itemTextProvider.getText(index));
-                    } else {
-                        tvItem.setText("* be sure to call [setItemTextProvider] to provide text for items.");
-                    }
-                    
-                } catch (Exception e) {
-                    tvItem.setText("* No field in [" + o.getClass().getName() + "] with name [" + variableFieldName + "], be sure it is public and exists.");
-                    v("No field found with [name " + variableFieldName + "]");
-                    e(e);
+                if (itemTextProvider != null) {
+                    tvItem.setText(itemTextProvider.getText(index));
+                } else {
+                    tvItem.setText("* be sure to call [setItemTextProvider] to provide text for items.");
                 }
                 
                 tvItem.setTextColor(itemTextColor);
@@ -368,12 +354,6 @@ public class HxListOfItems<T> {
     public HxListOfItems setItems(ArrayList<T> items) {
         arItems.addAll(items);
         arItemsAllItems.addAll(arItems);
-        return this;
-    }
-    
-    
-    public HxListOfItems setVariableField(String variableFieldName) {
-        this.variableFieldName = variableFieldName;
         return this;
     }
     
