@@ -1,6 +1,7 @@
 package com.dev.hazhanjalal.haxhantools.utils.ui;
 
 import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.e;
+import static com.dev.hazhanjalal.haxhantools.utils.print.Logger.v;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -25,22 +26,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.OnHxItemClickListener;
+import com.dev.hazhanjalal.haxhantools.utils.ui.list_related.HxListOfItemsShow;
 import com.dev.hazhanjalal.haxhantools.utils.utils.Utils;
 import com.frogobox.recycler.core.FrogoRecyclerNotifyListener;
 import com.frogobox.recycler.core.IFrogoViewAdapter;
 import com.frogobox.recycler.widget.FrogoRecyclerView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-public class HxListOfItems {
+public class HxListOfItems<T> {
     Context context;
-    ArrayList<String> arItems = new ArrayList<>();
-    ArrayList<String> arItemsAllItems = new ArrayList<>();
+    ArrayList<T> arItems = new ArrayList<>();
+    ArrayList<T> arItemsAllItems = new ArrayList<>();
     Dialog dialog;
     IFrogoViewAdapter adptItems;
     String searchText;
     int colorFoundTextInSearch;
     View btnClearSearchText;
+    
+    String variableFieldName;
     
     CustomAction actionDoAfterShown = null;
     boolean ignoreCaseInSearch = true;
@@ -144,7 +149,7 @@ public class HxListOfItems {
     /** Don't use this, use onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) instead.
      */
     public HxListOfItems onItemClickListener(CustomAction action, boolean closeDialogOnItemClick) {
-        adptItems = new IFrogoViewAdapter() {
+        adptItems = new IFrogoViewAdapter<T>() {
             @Override
             public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
                 CardView topLayout = view.findViewById(R.id.topLayout);
@@ -172,7 +177,27 @@ public class HxListOfItems {
                 });
                 
                 TextView tvItem = view.findViewById(R.id.tvItem);
-                tvItem.setText(o.toString());
+                
+                // grab the variable from O
+                try {
+                    
+                    Object value = null;
+                    
+                    if (checkDefaultTypes(o)) {
+                        value = o.toString();
+                    } else {
+                        Field nameField = o.getClass().getField(variableFieldName);
+                        value = nameField.get(o);
+                    }
+                    
+                    tvItem.setText(value.toString());
+                    
+                } catch (Exception e) {
+                    tvItem.setText("* No field in " + o.getClass().getName() + " with name " + variableFieldName);
+                    v("No field found with name name");
+                    e(e);
+                }
+                
                 tvItem.setTextColor(itemTextColor);
                 
                 if (searchText != null && !searchText.isEmpty()) {
@@ -275,15 +300,21 @@ public class HxListOfItems {
     }
     
     
-    public HxListOfItems onSingleItemClickListener(OnHxItemClickListener action) {
+    public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action) {
         return onSingleItemClickListener(action, true);
     }
     
-    public HxListOfItems onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) {
+    public HxListOfItemsShow onSingleItemClickListener(String variableFieldName, OnHxItemClickListener action) {
+        this.variableFieldName = variableFieldName;
+        
+        return onSingleItemClickListener(action, true);
+    }
+    
+    public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick) {
         return onSingleItemClickListener(action, closeDialogOnItemClick, false);
     }
     
-    public HxListOfItems onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick, boolean closeDialogOnItemLongClick) {
+    public HxListOfItemsShow onSingleItemClickListener(OnHxItemClickListener action, boolean closeDialogOnItemClick, boolean closeDialogOnItemLongClick) {
         adptItems = new IFrogoViewAdapter() {
             @Override
             public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
@@ -299,7 +330,24 @@ public class HxListOfItems {
                             
                             action.thisHxDialogObject = HxListOfItems.this; // Current Object
                             
-                            action.itemText = o.toString(); // text
+                            try {
+                                Object value = null;
+                                
+                                if (checkDefaultTypes(o)) {
+                                    value = o.toString();
+                                } else {
+                                    Field nameField = o.getClass().getField(variableFieldName);
+                                    value = nameField.get(o);
+                                }
+                                
+                                action.itemText = value.toString(); // text
+                                
+                            } catch (Exception e) {
+                                e(e);
+                            }
+                            
+                            action.selectedItem = o;
+                            
                             action.onItemClicked();
                         }
                         
@@ -317,7 +365,24 @@ public class HxListOfItems {
                             
                             action.thisHxDialogObject = HxListOfItems.this; // Current Object
                             
-                            action.itemText = o.toString(); // text
+                            try {
+                                Object nameValue = null;
+                                
+                                if (checkDefaultTypes(o)) {
+                                    nameValue = o.toString();
+                                } else {
+                                    Field nameField = o.getClass().getField(variableFieldName);
+                                    nameValue = nameField.get(o);
+                                }
+                                
+                                action.itemText = nameValue.toString(); // text
+                                
+                            } catch (Exception e) {
+                                e(e);
+                            }
+                            
+                            action.selectedItem = o;
+                            
                             action.onItemLongClicked();
                         }
                         
@@ -330,7 +395,27 @@ public class HxListOfItems {
                 });
                 
                 TextView tvItem = view.findViewById(R.id.tvItem);
-                tvItem.setText(o.toString());
+                
+                // grab the variable from O
+                try {
+                    
+                    Object nameValue = null;
+                    
+                    if (checkDefaultTypes(o)) {
+                        nameValue = o.toString();
+                    } else {
+                        Field nameField = o.getClass().getField(variableFieldName);
+                        nameValue = nameField.get(o);
+                    }
+                    
+                    tvItem.setText(nameValue.toString());
+                    
+                } catch (Exception e) {
+                    tvItem.setText("* No field in [" + o.getClass().getName() + "] with name [" + variableFieldName + "], be sure it is public and exists.");
+                    v("No field found with [name " + variableFieldName + "]");
+                    e(e);
+                }
+                
                 tvItem.setTextColor(itemTextColor);
                 
                 if (searchText != null && !searchText.isEmpty()) {
@@ -384,7 +469,7 @@ public class HxListOfItems {
                         btnLeft.setVisibility(View.VISIBLE);
                         btnLeft.setImageBitmap(bmpItemIcon);
                     } else {
-                        btnLeft.setVisibility(View.INVISIBLE);
+                        btnLeft.setVisibility(View.GONE);
                     }
                 }
               
@@ -429,7 +514,7 @@ public class HxListOfItems {
             }
         };
         
-        return this;
+        return new HxListOfItemsShow(this);
     }
     
     
@@ -460,13 +545,20 @@ public class HxListOfItems {
         return this;
     }
     
-    public HxListOfItems setItems(ArrayList<String> items) {
+    public HxListOfItems setItems(ArrayList<T> items) {
         arItems.addAll(items);
         arItemsAllItems.addAll(arItems);
         return this;
     }
     
-    public HxListOfItems setItems(String[] items) {
+    
+    public HxListOfItems setVariableField(String variableFieldName) {
+        this.variableFieldName = variableFieldName;
+        return this;
+    }
+    
+    
+    public HxListOfItems setItems(T[] items) {
         for (int i = 0; i < items.length; i++) {
             arItems.add(items[i]);
         }
@@ -474,6 +566,7 @@ public class HxListOfItems {
         arItemsAllItems.addAll(arItems);
         return this;
     }
+    
     
     public HxListOfItems showCloseButton(boolean show) {
         View btnClose = dialog.findViewById(R.id.btnClose);
@@ -646,12 +739,43 @@ public class HxListOfItems {
                         
                         for (int j = arItems.size() - 1; j >= 0; j--) {
                             if (ignoreCaseInSearch) {
-                                if (!arItems.get(j).toLowerCase().contains(searchText.toLowerCase())) {
-                                    arItems.remove(j);
+                                
+                                try {
+                                    
+                                    Object nameValue = null;
+                                    
+                                    if (checkDefaultTypes(arItems.get(j))) {
+                                        nameValue = arItems.get(j).toString();
+                                    } else {
+                                        Field nameField = arItems.get(j).getClass().getField(variableFieldName);
+                                        nameValue = nameField.get(arItems.get(j));
+                                    }
+                                    
+                                    if (!nameValue.toString().toLowerCase().contains(searchText.toLowerCase())) {
+                                        arItems.remove(j);
+                                    }
+                                } catch (Exception e) {
+                                    e(e);
                                 }
+                                
                             } else {
-                                if (!arItems.get(j).contains(searchText)) {
-                                    arItems.remove(j);
+                                
+                                try {
+                                    
+                                    Object nameValue = null;
+                                    
+                                    if (checkDefaultTypes(arItems.get(j))) {
+                                        nameValue = arItems.get(j).toString();
+                                    } else {
+                                        Field nameField = arItems.get(j).getClass().getField(variableFieldName);
+                                        nameValue = nameField.get(arItems.get(j));
+                                    }
+                                    
+                                    if (!nameValue.toString().contains(searchText)) {
+                                        arItems.remove(j);
+                                    }
+                                } catch (Exception e) {
+                                
                                 }
                             }
                             
@@ -927,13 +1051,26 @@ public class HxListOfItems {
                 for (int i = 0; i < arItems.size(); i++) {
                     //if current item is equal to requested text
                     // OR has contain set as true and current item contains requested text
-                    if (arItems.get(i).equals(selectedItemText)
-                            || (checkSelectedItemThatContains && arItems.get(i).contains(selectedItemText))) {
-                        // selectedIndex = i;
-                        frgList.scrollToPosition(i);
-                        break;
-                    }
                     
+                    try {
+                        Object value = null;
+                        
+                        if (checkDefaultTypes(arItems.get(i))) {
+                            value = arItems.get(i).toString();
+                        } else {
+                            Field nameField = arItems.get(i).getClass().getField(variableFieldName);
+                            value = nameField.get(arItems.get(i));
+                        }
+                        
+                        if (arItems.get(i).equals(selectedItemText)
+                                || (checkSelectedItemThatContains && value.toString().contains(selectedItemText))) {
+                            // selectedIndex = i;
+                            frgList.scrollToPosition(i);
+                            break;
+                        }
+                    } catch (Exception e) {
+                    
+                    }
                 }
             }
             
@@ -949,7 +1086,23 @@ public class HxListOfItems {
         if (actionDoAfterShown != null) {
             actionDoAfterShown.positiveButtonPressed();
         }
+    }
+    
+    
+    private boolean checkDefaultTypes(Object o) {
         
+        if (
+                o instanceof String
+                        || o instanceof Integer
+                        || o instanceof Float
+                        || o instanceof Double
+                        || o instanceof Character
+                        || o instanceof Boolean
+        ) {
+            return true;
+        }
+        
+        return false;
     }
     
     public void closeDialog() {
@@ -958,3 +1111,4 @@ public class HxListOfItems {
         }
     }
 }
+
