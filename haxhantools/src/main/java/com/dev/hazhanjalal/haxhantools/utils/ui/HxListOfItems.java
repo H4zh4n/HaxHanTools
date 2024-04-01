@@ -81,7 +81,6 @@ public class HxListOfItems<T> {
     int itemImageBackgroundColor, selectedItemImageBackgroundColor;
     
     // A hashmap to keep track of all the new indexes.
-    HashMap<Integer, Integer> positionRemap = new HashMap<>();
     
     
     public HxListOfItems setDialogBackgroundColor(int color) {
@@ -717,6 +716,8 @@ public class HxListOfItems<T> {
         
         return false;
     }
+    
+    HashMap<Integer, Integer> positionRemap = new HashMap<>();
     
     private String getRemappedString(int position) {
         String textToBeDisplayed = "";
