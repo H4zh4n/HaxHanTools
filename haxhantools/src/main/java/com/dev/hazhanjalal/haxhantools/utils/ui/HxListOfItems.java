@@ -33,6 +33,7 @@ import com.frogobox.recycler.widget.FrogoRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class HxListOfItems<T> {
     Context context;
@@ -48,7 +49,6 @@ public class HxListOfItems<T> {
     
     boolean closeDialogOnItemClick = true;
     boolean closeDialogOnItemLongClick = false;
-    
     
     CustomAction actionDoAfterShown = null;
     boolean ignoreCaseInSearch = true;
@@ -90,72 +90,8 @@ public class HxListOfItems<T> {
             0
     );
     
-    public HxListOfItems(Context ctx) {
-        context = ctx;
-        
-        dialog = new Dialog(context, R.style.alert);
-        dialog.setContentView(R.layout.hx_show_item_list);
-        
-        View btnClose = dialog.findViewById(R.id.btnClose);
-        frgList = dialog.findViewById(R.id.frgItemList);
-        
-        fullDialogLayout = dialog.findViewById(R.id.fullDialogLayout);
-        
-        EditText etBookSearch = dialog.findViewById(R.id.etBookSearch);
-        btnClearSearchText = dialog.findViewById(R.id.btnClearSearchText);
-        btnClearSearchText.setVisibility(View.INVISIBLE);
-        
-        btnClearSearchText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                etBookSearch.setText("");
-            }
-        });
-        
-        frgList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                //Frogo Scroll
-                stateScroll = recyclerView.getLayoutManager().onSaveInstanceState();
-            }
-        });
-        
-        //onItemClickListener(null);
-        onItemClickListener = null;
-        
-        enableSearch();
-        
-        prmCardShown.setMargins(Utils.dpToPx(5),
-                                Utils.dpToPx(5),
-                                Utils.dpToPx(5),
-                                Utils.dpToPx(5));
-        
-        colorFoundTextInSearch = Utils.getColor(context, R.color.colorRedChosen);
-        itemBackgroundColor = Utils.getColor(context, R.color.colorBlackTransparent);
-        selectedItemBackgroundColor = Utils.getColor(context, R.color.colorBlueChosen);
-        
-        itemImageBackgroundColor = Utils.getColor(context, R.color.colorBlackDark);
-        selectedItemImageBackgroundColor = Utils.getColor(context, R.color.colorBlackDark);
-        
-        selectedItemTextColor = Utils.getColor(context, R.color.white);
-        itemTextColor = Utils.getColor(context, R.color.white);
-        
-        scrollToSelectedItemWhenDialogOpens = true;
-        checkSelectedItemThatContains = false;
-        
-        selectedItemText = null;
-        selectedIndex = -1;
-        
-        closeDialogOnItemClick = true;
-        closeDialogOnItemLongClick = false;
-        
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-    }
+    // A hashmap to keep track of all the new indexes.
+    HashMap<Integer, Integer> positionRemap = new HashMap<>();
     
     
     public HxListOfItems setDialogBackgroundColor(int color) {
@@ -362,6 +298,73 @@ public class HxListOfItems<T> {
         return enableSearch(enableSearch, true);
     }
     
+    public HxListOfItems(Context ctx) {
+        context = ctx;
+        
+        dialog = new Dialog(context, R.style.alert);
+        dialog.setContentView(R.layout.hx_show_item_list);
+        
+        View btnClose = dialog.findViewById(R.id.btnClose);
+        frgList = dialog.findViewById(R.id.frgItemList);
+        
+        fullDialogLayout = dialog.findViewById(R.id.fullDialogLayout);
+        
+        EditText etBookSearch = dialog.findViewById(R.id.etBookSearch);
+        btnClearSearchText = dialog.findViewById(R.id.btnClearSearchText);
+        btnClearSearchText.setVisibility(View.INVISIBLE);
+        
+        btnClearSearchText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                etBookSearch.setText("");
+            }
+        });
+        
+        frgList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                //Frogo Scroll
+                stateScroll = recyclerView.getLayoutManager().onSaveInstanceState();
+            }
+        });
+        
+        //onItemClickListener(null);
+        onItemClickListener = null;
+        
+        enableSearch();
+        
+        prmCardShown.setMargins(Utils.dpToPx(5),
+                                Utils.dpToPx(5),
+                                Utils.dpToPx(5),
+                                Utils.dpToPx(5));
+        
+        colorFoundTextInSearch = Utils.getColor(R.color.colorRedChosen);
+        itemBackgroundColor = Utils.getColor(R.color.colorBlackTransparent);
+        selectedItemBackgroundColor = Utils.getColor(R.color.colorBlueChosen);
+        
+        itemImageBackgroundColor = Utils.getColor(context, R.color.colorBlackDark);
+        selectedItemImageBackgroundColor = Utils.getColor(context, R.color.colorBlackDark);
+        
+        selectedItemTextColor = Utils.getColor(context, R.color.white);
+        itemTextColor = Utils.getColor(context, R.color.white);
+        
+        scrollToSelectedItemWhenDialogOpens = true;
+        checkSelectedItemThatContains = false;
+        
+        selectedItemText = null;
+        selectedIndex = -1;
+        
+        closeDialogOnItemClick = true;
+        closeDialogOnItemLongClick = false;
+        
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+    
     public HxListOfItems enableSearch(boolean enableSearch, boolean ignoreCaseInSearch) {
         this.ignoreCaseInSearch = ignoreCaseInSearch;
         
@@ -381,7 +384,8 @@ public class HxListOfItems<T> {
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     searchText = etBookSearch.getText().toString();
                     
-                   /* arItems.clear();
+                    arItems.clear();
+                    positionRemap.clear();
                     
                     if (searchText.isEmpty()) {
                         arItems.addAll(arItemsAllItems);
@@ -389,10 +393,12 @@ public class HxListOfItems<T> {
                     } else {
                         btnClearSearchText.setVisibility(View.VISIBLE);
                         
-                       *//* for (int itemIndex = 0; itemIndex < arItemsAllItems.size(); itemIndex++) {
+                        for (int itemIndex = 0; itemIndex < arItemsAllItems.size(); itemIndex++) {
                             String text = "";
                             
                             if (itemTextProvider != null) {
+                                // NO need to call getRemappedString(int) because this loops is
+                                // looking at the entire list of items.
                                 text = itemTextProvider.getText(itemIndex).toString(); // text
                             } else {
                                 text = ""; // text
@@ -401,51 +407,34 @@ public class HxListOfItems<T> {
                             if (ignoreCaseInSearch) {
                                 if (text.toLowerCase().contains(searchText.toLowerCase())) {
                                     arItems.add(arItemsAllItems.get(itemIndex));
+                                    // Hold the global index, map it to the new index.
+                                    positionRemap.put(arItems.size() - 1, itemIndex);
                                 }
                             } else {
                                 if (text.contains(searchText)) {
                                     arItems.add(arItemsAllItems.get(itemIndex));
+                                    // Hold the global index, map it to the new index.
+                                    positionRemap.put(arItems.size() - 1, itemIndex);
                                 }
                             }
-                        }*//*
-                     
-                     *//*for (int itemsIndex = arItems.size() - 1; itemsIndex >= 0; itemsIndex--) {
-                            String text = "";
-                            
-                            if (itemTextProvider != null) {
-                                text = itemTextProvider.getText(itemsIndex).toString(); // text
-                            } else {
-                                text = ""; // text
-                            }
-                            
-                            if (ignoreCaseInSearch) {
-                                if (!text.toLowerCase().contains(searchText.toLowerCase())) {
-                                    arItems.remove(itemsIndex);
-                                }
-                            } else {
-                                if (!text.contains(searchText)) {
-                                    arItems.remove(itemsIndex);
-                                }
-                            }
-                            
-                        }*//*
-                    }*/
+                        }
+                    }
                     
                     if (frgList != null) {
                         
-                        frgList.getAdapter().notifyDataSetChanged();
+                        //frgList.getAdapter().notifyDataSetChanged();
                         
-                      /*  frgList.injector()
+                        frgList.injector()
                                 .addData(arItems)
                                 .addCallback(adptItems)
                                 .createLayoutLinearVertical(false)
                                 .addCustomView(R.layout.hx_layout_item_list)
                                 .addEmptyView(R.layout.hx_no_data_found)
-                                .build();*/
+                                .build();
                         
-                        /*if (stateScroll != null) {
+                        if (stateScroll != null) {
                             frgList.getLayoutManager().onRestoreInstanceState(stateScroll);
-                        }*/
+                        }
                     }
                 }
                 
@@ -472,14 +461,13 @@ public class HxListOfItems<T> {
     
     
     public HxListOfItems setSearchHint(String hint) {
-        EditText etBookSearch = dialog.findViewById(R.id.etBookSearch);
-        etBookSearch.setHint(hint);
+        EditText etSearch = dialog.findViewById(R.id.etBookSearch);
+        etSearch.setHint(hint);
         return this;
     }
     
     
     public void show() {
-        
         adptItems = new IFrogoViewAdapter() {
             @Override
             public void setupInitComponent(@NonNull View view, Object o, int index, @NonNull FrogoRecyclerNotifyListener frogoRecyclerNotifyListener) {
@@ -497,7 +485,7 @@ public class HxListOfItems<T> {
                             
                             try {
                                 if (itemTextProvider != null) {
-                                    onItemClickListener.itemText = itemTextProvider.getText(index).toString(); // text
+                                    onItemClickListener.itemText = getRemappedString(index); // text
                                 } else {
                                     onItemClickListener.itemText = ""; // text
                                 }
@@ -525,7 +513,7 @@ public class HxListOfItems<T> {
                             onItemClickListener.thisHxDialogObject = HxListOfItems.this; // Current Object
                             
                             if (itemTextProvider != null) {
-                                onItemClickListener.itemText = itemTextProvider.getText(index).toString(); // text
+                                onItemClickListener.itemText = getRemappedString(index); // text
                             } else {
                                 onItemClickListener.itemText = ""; // text
                             }
@@ -548,7 +536,7 @@ public class HxListOfItems<T> {
                 
                 // grab the variable from O
                 if (itemTextProvider != null) {
-                    textToBeDisplayed = itemTextProvider.getText(index).toString();
+                    textToBeDisplayed = getRemappedString(index);
                 }
                 
                 tvItem.setText(textToBeDisplayed);
@@ -580,13 +568,7 @@ public class HxListOfItems<T> {
                         }
                         
                         tvItem.setText(Html.fromHtml(colordText));
-                    } else {
-                        topLayout.setVisibility(View.GONE);
-                        topLayout.setLayoutParams(prmCardHidden);
                     }
-                } else {
-                    topLayout.setVisibility(View.VISIBLE);
-                    topLayout.setLayoutParams(prmCardShown);
                 }
                 
                 tvItem.setTypeface(tvItem.getTypeface(), Typeface.NORMAL);
@@ -613,11 +595,16 @@ public class HxListOfItems<T> {
                     }
                 }
                 
-                if ((index == selectedIndex && (searchText == null || searchText.isEmpty()))
-                        || (selectedItemText != null && !selectedItemText.isEmpty()
-                        && textToBeDisplayed.equals(selectedItemText))
-                        || (selectedItemText != null && !selectedItemText.isEmpty()
-                        && textToBeDisplayed.contains(selectedItemText) && checkSelectedItemThatContains)) {
+                if (
+                        (index == selectedIndex && (searchText == null || searchText.isEmpty()))
+                                || (
+                                selectedItemText != null && !selectedItemText.isEmpty()
+                                        &&
+                                        (
+                                                textToBeDisplayed.equals(selectedItemText)
+                                                        || (textToBeDisplayed.contains(selectedItemText) && checkSelectedItemThatContains)
+                                        ))
+                ) {
                     
                     checkSelectedItemThatContains = false;
                     
@@ -678,6 +665,9 @@ public class HxListOfItems<T> {
             }
         };
         
+        // Debatable decision.
+        frgList.setItemViewCacheSize(arItems.size());
+        
         frgList.injector()
                 .addData(arItems)
                 .addCallback(adptItems)
@@ -696,6 +686,8 @@ public class HxListOfItems<T> {
                         String text = "";
                         
                         if (itemTextProvider != null) {
+                            // NO need to call getRemappedString(int) because this gets called
+                            // only once and first time.
                             text = itemTextProvider.getText(i).toString(); // text
                         } else {
                             text = ""; // text
@@ -744,10 +736,32 @@ public class HxListOfItems<T> {
         return false;
     }
     
+    private String getRemappedString(int position) {
+        String textToBeDisplayed = "";
+        
+        if (itemTextProvider != null) {
+            if (arItems != null && arItemsAllItems != null) {
+                // this means there has been a remap. no need for the last check, but just in-case.
+                if (arItems.size() != arItemsAllItems.size()
+                        && !positionRemap.isEmpty()) {
+                    
+                    if (positionRemap.containsKey(position)) {
+                        textToBeDisplayed = itemTextProvider.getText(positionRemap.get(position)).toString();
+                    } else {
+                        textToBeDisplayed = "* Issue Occurred.";
+                    }
+                } else {
+                    textToBeDisplayed = itemTextProvider.getText(position).toString();
+                }
+            }
+        }
+        
+        return textToBeDisplayed;
+    }
+    
     public void closeDialog() {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
     }
 }
-

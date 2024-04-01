@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-       /* new Utils(this);
+        /*new Utils(this);
         ArrayList<Warehouses> itms = new ArrayList();
         itms.add(new Warehouses(1, "Sulaymani"));
         itms.add(new Warehouses(2, "Erbil"));
