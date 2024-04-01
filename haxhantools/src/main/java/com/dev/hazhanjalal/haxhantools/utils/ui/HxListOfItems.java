@@ -80,16 +80,6 @@ public class HxListOfItems<T> {
     
     int itemImageBackgroundColor, selectedItemImageBackgroundColor;
     
-    CardView.LayoutParams prmCardShown = new CardView.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-    );
-    
-    CardView.LayoutParams prmCardHidden = new CardView.LayoutParams(
-            0,
-            0
-    );
-    
     // A hashmap to keep track of all the new indexes.
     HashMap<Integer, Integer> positionRemap = new HashMap<>();
     
@@ -333,11 +323,6 @@ public class HxListOfItems<T> {
         
         enableSearch();
         
-        prmCardShown.setMargins(Utils.dpToPx(5),
-                                Utils.dpToPx(5),
-                                Utils.dpToPx(5),
-                                Utils.dpToPx(5));
-        
         colorFoundTextInSearch = Utils.getColor(R.color.colorRedChosen);
         itemBackgroundColor = Utils.getColor(R.color.colorBlackTransparent);
         selectedItemBackgroundColor = Utils.getColor(R.color.colorBlueChosen);
@@ -554,9 +539,6 @@ public class HxListOfItems<T> {
                     }
                     
                     if (isHere) {
-                        
-                        topLayout.setVisibility(View.VISIBLE);
-                        topLayout.setLayoutParams(prmCardShown);
                         
                         String colordText = "";
                         
