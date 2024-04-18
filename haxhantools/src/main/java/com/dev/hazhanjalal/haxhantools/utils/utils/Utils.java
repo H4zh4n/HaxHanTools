@@ -55,9 +55,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dev.hazhanjalal.haxhantools.R;
 import com.dev.hazhanjalal.haxhantools.utils.implementations.CustomAction;
+import com.dev.hazhanjalal.haxhantools.utils.implementations.smooth_scroller.AtStartSmoothScroller;
+import com.dev.hazhanjalal.haxhantools.utils.implementations.smooth_scroller.CenterSmoothScroller;
 import com.dev.hazhanjalal.haxhantools.utils.print.Logger;
 import com.dev.hazhanjalal.haxhantools.utils.ui.HxToast;
 import com.github.ybq.android.spinkit.sprite.Sprite;
@@ -1647,4 +1651,164 @@ public class Utils {
         });
     }
     
+    // -------------
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index where to scroll to.
+     * @param view  recyclerview object.
+     */
+    public static void scrollRecyclerToIndex(int index, RecyclerView view) {
+        scrollRecyclerToIndex(index, view, null, 0, false, false);
+    }
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index  where to scroll to.
+     * @param view   recyclerview object.
+     * @param smooth scroll smoothly or not.
+     */
+    public static void scrollRecyclerToIndex(int index, RecyclerView view, boolean smooth) {
+        scrollRecyclerToIndex(index, view, null, 0, smooth, false);
+    }
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index            where to scroll to.
+     * @param view             recyclerview object.
+     * @param smooth           scroll smoothly or not.
+     * @param centerItemInView center the item in the view (true) or have it at the top (false).
+     */
+    public static void scrollRecyclerToIndex(int index, RecyclerView view, boolean smooth, boolean centerItemInView) {
+        scrollRecyclerToIndex(index, view, null, 0, smooth, centerItemInView);
+    }
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index where to scroll to.
+     * @param view  recyclerview object.
+     */
+    public static <T> void scrollRecyclerToIndex(int index, RecyclerView view, ArrayList<T> items) {
+        scrollRecyclerToIndex(index, view, items, 0, false, false);
+    }
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index  where to scroll to.
+     * @param view   recyclerview object.
+     * @param smooth scroll smoothly or not.
+     */
+    public static <T> void scrollRecyclerToIndex(int index, RecyclerView view, ArrayList<T> items, boolean smooth) {
+        scrollRecyclerToIndex(index, view, items, 0, smooth, false);
+    }
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index            where to scroll to.
+     * @param view             recyclerview object.
+     * @param smooth           scroll smoothly or not.
+     * @param centerItemInView center the item in the view (true) or have it at the top (false).
+     */
+    public static <T> void scrollRecyclerToIndex(int index, RecyclerView view, ArrayList<T> items, boolean smooth, boolean centerItemInView) {
+        scrollRecyclerToIndex(index, view, items, 0, smooth, centerItemInView);
+    }
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index  where to scroll to.
+     * @param view   recyclerview object.
+     * @param offset NOT USED.
+     */
+    public static <T> void scrollRecyclerToIndex(int index, RecyclerView view, int offset) {
+        scrollRecyclerToIndex(index, view, null, offset, false, false);
+    }
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index  where to scroll to.
+     * @param view   recyclerview object.
+     * @param offset NOT USED.
+     * @param smooth scroll smoothly or not.
+     */
+    public static <T> void scrollRecyclerToIndex(int index, RecyclerView view, int offset, boolean smooth) {
+        scrollRecyclerToIndex(index, view, null, offset, smooth, false);
+    }
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index            where to scroll to.
+     * @param view             recyclerview object.
+     * @param offset           NOT USED.
+     * @param smooth           scroll smoothly or not.
+     * @param centerItemInView center the item in the view (true) or have it at the top (false).
+     */
+    public static <T> void scrollRecyclerToIndex(int index, RecyclerView view, int offset, boolean smooth, boolean centerItemInView) {
+        scrollRecyclerToIndex(index, view, null, offset, smooth, centerItemInView);
+    }
+    
+    
+    /**
+     * Scroll a Recycler to a specific position.
+     *
+     * @param index            where to scroll to.
+     * @param view             recyclerview object.
+     * @param items            itemlist, used to check whether requested index is larger than list size or not. preferable if you provide it.
+     * @param offset           NOT USED.
+     * @param smooth           scroll smoothly or not.
+     * @param centerItemInView center the item in the view (true) or have it at the top (false).
+     */
+    public static <T> void scrollRecyclerToIndex(int index, RecyclerView view, ArrayList<T> items, int offset, boolean smooth, boolean centerItemInView) {
+        if (items != null) {
+            if (index >= items.size()) {
+                return;
+            }
+        }
+        
+        if (view == null) {
+            return;
+        }
+        
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                
+                try {
+                    if (smooth) {
+                        RecyclerView.SmoothScroller smoothScroller = null;
+                        
+                        if (centerItemInView) {
+                            smoothScroller = new CenterSmoothScroller(view.getContext());
+                        } else {
+                            smoothScroller = new AtStartSmoothScroller(view.getContext());
+                        }
+                        
+                        smoothScroller.setTargetPosition(index < 0 ? 0 : index);
+                        ((LinearLayoutManager) view.getLayoutManager()).startSmoothScroll(smoothScroller);
+                    } else {
+                        ((LinearLayoutManager) view.getLayoutManager()).scrollToPositionWithOffset(index < 0 ? 0 : index, 0);
+                    }
+                } catch (Exception e) {
+                    e(e);
+                }
+            }
+        });
+        
+        if (offset > 0) {
+            view.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    view.scrollBy(0, offset);
+                }
+            }, 50);
+        }
+    }
 }
