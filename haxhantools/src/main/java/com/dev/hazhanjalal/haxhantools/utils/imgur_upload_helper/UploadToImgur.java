@@ -27,13 +27,13 @@ import okhttp3.Response;
 
 public class UploadToImgur {
     
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    public static String uploadURL = "https://api.imgur.com/3/upload";
     // Context Not really needed, but just in case for future use.
     Context context;
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     String clientId;
     String secretId;
     Uri imageURI;
+    public static String uploadURL = "https://api.imgur.com/3/upload";
     // ---
     private OnUploadCallback callback;
     
@@ -41,14 +41,6 @@ public class UploadToImgur {
     public UploadToImgur(String clientId, String secretId) {
         this.clientId = clientId;
         this.secretId = secretId;
-    }
-    
-    public static String getUploadURL() {
-        return uploadURL;
-    }
-    
-    public static void setUploadURL(String uploadURL) {
-        UploadToImgur.uploadURL = uploadURL;
     }
     
     public void upload(Context context, Uri imageURI, OnUploadCallback onUploadCallback) {
@@ -67,6 +59,14 @@ public class UploadToImgur {
         
         // start upload...
         performUpload();
+    }
+    
+    public static String getUploadURL() {
+        return uploadURL;
+    }
+    
+    public static void setUploadURL(String uploadURL) {
+        UploadToImgur.uploadURL = uploadURL;
     }
     
     private void performUpload() {
@@ -107,7 +107,7 @@ public class UploadToImgur {
                         try {
                             assert response.body() != null;
                             
-                            JSONObject jsnBody = new JSONObject(response.body().toString());
+                            JSONObject jsnBody = new JSONObject(response.body().string());
                             String url = "";
                             if (jsnBody.has("data") && jsnBody.getJSONObject("data").has("link")) {
                                 url = jsnBody.getJSONObject("data").getString("link");
