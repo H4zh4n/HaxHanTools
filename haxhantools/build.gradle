@@ -77,4 +77,10 @@ dependencies {
     //Dominant color finder
     implementation 'androidx.palette:palette:1.0.0'
 
+
+    // OkHTTP
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // Cookie forcer for OkHTTP
+    implementation 'org.riversun:okhttp3-cookie-helper:1.0.0'
+
 }
