@@ -15,7 +15,7 @@ new HxListOfItems(this)
 		return array[position];
 	    }
 	})
-	.setItems(a)
+	.setItems(array)
 	.show();
 ```
 
