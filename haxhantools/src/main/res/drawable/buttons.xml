@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#20000000">
+
+    <!-- This is the default background (solid and stroke) -->
+    <item>
+        <shape>
+            <solid android:color="@null" />
+            <corners android:radius="5dp" /> <!-- Optional corner radius -->
+        </shape>
+    </item>
+
+    <!-- Ripple effect on top -->
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="#000000" />
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+</ripple>

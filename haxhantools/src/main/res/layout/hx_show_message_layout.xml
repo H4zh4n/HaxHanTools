@@ -109,10 +109,12 @@
         android:gravity="right"
         android:orientation="horizontal">
 
-        <Button
+        <TextView
             android:id="@+id/btnNegative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/buttons"
+            android:gravity="center"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:backgroundTint="@color/colorRedChosen"
@@ -120,10 +122,12 @@
             android:text="@string/no_button"
             android:textColor="@color/colorWhiteLight" />
 
-        <Button
+        <TextView
             android:id="@+id/btnConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/buttons"
+            android:gravity="center"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:backgroundTint="@color/colorGreenChosen"

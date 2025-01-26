@@ -35,6 +35,7 @@
             android:id="@+id/imgClose"
             android:layout_width="32dp"
             android:layout_height="match_parent"
+            android:background="@drawable/buttons"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:src="@drawable/ic_close" />

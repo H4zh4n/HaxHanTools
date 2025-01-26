@@ -12,7 +12,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -335,7 +334,7 @@ public class HxPopup {
             }
         });
         
-        Button btnPositive = shInput.findViewById(R.id.btnConfirm);
+        TextView btnPositive = shInput.findViewById(R.id.btnConfirm);
         btnPositive.setText(txtPositiveButton);
         btnPositive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -354,7 +353,7 @@ public class HxPopup {
             }
         });
         
-        Button btnNegative = (Button) shInput.findViewById(R.id.btnNegative);
+        TextView btnNegative = shInput.findViewById(R.id.btnNegative);
         btnNegative.setText(txtNegativeButton);
         btnNegative.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -466,7 +465,7 @@ public class HxPopup {
         ((LinearLayout) shConfirm.findViewById(R.id.loTitle)).setBackgroundColor(ContextCompat.getColor(context,
                                                                                                         R.color.colorGreenChosen));
         shConfirm.setCancelable(isCancellable);
-        Button btnPositive = (Button) shConfirm.findViewById(R.id.btnConfirm);
+        TextView btnPositive = shConfirm.findViewById(R.id.btnConfirm);
         
         btnPositive.setText(txtButtonPositive);
         //btnPositive.setText(context.getResources().getString(R.string.yes_button));
@@ -481,7 +480,7 @@ public class HxPopup {
             }
         });
         
-        Button btnNegative = (Button) shConfirm.findViewById(R.id.btnNegative);
+        TextView btnNegative = shConfirm.findViewById(R.id.btnNegative);
         btnNegative.setText(txtButtonNegative);
         //btnNegative.setText(context.getResources().getString(R.string.no_button));
         btnNegative.setOnClickListener(new View.OnClickListener() {
@@ -555,7 +554,7 @@ public class HxPopup {
             }
         });
         
-        Button btnYes = shMessage.findViewById(R.id.btnConfirm);
+        TextView btnYes = shMessage.findViewById(R.id.btnConfirm);
         btnYes.setText(ok_text);
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -567,7 +566,7 @@ public class HxPopup {
             }
         });
         
-        Button btnNo = (Button) shMessage.findViewById(R.id.btnNegative);
+        TextView btnNo = shMessage.findViewById(R.id.btnNegative);
         btnNo.setVisibility(View.GONE);
         
         shMessage.show();
@@ -719,9 +718,9 @@ public class HxPopup {
             } else if (icon instanceof Bitmap) {
                 imgIcon.setImageBitmap((Bitmap) icon);
             }
-    
+            
         }
-    
+        
         dialog.show();
     }
     

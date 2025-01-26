@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
-            android:background="@drawable/onclick_highlight"
+            android:background="@drawable/buttons"
             android:src="@drawable/ic_close" />
 
     </LinearLayout>
@@ -63,7 +63,7 @@
             android:minLines="1"
             android:padding="10dp"
             android:text="Message"
-            android:textColor="@color/colorWhiteLight"
+            android:textColor="@color/colorText"
             android:textSize="15dp" />
     </ScrollView>
 
@@ -100,24 +100,28 @@
         android:gravity="right"
         android:orientation="horizontal">
 
-        <Button
+        <TextView
             android:id="@+id/btnNegative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:background="@drawable/buttons"
             android:backgroundTint="@color/colorRedChosen"
+            android:gravity="center"
             android:padding="10dp"
             android:text="@string/close_button"
             android:textColor="@color/colorWhiteLight" />
 
-        <Button
+        <TextView
             android:id="@+id/btnConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:backgroundTint="@color/colorGreenChosen"
+            android:background="@drawable/buttons"
+            android:gravity="center"
             android:padding="10dp"
             android:text="@string/confirm_button"
             android:textColor="@color/colorWhiteLight" />

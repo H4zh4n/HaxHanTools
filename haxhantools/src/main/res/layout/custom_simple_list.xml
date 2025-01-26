@@ -3,7 +3,7 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/onclick_highlight"
+    android:background="@drawable/buttons"
     android:backgroundTint="@color/colorBlueChosen"
     android:gravity="center_vertical"
     android:padding="10dp"
