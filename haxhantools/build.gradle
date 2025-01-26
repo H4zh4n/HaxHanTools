@@ -1,5 +1,19 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.findByName('release')
+                groupId 'com.github.H4zh4n'
+                artifactId 'haxhantools'
+                version '1.0.18.1'
+            }
+        }
+    }
 }
 
 android {
