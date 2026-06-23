@@ -92,13 +92,8 @@ That's it — the library is ready to use. No manual `Utils` initialization need
 
 ```java
 Logger.setEnabled(BuildConfig.DEBUG);
-
-Logger.
-
-d("Data loaded successfully");
-Logger.
-
-e("Network error",exception);
+Logger.d("Data loaded successfully");
+Logger.e("Network error",exception);
 ```
 
 > 📖 [Full Logger docs](docs/logger.md)
@@ -107,9 +102,7 @@ e("Network error",exception);
 
 ```java
 HxToast.showToastSuccess("Upload complete!");
-HxToast.
-
-showToastError("Connection failed");
+HxToast.showToastError("Connection failed");
 ```
 
 > 📖 [Full Toast docs](docs/toast.md)
@@ -120,23 +113,15 @@ showToastError("Connection failed");
 String[] cities = {"Sulaymaniyah", "Hawler", "Kirkuk"};
 
 new HxListOfItems<>(this)
-        .
-
-setItems(cities)
-    .
-
-setItemTextProvider(position ->cities[position])
-        .
-
-setOnItemClickListener(new OnHxItemClickListener<>() {
-    @Override
-    public void onItemClicked () {
-        HxToast.showToast("Selected: " + itemText);
-    }
-})
-        .
-
-show();
+        .setItems(cities)
+        .setItemTextProvider(position ->cities[position])
+        .setOnItemClickListener(new OnHxItemClickListener<>() {
+            @Override
+            public void onItemClicked () {
+                HxToast.showToast("Selected: " + itemText);
+            }
+        })
+        .show();
 ```
 
 > 📖 [Full List Dialog docs](docs/list_of_items.md)
@@ -146,9 +131,7 @@ show();
 ```java
 HxProgress.showProgressDialog("Loading","Fetching data...");
 // ... work ...
-HxProgress.
-
-closeProgressDialog();
+HxProgress.closeProgressDialog();
 ```
 
 > 📖 [Full Progress docs](docs/progress.md)
@@ -160,11 +143,11 @@ Downloader.startDownload(url, "downloads","file.pdf",
         true,   // show notification
         true,   // show progress dialog
         new OnCustomDownload() {
-    @Override
-    public void onDownloadCompleted () {
-        HxToast.showToastSuccess("Download finished!");
-    }
-});
+            @Override
+            public void onDownloadCompleted () {
+                HxToast.showToastSuccess("Download finished!");
+            }
+        });
 ```
 
 > 📖 [Full Downloader docs](docs/downloader.md)
