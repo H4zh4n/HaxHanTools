@@ -100,7 +100,7 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    implementation 'com.github.H4zh4n:HaxHanTools:1.0.15.2'
+    implementation 'com.github.H4zh4n:HaxHanTools:1.0.20'
 }
 ```
 
