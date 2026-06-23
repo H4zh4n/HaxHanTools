@@ -2,6 +2,8 @@ package com.dev.hazhanjalal.haxhantools;
 
 import android.os.Bundle;
 
+import com.dev.hazhanjalal.haxhantools.sample.R;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 
