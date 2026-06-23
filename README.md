@@ -2,106 +2,159 @@
 
 [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
 
-# Documentation
-Partial documentation available here : [documentation](https://github.com/H4zh4n/HaxHanTools/tree/documentation)
+HaxHanTools is an Android utility library that provides ready-to-use UI components, networking helpers, and general-purpose utilities to speed up Android development.
 
+---
 
-# Components
-- [x] Easy File Download manager [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/download)
+## Documentation
 
-- [x] Easy Imgur uploader [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/imgur_upload_helper)
-- [x] Easy debugger [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/print)
-- [x] Easy Ui Components creator (Confirm/Input/Progress/List dialogs, Toasts) [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/ui)
-- [x] General App utils, File Utils, Image Utils [Found here](https://github.com/H4zh4n/HaxHanTools/tree/master/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils)
-- [x] Easy Global SharedPreferences Setup/Usage [Found here](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L434).
+| Feature | Description |
+|---|---|
+| [Setup & Initialization](docs/setup.md) | Library setup, `HaxHanToolsInitializer`, `Utils` configuration |
+| [Logger](docs/logger.md) | Debug logging with clickable Logcat links and auto caller detection |
+| [Toast](docs/toast.md) | Custom styled toast messages (info, success, warning, error) |
+| [Progress Dialog](docs/progress.md) | Customizable progress/loading dialogs |
+| [Popup Dialog](docs/popup.md) | Image & HTML content popup dialogs |
+| [List Dialog](docs/list_of_items.md) | Searchable list selection dialog with rich customization |
+| [Downloader](docs/downloader.md) | File download manager with progress & notifications |
+| [Imgur Upload](docs/imgur_upload.md) | Upload images to Imgur |
+| [Hash & Encryption](docs/hash_encryption.md) | SHA-1/256/512, MD5 hashing & Caesar cipher |
+| [Utilities](docs/utilities.md) | SharedPreferences, file operations, image analysis |
+| [AutoComplete](docs/autocomplete.md) | AutoCompleteTextView with inline add/remove chips |
+| [Known Issues](docs/known_issues.md) | Common build problems and their solutions |
 
-    Call `new Utils(this)` once in the first activity. later use this methods
-[put(key, value)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L353),
-[getFloatPref(key, default value)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L374),
-[getIntegerPref(key, default value)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L382),
-[getLongPref(key, default value)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L390),
-[getStringPref(key, default value)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L398),
-[getBooleanPref(key, default value)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L426),
-[removeKeyPrefs(key)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L406),
-[prefsContains(key)](https://github.com/H4zh4n/HaxHanTools/blob/f60a882df13c574802598cc51c2a63941d7ef3dc/haxhantools/src/main/java/com/dev/hazhanjalal/haxhantools/utils/utils/Utils.java#L412),
+## Component Overview
 
+| Component | Type | Key Features |
+|---|---|---|
+| `HaxHanToolsInitializer` | Auto-init | ContentProvider-based; auto-tracks active Activity & applies edge-to-edge |
+| `Utils` | Utility | SharedPreferences, resources, colors, screen metrics, vibration, keyboard |
+| `UtilsFile` | Utility | File existence, deletion, raw resource checks |
+| `UtilsImage` | Utility | Dominant color extraction, image similarity, region analysis |
+| `Logger` | Debug | Clickable Logcat output with auto-generated class/method/line info |
+| `HxToast` | UI | Colored toasts: info, success, warning, error |
+| `HxProgress` | UI | Non-cancelable progress dialog with Sprite animations |
+| `HxPopup` | UI | Image popups with optional HTML text, URL loading via Picasso |
+| `HxListOfItems` | UI | Searchable RecyclerView dialog with selection, theming, long-click |
+| `Downloader` | Network | PRDownloader wrapper with notifications, progress dialogs, callbacks |
+| `UploadToImgur` | Network | OkHttp-based Imgur image upload with JSON response |
+| `HashGenerator` | Crypto | SHA-1, SHA-256, SHA-512, MD5 |
+| `EncryptionCaesar` | Crypto | Caesar cipher encrypt/decrypt with position-based key alternation |
+| `FrogoListWithAutoComplete` | UI | Chip-style multi-value input with auto-complete suggestions |
 
-# Implementation
-### Jitpack required in `settings.gradle`
+---
+
+## Quick Start
+
+### 1. Add JitPack to `settings.gradle`
+
 ```gradle
-repositories {
-  //...
-  maven { url 'https://jitpack.io' }
-
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        // ...
+        maven { url 'https://jitpack.io' }
+    }
 }
 ```
 
-### Implementation in `build.gradle` Module :
+### 2. Add the dependency
+
+[![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
+
 ```gradle
 implementation 'com.github.H4zh4n:HaxHanTools:1.0.15.2'
 ```
-___
 
-# Usage 
-For the whole process to work properly, `Utils()` must be initialized before any of the ui/ context based components to be used.
+> 👆 Click the badge above to see the latest available version on JitPack.
 
-I Recommend that you write below line in first activities `onCreate`
+### 3. Add the auto-initializer to your manifest
+
+```xml
+<provider
+    android:name="com.dev.hazhanjalal.haxhantools.utils.implementations.HaxHanToolsInitializer"
+    android:authorities="${applicationId}.haxhantools-initializer"
+    android:exported="false" />
+```
+
+That's it — the library is ready to use. No manual `Utils` initialization needed.
+
+> **Legacy setup**: If you prefer manual control, call `new Utils(this)` in your first Activity's
+> `onCreate()` and set `Utils.activeContext = this` in each Activity's `onResume()`.
+> See [Setup & Initialization](docs/setup.md) for details.
+
+---
+
+## Usage Examples
+
+### Logger
+
 ```java
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+Logger.setEnabled(BuildConfig.DEBUG);
 
-    new Utils(this); // <--- have this
-
-    // ... other codes
-}
-
+Logger.d("Data loaded successfully");
+Logger.e("Network error", exception);
 ```
 
-For the dialogs/toast and such to work and display data properly, make sure that for each activity you have below line in it's `onResume`
+> 📖 [Full Logger docs](docs/logger.md)
+
+### Toast
 
 ```java
-@Override
-protected void onResume() {
-    super.onResume();
-
-    Utils.activeContext = this;
-
-    // ... other codes
-}
-
-```
-This is so that the app knows on which screen the dialogs should be shown.
-
-
-
-___
-
-# Known Errors
-
-### -- Duplicate Class Found
-- If you faced duplicate Class found for `lifecycle-viewmodel` or  `androidx.lifecycle` or `lifecycle-viewmodel-ktx` then implement as following
-
-```gradle
-implementation('com.github.H4zh4n:HaxHanTools:1.0.15.2') {
-        exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel'
-        exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
-}
+HxToast.showToastSuccess("Upload complete!");
+HxToast.showToastError("Connection failed");
 ```
 
-### -- More than one file was found
+> 📖 [Full Toast docs](docs/toast.md)
 
-- below code might be needed in `build.grade` Module to avoid `More than one file was found with OS independent path 'META-INF/DEPENDENCIES'`
+### List Dialog
 
+```java
+String[] cities = {"Sulaymaniyah", "Hawler", "Kirkuk"};
 
-```gradle
-android {
- // ...
-    packagingOptions {
-        exclude 'META-INF/*'
-    }
-   //...
-}
+new HxListOfItems<>(this)
+    .setItems(cities)
+    .setItemTextProvider(position -> cities[position])
+    .setOnItemClickListener(new OnHxItemClickListener<>() {
+        @Override
+        public void onItemClicked() {
+            HxToast.showToast("Selected: " + itemText);
+        }
+    })
+    .show();
 ```
 
+> 📖 [Full List Dialog docs](docs/list_of_items.md)
 
+### Progress Dialog
+
+```java
+HxProgress.showProgressDialog("Loading", "Fetching data...");
+// ... work ...
+HxProgress.closeProgressDialog();
+```
+
+> 📖 [Full Progress docs](docs/progress.md)
+
+### Downloader
+
+```java
+Downloader.startDownload(url, "downloads", "file.pdf",
+    true,   // show notification
+    true,   // show progress dialog
+    new OnCustomDownload() {
+        @Override
+        public void onDownloadCompleted() {
+            HxToast.showToastSuccess("Download finished!");
+        }
+    });
+```
+
+> 📖 [Full Downloader docs](docs/downloader.md)
+
+---
+
+## Known Issues
+
+See [Known Issues](docs/known_issues.md) for common build problems and solutions.
+For additional problems, check [GitHub Issues](https://github.com/H4zh4n/HaxHanTools/issues).
