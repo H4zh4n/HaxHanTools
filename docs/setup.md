@@ -2,7 +2,7 @@
 
 HaxHanTools requires a small amount of initialization to function correctly. The library tracks the currently active Activity so that UI components (dialogs, toasts) can be displayed on the right screen.
 
-## Recommended: Auto-Initialization (v1.0.15+)
+## Recommended: Auto-Initialization (v1.1.0+)
 
 Add the `HaxHanToolsInitializer` provider to your `AndroidManifest.xml`:
 
