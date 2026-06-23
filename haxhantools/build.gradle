@@ -10,7 +10,7 @@ afterEvaluate {
                 from components.findByName('release')
                 groupId 'com.github.H4zh4n'
                 artifactId 'haxhantools'
-                version '1.0.20'
+                version '1.1.0'
             }
         }
     }
