@@ -5,4 +5,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <application>
+
+        <provider
+            android:name="com.dev.hazhanjalal.haxhantools.utils.implementations.HaxHanToolsInitializer"
+            android:authorities="${applicationId}.haxhantools.initializer"
+            android:exported="false"
+            android:initOrder="99" />
+
+    </application>
+
 </manifest>
