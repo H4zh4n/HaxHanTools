@@ -1,235 +1,281 @@
 # HxListOfItems
 
-Show a dialog with a list of items with search capabilities.
+A searchable dialog that displays a list of items with rich customization — theming, selection, images, and click handling.
 
 <img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/4f236019-2ae4-4a71-85ab-f47ec3123d8d" width="30%"/> <img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/e2a4002e-8ee0-4594-8a4b-f21341b9f4ab" width="30%"/> <img src="https://github.com/H4zh4n/HaxHanTools/assets/47919702/c5a7239c-019f-4438-8911-cc7040fcd48b" width="30%"/>
 
-### Basic usage
-```java
-String array[] = {"Sulaymaniyah", "Hawler"};
+## Quick Start
 
-new HxListOfItems(this)
-	.setItemTextProvider(new ItemTextProvider() {
-	    @Override
-	    public CharSequence getText(int position) {
-		return array[position];
-	    }
-	})
-	.setItems(array)
-	.show();
+```java
+String[] cities = {"Sulaymaniyah", "Hawler", "Kirkuk"};
+
+new HxListOfItems<String>(this)
+    .setItems(cities)
+    .setItemTextProvider(position -> cities[position])
+    .setOnItemClickListener(new OnHxItemClickListener<>() {
+        @Override
+        public void onItemClicked() {
+            HxToast.showToast("Selected: " + itemText);
+        }
+    })
+    .show();
 ```
 
+---
 
-# Parameters
+## Providing Items
 
-### `setItems(ArrayList<Object> items)`
-### `setItems(Object[] items)`
-Provide the items to be shown. The list can be of any type (String, Integer, Custom class... ).
-The List can be Normal array `new String[]{"a", "b"}` or an ArrayList.
+Items can be an array or an `ArrayList` of any type — `String`, `Integer`, or your own custom classes.
 
-Normal array :
+### Using an Array
+
 ```java
+String[] colors = {"Red", "Green", "Blue"};
 
-String [] array = {"a", "b"};
-
-new HxListOfItems(this)
-	.setItems(array)
-	.show();
+new HxListOfItems<String>(this)
+    .setItems(colors)
+    .setItemTextProvider(position -> colors[position])
+    .show();
 ```
 
-ArrayList :
+### Using an ArrayList
 
 ```java
+ArrayList<String> names = new ArrayList<>();
+names.add("Ahmed");
+names.add("Sara");
+names.add("Dana");
 
-ArrayList<String> arLst = new ArrayList<>();
-
-arLst.add("a");
-arLst.add("b");
-
-new HxListOfItems(this)
-	.setItems(arLst)
-	.show();
-```
-____
-### `setItemTextProvider (ItemTextProvider)`
-MUST provide this method so that your items have the correct text.
-
-```java
-ArrayList<String> arLst = new ArrayList<>();
-
-arLst.add("a");
-arLst.add("b");
-
-new HxListOfItems(this)
-	.setItems(arLst)
-	.setItemTextProvider(new ItemTextProvider() {
-	    @Override
-	    public CharSequence getText(int position) {
-		// For each item in arLst, it will return it's own text and display it in the item text place.
-		return arLst.get(position);
-	    }
-	})
-	.show();
+new HxListOfItems<String>(this)
+    .setItems(names)
+    .setItemTextProvider(position -> names.get(position))
+    .show();
 ```
 
-____
-### Custom Classes
-If your array has custom class types, it's best to do as following :
+### Using Custom Classes
 
-- Assuming we have this custom class :
+The list can hold any object type. You control what text to display via `setItemTextProvider`:
+
 ```java
-public class Item {
-  int id;
-
-  // Either have a field as public, or a getter method that is public. handle that yourself. 
-  public String name; 
-
-  public Item (int id, String name){
-    this.id = id;
-    this.name = name;
-  }
+public class City {
+    public int id;
+    public String name;
+    public City(int id, String name) { this.id = id; this.name = name; }
 }
+
+ArrayList<City> cities = new ArrayList<>();
+cities.add(new City(1, "Sulaymaniyah"));
+cities.add(new City(2, "Erbil"));
+cities.add(new City(3, "Kirkuk"));
+
+new HxListOfItems<City>(this)
+    .setItems(cities)
+    .setItemTextProvider(position -> cities.get(position).name)
+    .setOnItemClickListener(new OnHxItemClickListener<City>() {
+        @Override
+        public void onItemClicked() {
+            City selected = itemObject;   // typed as City
+            String text = itemText;        // the displayed text
+            int pos = itemPosition;        // 0-based index
+        }
+    })
+    .show();
 ```
 
-- We can then do the following :
+---
+
+## Click & Long-Click
+
+### Basic Click Handling
+
 ```java
-
-// create the list
-ArrayList<Item> itms = new ArrayList();
-itms.add(new Item(1, "Sulaymani"));
-itms.add(new Item(2, "Erbil"));
-itms.add(new Item(3, "Karkuk"));
-
-//                 v denote array type for setItems
-new HxListOfItems<Item>(this)
-      .setItems(itms)
-
-      // setup each item's text in the popup.
-      .setItemTextProvider(new ItemTextProvider() {
-          @Override
-          public CharSequence getText(int position) {
-              // calling the public field of [name] from the arraylist [itms].
-              return itms.get(position).name;
-          }
-      })
-      //                                                 v denote the class type, used for [itemObject]
-      .setOnItemClickListener(new OnHxItemClickListener<Item>() {
-          @Override
-          public void onItemClicked() {
-            String text = itemText;
-            Item clickedItem = itemObject;
-          }
-      })
-      .show();
+new HxListOfItems<String>(this)
+    .setItems(cities)
+    .setItemTextProvider(position -> cities[position])
+    .setOnItemClickListener(new OnHxItemClickListener<String>() {
+        @Override
+        public void onItemClicked() {
+            HxToast.showToastSuccess("Clicked: " + itemText);
+        }
+    })
+    .show();
 ```
 
-____
+### OnHxItemClickListener Callback Fields
 
-### `show()`
-Display the list. this must be provided preferably at the end of all the parameters so the list can be shown.
+| Field | Type | Description |
+|---|---|---|
+| `itemObject` | `T` | The actual object from your list |
+| `itemText` | `String` | The text displayed for the item |
+| `itemPosition` | `int` | 0-based index in the list |
+| `thisHxDialogObject` | `HxListOfItems` | Current dialog instance (useful for manual dismiss) |
+
+### Long-Click Support
+
+Override `onItemLongClicked` in the same listener:
 
 ```java
-new HxListOfItems(this)
-	.setItems(new String[]{"a", "b"})
-	.show();
-```
+.setOnItemClickListener(new OnHxItemClickListener<City>() {
+    @Override
+    public void onItemClicked() {
+        // Single tap
+    }
 
-### `enableSearch(boolean enableSearch)`
-Show Search header or not. default is true.
-
-```java
-new HxListOfItems(this)
-	.enableSearch(false) // Hides the search section
-	.setItems(new String[]{"a", "b"})
-	.show();
-```
-____
-### `setOnItemClickListener(OnHxItemClickListener action)`
-What to do after an item is clicked. When you provide `new OnHxItemClickListener` you will be provided with these values :
-
-1. `itemObject` : The Object of the item clicked. When instantiating the `setOnItemClickListener`, be sure to provide a type just so this variable has same type.
-```java
-...
-//                                                 v denote the class type, used for [itemObject]
-.setOnItemClickListener(new OnHxItemClickListener<Item>() {
-	@Override
-	public void onItemClicked() {
-		// the itemObject will have the type of Item, which might be what your provided in the array.
-		Item clickedItem = itemObject;
-	}
+    @Override
+    public void onItemLongClicked() {
+        // Long press — same fields available
+        HxToast.showToast("Long-pressed: " + itemText);
+    }
 })
-...
 ```
 
-
-
-2. `itemText` : The text of the item clicked.
-
-3. `itemPosition` : clicked item's position in the list .
-
-4. `thisHxDialogObject` : Current instance of the dialog. you may close it manually or do whatever. useful when providing false for when you call `setCloseDialogOnItemClick`.
-
-Example :
-```java
-new HxListOfItems(this)  
-	.setOnItemClickListener(new OnHxItemClickListener<Item>() {  
-			@Override  
-			public void onItemClicked() {  
-				// Click action here...
-				Item clickedItem = itemObject;
-				String tx = itemText;
-				int pst = itemPosition;
-				Dialog d = thisHxDialogObject;
-			}  
-		})  
-	.setItems(new String[]{"a", "b"})  
-	.show();
-```
-
-You can also add an action for long click by overriding `onItemLongClicked`.
+### Controlling Dialog Close Behavior
 
 ```java
-new HxListOfItems(this)  
-	.onSingleItemClickListener(new OnHxItemClickListener() {  
-		@Override  
-		public void onItemClicked() {  
-		  // Click action here...
-		  String tx = itemText;
-		  int pst = itemPosition;
-		  Dialog d = thisHxDialogObject;
-		}
-	
-		@Override  
-		public void onItemLongClicked() {  
-			// on item long clicked. will be provided with same variables as onItemClicked. (itemObject, itemText,itemPosition ... etc.)
+// Keep dialog open after click (useful for multi-select)
+.setCloseDialogOnItemClick(false)
 
-		}
-	
-	
-	})  
-	.setItems(new String[]{"a", "b"})  
-	.show();
+// Close dialog on long-click
+.setCloseDialogOnItemLongClick(true)
 ```
 
+---
 
-____
+## Search
 
-### `onListCloseListener(CustomAction action)`
-An action to perform after the list is closed. This will be performed whether an item is clicked or the list is closed from the close button.
-
+Search is enabled by default with case-insensitive matching. Search matches are **highlighted** in the list.
 
 ```java
-new HxListOfItems(this)
-	.onListCloseListener(new CustomAction() {  
-		@Override  
-		public void positiveButtonPressed() {  
-		  // code here
-		}  
-	})
-	.setItems(new String[]{"a", "b"})
-	.show();
+// Hide the search bar
+.enableSearch(false)
+
+// Case-sensitive search
+.enableSearch(true, false)
+
+// Customize the matched text highlight color
+.setFoundPortionTextColor(Color.parseColor("#FF9800"))
+
+// Change search input text color & hint
+.setSearchTextColor(Color.WHITE)
+.setSearchHint("Type to filter...")
 ```
 
-____
+---
 
-... more method explanations to come ...
+## Pre-Selecting Items
+
+```java
+// Select by index
+.setSelectedItemIndex(2)
+
+// Select by exact text match
+.setSelectedItem("Erbil")
+
+// Select first item whose text contains the given string
+.setSelectFirstItemThatContains("Kirk")
+
+// Disable auto-scrolling to the selected item
+.scrollToSelectedItemWhenDialogOpens(false)
+```
+
+---
+
+## Theming & Appearance
+
+```java
+new HxListOfItems<String>(this)
+    .setTitle("Choose a City")
+    .setTitleBarBackgroundColor(Color.parseColor("#1A1A2E"))
+    .setTitleBarTextColor(Color.WHITE)
+
+    // Item colors (normal state)
+    .setItemBackgroundColor(Color.parseColor("#2D2D44"))
+    .setItemTextColor(Color.WHITE)
+
+    // Item colors (selected state)
+    .setSelectedItemBackgroundColor(Color.parseColor("#16213E"))
+    .setSelectedItemTextColor(Color.parseColor("#E94560"))
+
+    // Dialog background
+    .setDialogBackgroundColor(Color.parseColor("#0F3460"))
+    .setHintBackgroundColor(Color.parseColor("#1A1A2E"))
+
+    // Close button
+    .setCloseButtonColor(Color.WHITE)
+    .showCloseButton(true)
+
+    .setItems(cities)
+    .setItemTextProvider(position -> cities[position])
+    .show();
+```
+
+---
+
+## Item Icons
+
+Each item can have a leading icon. Different icons for normal and selected states:
+
+```java
+// Same icon for all items
+.setItemImage(R.drawable.ic_city, Color.parseColor("#333333"))
+
+// Different icon when selected
+.setSelectedItemImage(R.drawable.ic_city_selected, Color.parseColor("#E94560"))
+```
+
+---
+
+## Dialog Lifecycle
+
+```java
+new HxListOfItems<String>(this)
+    // Action to run after the dialog is shown
+    .doAfterDialogShown(() -> Logger.d("Dialog is now visible"))
+
+    // Action when the dialog is dismissed (by any means)
+    .onListCloseListener(() -> Logger.d("Dialog was closed"))
+
+    .setItems(cities)
+    .setItemTextProvider(position -> cities[position])
+    .show();
+```
+
+---
+
+## API Reference
+
+| Method | Description |
+|---|---|
+| `setItems(T[] items)` | Provide items as an array |
+| `setItems(ArrayList<T> items)` | Provide items as an ArrayList |
+| `setItemTextProvider(ItemTextProvider)` | **Required.** Maps each item to its display text |
+| `setOnItemClickListener(OnHxItemClickListener)` | Click & long-click handler |
+| `show()` | Display the dialog |
+| `setTitle(String title)` | Set the title bar text |
+| `setTitleBarBackgroundColor(int)` | Title bar background color |
+| `setTitleBarTextColor(int)` | Title bar text color |
+| `setDialogBackgroundColor(int)` | Full dialog background color |
+| `setHintBackgroundColor(int)` | Search bar background color |
+| `setCloseButtonColor(int)` | Tint the close (✕) button |
+| `showCloseButton(boolean)` | Show or hide the close button |
+| `enableSearch(boolean)` | Show/hide the search bar (default: `true`) |
+| `enableSearch(boolean, boolean)` | Second param controls case-insensitive matching |
+| `setSearchTextColor(int)` | Search input text color |
+| `setSearchHint(String)` | Search input placeholder text |
+| `setFoundPortionTextColor(int)` | Highlight color for search matches |
+| `setItemBackgroundColor(int)` | Normal item background |
+| `setItemTextColor(int)` | Normal item text color |
+| `setSelectedItemBackgroundColor(int)` | Selected item background |
+| `setSelectedItemTextColor(int)` | Selected item text color |
+| `setSelectedItemIndex(int)` | Pre-select an item by index |
+| `setSelectedItem(String)` | Pre-select an item by exact text match |
+| `setSelectFirstItemThatContains(String)` | Pre-select first item containing the given text |
+| `scrollToSelectedItemWhenDialogOpens(boolean)` | Auto-scroll to selected item (default: `true`) |
+| `setCloseDialogOnItemClick(boolean)` | Close on item click (default: `true`) |
+| `setCloseDialogOnItemLongClick(boolean)` | Close on item long-click (default: `false`) |
+| `setItemImage(Bitmap, int)` | Set a leading icon for items (Bitmap + background) |
+| `setItemImage(int, int)` | Set a leading icon from a drawable resource |
+| `setSelectedItemImage(Bitmap, int)` | Set the leading icon for the selected item |
+| `setSelectedItemImage(int, int)` | Set selected icon from a drawable resource |
+| `doAfterDialogShown(CustomAction)` | Action to run after the dialog appears |
+| `onListCloseListener(CustomAction)` | Action to run when the dialog is dismissed |

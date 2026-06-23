@@ -1,13 +1,13 @@
 # UploadToImgur
 
-Upload images to Imgur using their API. Built on OkHttp with JSON response parsing.
+Upload images to Imgur using their API. Built on OkHttp with multipart form data and JSON response parsing.
 
 ## Prerequisites
 
 You need Imgur API credentials:
 
 1. Register an application at [https://api.imgur.com/oauth2/addclient](https://api.imgur.com/oauth2/addclient)
-2. Choose "Anonymous usage without user authorization" for simple uploads
+2. Choose **"Anonymous usage without user authorization"** for simple uploads
 3. Copy your **Client ID** and **Client Secret**
 
 ---
@@ -15,17 +15,20 @@ You need Imgur API credentials:
 ## Quick Start
 
 ```java
+// 1. Create the uploader with your credentials
 UploadToImgur uploader = new UploadToImgur("YOUR_CLIENT_ID", "YOUR_SECRET_ID");
 
+// 2. Pick an image (e.g. from ImagePicker) and upload
 uploader.upload(
     context,
-    imageUri,          // Uri of the image to upload
+    imageUri,
     new OnUploadCallback() {
         @Override
         public void onSuccess(String imageLink, String deleteHash) {
-            // imageLink: public URL of the uploaded image
-            // deleteHash: use this to delete the image later
-            HxToast.showToastSuccess("Uploaded: " + imageLink);
+            // imageLink — public URL of the uploaded image
+            // deleteHash — use this to delete the image later via Imgur API
+            HxToast.showToastSuccess("Uploaded!");
+            Utils.copyToClip(imageLink);  // copy link to clipboard
         }
 
         @Override
@@ -37,23 +40,43 @@ uploader.upload(
 
 ---
 
-## Constructors
+## Upload Without Explicit Context
 
-### `UploadToImgur(String clientId, String secretId)`
+If your app uses `HaxHanToolsInitializer`, you can omit the context:
 
-Create an uploader with your Imgur credentials.
+```java
+uploader.upload(imageUri, new OnUploadCallback() {
+    @Override
+    public void onSuccess(String imageLink, String deleteHash) {
+        // Uses Utils.activeContext internally
+    }
+
+    @Override
+    public void onFailed(String reason) {
+    }
+});
+```
 
 ---
 
-## Upload Methods
+## Integration with ImagePicker
 
-### `upload(Uri imageUri, OnUploadCallback callback)`
+The library includes [ImagePicker](https://github.com/Dhaval2404/ImagePicker), making it easy to capture or select an image and upload it:
 
-Upload using `Utils.activeContext`.
+```java
+ImagePicker.with(activity)
+    .crop()
+    .compress(1024)
+    .maxResultSize(1080, 1080)
+    .createIntent(intent -> {
+        startActivityForResult(intent, REQUEST_IMAGE);
 
-### `upload(Context context, Uri imageUri, OnUploadCallback callback)`
-
-Upload with explicit context.
+        // In onActivityResult:
+        Uri imageUri = intent.getData();
+        uploader.upload(imageUri, callback);
+        return null;
+    });
+```
 
 ---
 
@@ -61,14 +84,25 @@ Upload with explicit context.
 
 | Method | Description |
 |---|---|
-| `onSuccess(String imageLink, String deleteHash)` | Upload succeeded. `imageLink` is the public URL; `deleteHash` can be used to delete the image via Imgur API |
+| `onSuccess(String imageLink, String deleteHash)` | Upload succeeded. `imageLink` is the public URL; `deleteHash` can be used to delete the image via the Imgur API |
 | `onFailed(String reason)` | Upload failed with a reason string |
+
+---
+
+## API Reference
+
+| Method | Description |
+|---|---|
+| `new UploadToImgur(String clientId, String secretId)` | Create an uploader with your Imgur credentials |
+| `upload(Uri imageUri, OnUploadCallback)` | Upload using `Utils.activeContext` |
+| `upload(Context, Uri imageUri, OnUploadCallback)` | Upload with explicit context |
 
 ---
 
 ## Notes
 
-- Uses `https://api.imgur.com/3/upload` endpoint
-- Images are sent as multipart form data
-- The upload runs on a background thread — callbacks fire on the OkHttp thread (not the main thread)
+- Uploads to `https://api.imgur.com/3/upload`
+- Images are sent as multipart form data via OkHttp
+- Callbacks fire on the **OkHttp background thread** — not the main thread. Use `runOnUiThread` if you need to update UI from callbacks
 - Internet permission is required in your manifest
+- The `clientId` / `secretId` are sent as headers (`Authorization: Client-ID ...`)
