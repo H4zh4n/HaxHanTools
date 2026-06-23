@@ -3,12 +3,17 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdkVersion 37
+    //compileSdk 36
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId "com.dev.hazhanjalal.haxhantools"
-        minSdk 21
-        targetSdk 35
+        minSdk 23
+        targetSdk 37
         versionCode 1
         versionName "1.0"
 
@@ -25,7 +30,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    namespace 'com.dev.hazhanjalal.haxhantools'
+    namespace 'com.dev.hazhanjalal.haxhantools.sample'
     packagingOptions {
         jniLibs {
             excludes += ['META-INF/*']
