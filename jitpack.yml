@@ -1,0 +1,5 @@
+jdk:
+  - openjdk17
+before_install:
+  - yes | sdkmanager --licenses
+  - yes | sdkmanager "platforms;android-36" "build-tools;35.0.0"

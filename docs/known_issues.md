@@ -15,7 +15,7 @@ Duplicate class found ...
 **Solution** — exclude the conflicting modules in your `app/build.gradle`:
 
 ```gradle
-implementation('com.github.H4zh4n:HaxHanTools:1.0.15.2') {
+implementation('com.github.H4zh4n:HaxHanTools:1.0.20') {
     exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel'
     exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
 }
