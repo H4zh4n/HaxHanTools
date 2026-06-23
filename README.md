@@ -64,7 +64,7 @@ dependencyResolutionManagement {
 [![](https://jitpack.io/v/H4zh4n/HaxHanTools.svg)](https://jitpack.io/#H4zh4n/HaxHanTools)
 
 ```gradle
-implementation 'com.github.H4zh4n:HaxHanTools:1.0.20'
+implementation 'com.github.H4zh4n:HaxHanTools:1.1.0'
 ```
 
 > 👆 Click the badge above to see the latest available version on JitPack.
